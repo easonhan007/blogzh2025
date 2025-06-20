@@ -1,5 +1,5 @@
 # Change baseurl before deploy
-baseurl = "zh.ethanhan.cc"
+baseurl = "zh.ethanhan.cc/"
 languageCode = "zh-cn"
 title = "乙醇的博客"
 
