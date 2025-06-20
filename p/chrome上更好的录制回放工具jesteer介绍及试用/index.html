@@ -1,0 +1,217 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="之前跟大家分享后chrome上原生的录制回放功能，今天看到了一款最新的的录制回放工具jesteer，于是第一时间来了解和试用一下。\n主要功能 不用写代码，直接可以录制和回放 可以录制基本的页面交互 自动创建基于Puppeteer的脚本 回放时的快照检查功能 简单舒适的web ui 安装 jesteer是一款chrome插件，直接去chrome商店里所有jesteer点击安装既可。\n"><title>chrome上更好的录制回放工具？Jesteer介绍及试用</title><link rel=canonical href=zh.ethanhan.cc/p/chrome%E4%B8%8A%E6%9B%B4%E5%A5%BD%E7%9A%84%E5%BD%95%E5%88%B6%E5%9B%9E%E6%94%BE%E5%B7%A5%E5%85%B7jesteer%E4%BB%8B%E7%BB%8D%E5%8F%8A%E8%AF%95%E7%94%A8/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css><meta property='og:title' content="chrome上更好的录制回放工具？Jesteer介绍及试用"><meta property='og:description' content="之前跟大家分享后chrome上原生的录制回放功能，今天看到了一款最新的的录制回放工具jesteer，于是第一时间来了解和试用一下。\n主要功能 不用写代码，直接可以录制和回放 可以录制基本的页面交互 自动创建基于Puppeteer的脚本 回放时的快照检查功能 简单舒适的web ui 安装 jesteer是一款chrome插件，直接去chrome商店里所有jesteer点击安装既可。\n"><meta property='og:url' content='zh.ethanhan.cc/p/chrome%E4%B8%8A%E6%9B%B4%E5%A5%BD%E7%9A%84%E5%BD%95%E5%88%B6%E5%9B%9E%E6%94%BE%E5%B7%A5%E5%85%B7jesteer%E4%BB%8B%E7%BB%8D%E5%8F%8A%E8%AF%95%E7%94%A8/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-04-07T14:39:24+08:00'><meta property='article:modified_time' content='2023-04-07T14:39:24+08:00'><meta name=twitter:title content="chrome上更好的录制回放工具？Jesteer介绍及试用"><meta name=twitter:description content="之前跟大家分享后chrome上原生的录制回放功能，今天看到了一款最新的的录制回放工具jesteer，于是第一时间来了解和试用一下。\n主要功能 不用写代码，直接可以录制和回放 可以录制基本的页面交互 自动创建基于Puppeteer的脚本 回放时的快照检查功能 简单舒适的web ui 安装 jesteer是一款chrome插件，直接去chrome商店里所有jesteer点击安装既可。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_1a55c1889b9d7ad9.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#主要功能>主要功能</a></li><li><a href=#安装>安装</a></li><li><a href=#界面>界面</a></li><li><a href=#简单上手使用>简单上手使用</a></li><li><a href=#把生成的代码粘贴到测试项目中>把生成的代码粘贴到测试项目中</a></li><li><a href=#初步结论>初步结论</a></li><li><a href=#总结>总结</a></li><li><a href=#最后>最后</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/chrome%E4%B8%8A%E6%9B%B4%E5%A5%BD%E7%9A%84%E5%BD%95%E5%88%B6%E5%9B%9E%E6%94%BE%E5%B7%A5%E5%85%B7jesteer%E4%BB%8B%E7%BB%8D%E5%8F%8A%E8%AF%95%E7%94%A8/>chrome上更好的录制回放工具？Jesteer介绍及试用</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 07, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><p>之前跟大家分享后chrome上原生的录制回放功能，今天看到了一款最新的的录制回放工具jesteer，于是第一时间来了解和试用一下。</p><h3 id=主要功能>主要功能</h3><ul><li>不用写代码，直接可以录制和回放</li><li>可以录制基本的页面交互</li><li>自动创建基于Puppeteer的脚本</li><li>回放时的快照检查功能</li><li>简单舒适的web ui</li></ul><h3 id=安装>安装</h3><p>jesteer是一款chrome插件，直接去chrome商店里所有jesteer点击安装既可。</p><h3 id=界面>界面</h3><p>jesterr的界面很简单，就3个按钮</p><ul><li>Record：开始录制</li><li>Take a snapshot：dom高亮</li><li>Copy to clipboard</li></ul><h3 id=简单上手使用>简单上手使用</h3><ul><li>点击Record开始录制</li><li>录制过程中点击Take a snapshot进行断言</li><li>点击Stop Recording停止录制</li><li>点击Copy to clipboard拷贝生成的代码到剪切板</li></ul><p>这几步还是非常简单的，后来我遇到了一个问题，怎么进行用例的回放呢？之前chrome自带的Recorder是可以录制完成后直接回放的，而jesteer则找不到回放按钮。折腾一小会后我终于找到了答案。</p><h3 id=把生成的代码粘贴到测试项目中>把生成的代码粘贴到测试项目中</h3><p>为了可以运行生成的代码，我决定新建一个nodejs项目来进行尝试。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-jsx data-lang=jsx><span class=line><span class=cl><span class=nx>mkdir</span> <span class=nx>jesteer_example</span>
+</span></span><span class=line><span class=cl><span class=nx>cd</span> <span class=nx>jesteer_example</span>
+</span></span><span class=line><span class=cl><span class=nx>npm</span> <span class=nx>init</span>
+</span></span><span class=line><span class=cl><span class=nx>npm</span> <span class=nx>install</span> <span class=o>--</span><span class=nx>save</span><span class=o>-</span><span class=nx>dev</span> <span class=nx>jest</span>
+</span></span><span class=line><span class=cl><span class=nx>npm</span> <span class=nx>install</span> <span class=o>--</span><span class=nx>save</span><span class=o>-</span><span class=nx>dev</span> <span class=nx>puppteer</span>
+</span></span><span class=line><span class=cl><span class=nx>touch</span> <span class=nx>example</span><span class=p>.</span><span class=nx>test</span><span class=p>.</span><span class=nx>js</span>
+</span></span></code></pre></td></tr></table></div></div><p>修改package.json</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-jsx data-lang=jsx><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;scripts&#34;</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;test&#34;</span><span class=o>:</span> <span class=s2>&#34;jest&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>我打开一个空白页，然后输入www.itest.info，跳转到搜索页面后，添加一个snapshot断言，最后结束录制。下面是录制出来的脚本。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-jsx data-lang=jsx><span class=line><span class=cl><span class=cm>/* 
+</span></span></span><span class=line><span class=cl><span class=cm>This test suite was created using JESTEER, a project developed by 
+</span></span></span><span class=line><span class=cl><span class=cm>Tim Ruszala, Katie Janzen, Clare Cerullo, and Charissa Ramirez.
+</span></span></span><span class=line><span class=cl><span class=cm>
+</span></span></span><span class=line><span class=cl><span class=cm>Learn more at https://github.com/oslabs-beta/Jesteer .
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>puppeteer</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;puppeteer&#39;</span><span class=p>);</span> <span class=c1>// v13.0.0 or later
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=nx>jest</span><span class=p>.</span><span class=nx>setTimeout</span><span class=p>(</span><span class=mi>10000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>describe</span><span class=p>(</span><span class=s1>&#39;&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>let</span> <span class=nx>browser</span><span class=p>,</span> <span class=nx>page</span><span class=p>,</span> <span class=nx>timeout</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>beforeAll</span><span class=p>(</span><span class=kr>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=nx>browser</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>puppeteer</span><span class=p>.</span><span class=nx>launch</span><span class=p>({</span>
+</span></span><span class=line><span class=cl><span class=nx>headless</span><span class=o>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>beforeEach</span><span class=p>(</span><span class=kr>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=nx>page</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>browser</span><span class=p>.</span><span class=nx>newPage</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>timeout</span> <span class=o>=</span> <span class=mi>5000</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>page</span><span class=p>.</span><span class=nx>setDefaultTimeout</span><span class=p>(</span><span class=nx>timeout</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>afterEach</span><span class=p>(</span><span class=kr>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>close</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>afterAll</span><span class=p>(</span><span class=kr>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>browser</span><span class=p>.</span><span class=nx>close</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>it</span><span class=p>(</span><span class=s1>&#39;&#39;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>promises</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl><span class=nx>promises</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>page</span><span class=p>.</span><span class=nx>waitForNavigation</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=kr>goto</span><span class=p>(</span><span class=s1>&#39;chrome://newtab/&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nb>Promise</span><span class=p>.</span><span class=nx>all</span><span class=p>(</span><span class=nx>promises</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>waitForNavigation</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>keyboard</span><span class=p>.</span><span class=nx>type</span><span class=p>(</span><span class=s1>&#39;itest.info&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>keyboard</span><span class=p>.</span><span class=nx>press</span><span class=p>(</span><span class=s1>&#39;Enter&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>element</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>waitForSelector</span><span class=p>(</span><span class=s1>&#39;#su&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>element</span><span class=p>.</span><span class=nx>click</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>element</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>waitForSelector</span><span class=p>(</span><span class=s1>&#39;HTML &gt; BODY:nth-child(2)&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>element</span><span class=p>.</span><span class=nx>click</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>waitForNavigation</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>snapped</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=nx>$eval</span><span class=p>(</span><span class=s1>&#39;#1 &gt; DIV:nth-child(1) &gt; DIV:nth-child(1) &gt; H3:nth-child(1) &gt; A:nth-child(1)&#39;</span><span class=p>,</span> <span class=nx>el</span> <span class=p>=&gt;</span> <span class=nx>el</span><span class=p>.</span><span class=nx>innerHTML</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>expect</span><span class=p>(</span><span class=nx>snapped</span><span class=p>).</span><span class=nx>toMatchSnapshot</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用npm run test命令来运行，不出意外运行失败。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-jsx data-lang=jsx><span class=line><span class=cl><span class=nx>FAIL</span>  <span class=p>.</span><span class=o>/</span><span class=nx>sum</span><span class=p>.</span><span class=nx>test</span><span class=p>.</span><span class=nx>js</span>
+</span></span><span class=line><span class=cl>    <span class=err>✕</span>  <span class=p>(</span><span class=mi>297</span> <span class=nx>ms</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=err>●</span>  <span class=err>›</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nx>net</span><span class=o>::</span><span class=nx>ERR_INVALID_URL</span> <span class=nx>at</span> <span class=nx>chrome</span><span class=o>:</span><span class=c1>//newtab/
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>      <span class=mi>37</span> <span class=o>|</span> <span class=kr>const</span> <span class=nx>promises</span> <span class=o>=</span> <span class=p>[];</span>
+</span></span><span class=line><span class=cl>      <span class=mi>38</span> <span class=o>|</span> <span class=nx>promises</span><span class=p>.</span><span class=nx>push</span><span class=p>(</span><span class=nx>page</span><span class=p>.</span><span class=nx>waitForNavigation</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>    <span class=o>&gt;</span> <span class=mi>39</span> <span class=o>|</span> <span class=kr>await</span> <span class=nx>page</span><span class=p>.</span><span class=kr>goto</span><span class=p>(</span><span class=s1>&#39;chrome://newtab/&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>         <span class=o>|</span> <span class=o>^</span>
+</span></span><span class=line><span class=cl>      <span class=mi>40</span> <span class=o>|</span> <span class=kr>await</span> <span class=nb>Promise</span><span class=p>.</span><span class=nx>all</span><span class=p>(</span><span class=nx>promises</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=mi>41</span> <span class=o>|</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=mi>42</span> <span class=o>|</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>      <span class=nx>at</span> <span class=nx>navigate</span> <span class=p>(</span><span class=nx>node_modules</span><span class=o>/</span><span class=nx>puppeteer</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>common</span><span class=o>/</span><span class=nx>FrameManager</span><span class=p>.</span><span class=nx>ts</span><span class=o>:</span><span class=mi>226</span><span class=o>:</span><span class=mi>13</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=nx>at</span> <span class=nx>FrameManager</span><span class=p>.</span><span class=nx>navigateFrame</span> <span class=p>(</span><span class=nx>node_modules</span><span class=o>/</span><span class=nx>puppeteer</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>common</span><span class=o>/</span><span class=nx>FrameManager</span><span class=p>.</span><span class=nx>ts</span><span class=o>:</span><span class=mi>198</span><span class=o>:</span><span class=mi>17</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=nx>at</span> <span class=nx>Frame</span><span class=p>.</span><span class=kr>goto</span> <span class=p>(</span><span class=nx>node_modules</span><span class=o>/</span><span class=nx>puppeteer</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>common</span><span class=o>/</span><span class=nx>FrameManager</span><span class=p>.</span><span class=nx>ts</span><span class=o>:</span><span class=mi>792</span><span class=o>:</span><span class=mi>12</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=nx>at</span> <span class=nx>Page</span><span class=p>.</span><span class=kr>goto</span> <span class=p>(</span><span class=nx>node_modules</span><span class=o>/</span><span class=nx>puppeteer</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>common</span><span class=o>/</span><span class=nx>Page</span><span class=p>.</span><span class=nx>ts</span><span class=o>:</span><span class=mi>1781</span><span class=o>:</span><span class=mi>12</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=nx>at</span> <span class=nb>Object</span><span class=p>.&lt;</span><span class=nt>anonymous</span><span class=p>&gt;</span> <span class=p>(</span><span class=nx>sum</span><span class=p>.</span><span class=nx>test</span><span class=p>.</span><span class=nx>js</span><span class=o>:</span><span class=mi>39</span><span class=o>:</span><span class=mi>1</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>查了一下代码，应该是打开chrome的新tab页面之后自动等待的代码报错导致。</p><h3 id=初步结论>初步结论</h3><p>初步结论现在应该有了，jesteer录制出来的代码其实没办法自动识别上下文，也就是说如果在地址栏上输入url并按回车键打开一个新页面，我们期望的结果是直接录制成goto url，但是jesteer只能忠实的还原我们的操作，而这些操作有可能导致回放失败。</p><h3 id=总结>总结</h3><p>先说优点</p><ul><li>jesteer作为一款纯录制工具，其提供的snapshot比对功能还是非常强大的，等于是支持了在录制时候直接录制断言的能力；</li><li>jesteer可以录制用户的一系列简单交互，对于一些页面来说还是很管用的；</li><li>根据jesteer的文档描述，jesteer比chrome原生的recorder录制准确性更高；</li><li>jesteer录制出的脚本集成了jest框架，等于可以直接录制用例，而不是一系列的操作，省去了把脚本加工成用例的过程；</li></ul><p>再说不足</p><ul><li>jesteer需要用户对nodejs有一定的了解，不能直接录制完就一键回放；</li><li>jesteer录制出的脚本需要进行一些加工，比如上文可以感知到的修改goto的语句的工作；</li><li>jesteer帮助文档比较简单，想上手用起来需要发挥一点点的想象力</li></ul><h3 id=最后>最后</h3><p>对于一些简单的操作和场景，且不介意使用jest作为测试框架的话，jesteer还是比较推荐的，可以极大的提升生产力；其他情况下就不推荐了。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
