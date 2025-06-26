@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>测试周刊 on 乙醇的博客</title><link>zh.ethanhan.cc/tags/%E6%B5%8B%E8%AF%95%E5%91%A8%E5%88%8A/</link><description>Recent content in 测试周刊 on 乙醇的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 26 Jun 2025 16:26:47 +0800</lastBuildDate><atom:link href="zh.ethanhan.cc/tags/%E6%B5%8B%E8%AF%95%E5%91%A8%E5%88%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>测试周刊006: playwrightv1.53的新功能</title><link>zh.ethanhan.cc/p/%E6%B5%8B%E8%AF%95%E5%91%A8%E5%88%8A006-playwrightv1.53%E7%9A%84%E6%96%B0%E5%8A%9F%E8%83%BD/</link><pubDate>Thu, 26 Jun 2025 16:26:47 +0800</pubDate><guid>zh.ethanhan.cc/p/%E6%B5%8B%E8%AF%95%E5%91%A8%E5%88%8A006-playwrightv1.53%E7%9A%84%E6%96%B0%E5%8A%9F%E8%83%BD/</guid><description>&lt;p>在一个已有开发节奏的团队中，作为第一位测试人员去推行新流程，绝非易事。&lt;/p>
+&lt;p>你会被开发质疑：是不是要拖慢上线进度？是不是要卡死流程，让整个开发团队都不爽？&lt;/p>
+&lt;p>这些成见不是你的错，但你必须面对它们。&lt;/p>
+&lt;!-- more -->
+&lt;h2 id="pydoll-初体验">pydoll 初体验
+&lt;/h2>&lt;p>之前介绍过一款新的 ui 自动化测试工具&amp;mdash;-&lt;a class="link" href="https://autoscrape-labs.github.io/pydoll/" target="_blank" rel="noopener"
+>pydoll&lt;/a>。&lt;/p>
+&lt;p>今天抽空在 github 的 copilot 的帮助下试用了一下。&lt;/p>
+&lt;p>我用 pydoll 实现了一个测试&lt;a class="link" href="https://todomvc.com/examples/react/dist/" target="_blank" rel="noopener"
+>任务列表&lt;/a>的测试套件，包含 5 个测试用例。&lt;/p>
+&lt;p>&lt;img src="https://github-production-user-asset-6210df.s3.amazonaws.com/1966376/459310738-09a6bfd3-26cb-4e98-bce5-6866f0f56343.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;amp;X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250626%2Fus-east-1%2Fs3%2Faws4_request&amp;amp;X-Amz-Date=20250626T095315Z&amp;amp;X-Amz-Expires=300&amp;amp;X-Amz-Signature=48215a1a9182263db82af63a813ce359d96be489f934bf8a6a87c64383c308f4&amp;amp;X-Amz-SignedHeaders=host"
+loading="lazy"
+>&lt;/p>
+&lt;p>具体用例如下&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
+&lt;/span>&lt;span class="lnt">80
+&lt;/span>&lt;span class="lnt">81
+&lt;/span>&lt;span class="lnt">82
+&lt;/span>&lt;span class="lnt">83
+&lt;/span>&lt;span class="lnt">84
+&lt;/span>&lt;span class="lnt">85
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">asyncio&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">os&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">unittest&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">pydoll.browser.chromium&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Chrome&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">pydoll.browser.options&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">ChromiumOptions&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">pydoll.constants&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">TestTodoMVC&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">unittest&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">IsolatedAsyncioTestCase&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">asyncSetUp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">options&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ChromiumOptions&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">options&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">add_argument&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;--start-maximized&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">options&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">add_argument&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;--disable-notifications&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">browser&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Chrome&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">options&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">options&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">browser&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">start&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">go_to&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;https://todomvc.com/examples/react/dist/&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">asyncTearDown&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">browser&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="fm">__aexit__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">test_add_todo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">new_todo&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;new-todo&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">new_todo&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">type_text&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Install pydoll&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">asyncio&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sleep&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">new_todo&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">press_keyboard_key&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ENTER&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">todo_items&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;view&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">find_all&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">found&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">texts&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">item&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">todo_items&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">text&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="n">item&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">texts&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="s2">&amp;#34;Install pydoll&amp;#34;&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">text&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">found&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">assertTrue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">found&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">test_complete_todo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">test_add_todo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">toggle&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;toggle&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">toggle&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">completed&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;completed&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">assertIsNotNone&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">completed&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">test_delete_todo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">test_add_todo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">todo_item&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;view&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">todo_item&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">destroy_btn&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="n">todo_item&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;destroy&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">destroy_btn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">todo_items&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;view&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">find_all&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">found&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">item&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">todo_items&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="s2">&amp;#34;Install pydoll&amp;#34;&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">item&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">found&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">assertFalse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">found&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">test_filter_todo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">test_add_todo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">toggle&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;toggle&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">toggle&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">active_filter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Active&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">active_filter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">asyncio&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sleep&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">active_items&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">item&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">item&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;view&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">find_all&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">assertEqual&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">active_items&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">completed_filter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Completed&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">completed_filter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">asyncio&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sleep&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">completed_items&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">class_name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;view&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">find_all&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">found&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">item&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">completed_items&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="n">item&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="s2">&amp;#34;Install pydoll&amp;#34;&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">title&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">found&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">assertTrue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">found&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">test_screenshot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">test_add_todo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">screenshot_path&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">getcwd&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="s1">&amp;#39;pydoll_repo.png&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">take_screenshot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">screenshot_path&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">assertTrue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">exists&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">screenshot_path&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">unittest&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">main&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>上面的代码实现了&lt;/p>
+&lt;ul>
+&lt;li>创建 1 条任务&lt;/li>
+&lt;li>完成 1 条任务&lt;/li>
+&lt;li>删除新创建的任务&lt;/li>
+&lt;li>任务列表过滤&lt;/li>
+&lt;li>截图&lt;/li>
+&lt;/ul>
+&lt;p>这 5 条用例。&lt;/p>
+&lt;h3 id="具体感受">具体感受
+&lt;/h3>&lt;p>pydoll 在交互上有一定的问题，比如&lt;/p>
+&lt;ul>
+&lt;li>没有 &lt;code>hover()&lt;/code> 方法，上面删除任务的用例里需要鼠标悬停到任务实例上，等删除按钮出现的时候再去点击。因为 pydoll 没有提供 hover 方法，我就只能用 click 来代替了。在使用&lt;code>click&lt;/code>之前，我是试着用 javascript 去模拟 hover，但是没有效果，这里其实浪费了 20 分钟以上的；&lt;/li>
+&lt;li>没有 double click 方法，所以双击编辑任务的测试用例就没有实现了；&lt;/li>
+&lt;/ul>
+&lt;p>前端交互稍微复杂一点就不行了。&lt;/p>
+&lt;p>另外用 &lt;code>query&lt;/code> 方法去定位一组元素似乎用不起来，因为混合着异步的关系，所以到底为什么定位不到，具体原因还是不清楚。&lt;/p>
+&lt;h3 id="总结">总结
+&lt;/h3>&lt;p>pydoll 目前提供的交互形的 api 还是有较大的提升空间的。&lt;/p>
+&lt;p>如果你的被测项目前端交互比较丰富，比如需要大量的鼠标悬停，拖拽等操作的话，pydoll 应该可以处理，但可能会用到大量的原生 javascript 代码，有点绕路了，不推荐。&lt;/p>
+&lt;p>从目前情况看，用 pydoll 来实现数据爬虫可能会比较现实一点。&lt;/p>
+&lt;h2 id="copilot-进行-ui-自动化用例编写的感受">copilot 进行 ui 自动化用例编写的感受
+&lt;/h2>&lt;p>之前的项目里用到过 copilot 来进行单元测试用例的生成，在批量实现 fixture 数据上面，ai 对于编码的效率提升是极其巨大的。&lt;/p>
+&lt;p>这次试试用 copilot 来实现自动化测试用例，而且用的是比较新的工具&amp;ndash;pydoll，copilot 的一些局限性就表现出来了。&lt;/p>
+&lt;h3 id="问题-1幻觉严重">问题 1:幻觉严重
+&lt;/h3>&lt;p>可能是因为 pydoll 是比较新的库吧，copilot 在进行代码生成时出现了比较严重的幻觉。&lt;/p>
+&lt;p>比如 pydoll 没有&lt;code>find_elements&lt;/code>方法，但 copilot 一直坚持用这个不存在的方法来定位元素。&lt;/p>
+&lt;p>所以在用 copilot 写代码时，最好是写成熟框架的代码。&lt;/p>
+&lt;p>大部分人类都不熟悉的领域，ai 自然也不会有太深的造诣。&lt;/p>
+&lt;h3 id="问题-2异步和同步分不清楚">问题 2:异步和同步分不清楚
+&lt;/h3>&lt;p>我发现 copilot 生成的代码，有一种把大部分语句都当作异步代码来实现的倾向。&lt;/p>
+&lt;p>比如在遍历一组定位到的元素时，copilot 建议使用&lt;code>async for&lt;/code>，而一些同步方法，copilot 也喜欢在前面加&lt;code>await&lt;/code>。&lt;/p>
+&lt;p>这应该是 pydoll 比较新的缘故的，在 playwright 的异步调用代码生成方面，copilot 的准确率应该会高一些。&lt;/p>
+&lt;h3 id="问题-3分析不出来具体的问题">问题 3:分析不出来具体的问题
+&lt;/h3>&lt;p>在调试代码的过程中，我尝试把报错信息扔给 copilot 进行分析，并给出修改后的代码。&lt;/p>
+&lt;p>不过在几个回合内，copilot 给出的解决方案不仅包含幻觉（比如调用不存在的方法），而且在我人工修正幻觉后，copilot 的建议也不能解决报错的问题。&lt;/p>
+&lt;p>后来是我自己根据经验进行调试，才让测试用例顺利跑通。&lt;/p>
+&lt;p>感觉是 copilot 并没有分析出用例无法执行的根本原因，所以给出的修复方案并不能对症下药。&lt;/p>
+&lt;p>copilot 有时候很努力，但有可能解决不了根本的问题。&lt;/p>
+&lt;p>也可能是我自己耐心不足，没准多尝试几轮，copilot 就会给出正确的解法了。&lt;/p>
+&lt;h2 id="playwright-v152-和-v153-有哪些新功能">Playwright v1.52 和 v1.53 有哪些新功能
+&lt;/h2>&lt;h3 id="-vs-code-中的-ai-自动修复功能">🧠 VS Code 中的 AI 自动修复功能
+&lt;/h3>&lt;p>我们在调试用例的时候，用例运行失败是家常便饭了。&lt;/p>
+&lt;p>根据我自己的经验，ui 自动化测试 60%以上的时间都花在了调试上。&lt;/p>
+&lt;p>为什么定位不到元素呢？&lt;/p>
+&lt;p>为什么获取不到属性呢？&lt;/p>
+&lt;p>为什么点击没有效果呢？&lt;/p>
+&lt;p>每日三省吾身。&lt;/p>
+&lt;p>现在使用 playwright 时， 当测试失败，只需点击错误信息旁边的 ✨ 图标，或在测试资源管理器中悬停测试名称时点击图标。&lt;/p>
+&lt;p>Playwright 会将足够的上下文信息提供给 Copilot，Copilot 会生成有针对性的修复建议。你可以查看、接受并重新运行，整个流程快速、高效，而且非常实用。&lt;/p>
+&lt;p>&lt;img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fg8shs35tp2e33mtmejkm.png"
+loading="lazy"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>想尝试这个功能？确保你已经安装并启用了 Playwright 的 VS Code 插件。&lt;/p>&lt;/blockquote>
+&lt;h3 id="-locatordescribe增强-trace-和报告可读性">🔎 locator.describe()：增强 Trace 和报告可读性
+&lt;/h3>&lt;p>一般情况下，在不使用 po 的前提下，ui 自动化测试的代码的可读性是不够好的。&lt;/p>
+&lt;p>很多时候，代码里会充斥着各种看不懂的 css 选择器或 xpath 表达式。&lt;/p>
+&lt;p>现在你可以通过 &lt;code>.describe()&lt;/code> 为任何定位器添加更具可读性的描述：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">newTodo&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">page&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">getByPlaceholder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;What needs to be done?&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">describe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;新待办输入框&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">await&lt;/span> &lt;span class="nx">newTodo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fill&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;买牛奶&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这些描述会出现在：&lt;/p>
+&lt;ul>
+&lt;li>Trace Viewer 中&lt;/li>
+&lt;li>UI 模式下&lt;/li>
+&lt;li>HTML 测试报告中&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzjsqapaixb7b0s7r6jdj.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>这一小改动在调试复杂 UI 或团队协作时可以带来巨大的帮助。&lt;/p>
+&lt;hr>
+&lt;h3 id="-html-报告支持自定义标题">📊 HTML 报告支持自定义标题
+&lt;/h3>&lt;p>你可以为测试报告添加更清晰的标题，配置如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">defineConfig&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s2">&amp;#34;@playwright/test&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="nx">defineConfig&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">reporter&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[[&lt;/span>&lt;span class="s2">&amp;#34;html&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">title&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;自定义测试运行 #1028&amp;#34;&lt;/span> &lt;span class="p">}]],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>非常适合用于团队仪表板、CI 输出，或用于区分多轮测试的运行记录。&lt;/p>
+&lt;hr>
+&lt;h3 id="-新增断言tocontainclass">✅ 新增断言：&lt;code>toContainClass&lt;/code>
+&lt;/h3>&lt;p>有时候我们是需要断言某个元素是否包含特定的 class 的。&lt;/p>
+&lt;p>比如有个元素被禁用了，那么&lt;code>class&lt;/code>里就可能会包含&lt;code>disabled&lt;/code>这个值。&lt;/p>
+&lt;p>之前 playwright 是没有特定的断言来开箱即用的。&lt;/p>
+&lt;p>不过现在有了：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">await&lt;/span> &lt;span class="nx">expect&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">page&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">getByRole&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;listitem&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;Ship v1.52&amp;#34;&lt;/span> &lt;span class="p">})).&lt;/span>&lt;span class="nx">toContainClass&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;done&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这种方式语法简洁、表达精准，尤其适用于基于 class 的 UI 状态检查。&lt;/p>
+&lt;hr>
+&lt;h3 id="-快照增强支持-children-和-url">🧪 快照增强：支持 &lt;code>children&lt;/code> 和 &lt;code>url&lt;/code>
+&lt;/h3>&lt;p>ARIA 快照（通过 &lt;code>toMatchAriaSnapshot&lt;/code>）现在支持：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>/children: equal&lt;/code> —— 确保子元素被包含在快照中&lt;/li>
+&lt;li>&lt;code>/url: &amp;quot;https://playwright.dev&amp;quot;&lt;/code> —— 匹配特定 URL&lt;/li>
+&lt;/ul>
+&lt;p>示例：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">await&lt;/span> &lt;span class="nx">expect&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">locator&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">toMatchAriaSnapshot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sb">`
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> - list
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> - /children: equal
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> - listitem: Feature A
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> - listitem:
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> - link &amp;#34;Feature B&amp;#34;:
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb"> - /url: &amp;#34;https://playwright.dev&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="sb">`&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这让 UI 快照测试在处理复杂或动态组件时更加可靠。&lt;/p>
+&lt;hr>
+&lt;h3 id="-test-runner-更新">⚙ test runner 更新
+&lt;/h3>&lt;p>新增了以下快捷功能：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>testProject.workers&lt;/code> —— 每个测试项目可自定义并发数&lt;/li>
+&lt;li>&lt;code>failOnFlaky&lt;/code> —— 一旦检测到测试不稳定，可自动判定为失败&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="-如何升级">🆙 如何升级？
+&lt;/h3>&lt;p>安装最新版本：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npm i -D @playwright/test@latest
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>同时别忘了将 VS Code 插件更新到最新版本，以便启用 AI 修复等新功能。&lt;/p>
+&lt;h2 id="言论">言论
+&lt;/h2>&lt;p>我不确定“测试债务（Testing Debt）”这个术语在行业中是否被广泛使用！&lt;/p>
+&lt;p>但在我的实践中，我已经使用“测试债务”这个术语有 9 年了。&lt;/p>
+&lt;p>我用它来向相关干系人传达和持续提醒我们因为技术债务而不得不进行的返工工作。&lt;/p>
+&lt;p>在理解“技术债务”含义的基础上，我们是否可以类比出什么是“测试债务”呢？&lt;/p>
+&lt;p>大多数时候，系统的可测试性（testability）、可自动化性（automatability）和可观测性（observability）都会因为技术债务而受到影响。&lt;/p>
+&lt;p>而这种影响一旦发生，就会进一步引发测试债务，形成连锁效应。&lt;/p>
+&lt;p>测试债务的一个主要影响是：原本测试中植入的确定性能力（Deterministic capability 被改变。&lt;/p>
+&lt;p>而要对这种确定性能力进行返工，在很多情况下并不简单，尤其当业务操作、技术层或基础设施发生了变更时更是如此。&lt;/p>
+&lt;p>当我说“我们正在做的事情和交付的内容带来了技术债务”，这也意味着，“由此也产生了相应的测试债务”。&lt;/p>
+&lt;p>从工程的角度看，测试本身就是技术活动的一部分。&lt;/p>
+&lt;p>所以当有人把测试团队描述为“非技术”，甚至贴上某些标签时，我总觉得有些好笑。&lt;/p>
+&lt;p>比如，常听到的标签是“手动的”、“可重复的”、“重复性高的”等等。&lt;/p>
+&lt;p>但其实，测试的“重复性”恰恰就是工程周期和流程的一部分——它有其存在的意义和价值。&lt;/p>
+&lt;p>&amp;ndash;&lt;a class="link" href="https://x.com/testingGarage" target="_blank" rel="noopener"
+>@Ravisuriya Eswara&lt;/a>&lt;/p></description></item><item><title>测试周刊005: Google是怎么做测试的</title><link>zh.ethanhan.cc/p/%E6%B5%8B%E8%AF%95%E5%91%A8%E5%88%8A005-google%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E6%B5%8B%E8%AF%95%E7%9A%84/</link><pubDate>Thu, 19 Jun 2025 10:12:22 +0800</pubDate><guid>zh.ethanhan.cc/p/%E6%B5%8B%E8%AF%95%E5%91%A8%E5%88%8A005-google%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E6%B5%8B%E8%AF%95%E7%9A%84/</guid><description>&lt;p>在 Google 早期，测试并不是首要任务。公司文化高度依赖工程师的才华——聪明的人写聪明的代码。大多数情况下，这种方式都很有效。少数系统部署了集成测试，但广泛的、结构化的测试极其罕见。这就像软件开发的&amp;quot;狂野西部&amp;quot;时代。&lt;/p>
+&lt;p>&lt;img src="https://images.unsplash.com/photo-1746730406177-f8562813b938?q=80&amp;amp;w=1600&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;ixlib=rb-4.1.0&amp;amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="google-的测试文化从危机到规模化的演进之路">Google 的测试文化：从危机到规模化的演进之路
+&lt;/h2>&lt;h3 id="google-web-server-gws-的觉醒时刻">Google Web Server (GWS) 的觉醒时刻
+&lt;/h3>&lt;p>在 Google 早期，测试并不是首要任务。公司文化高度依赖工程师的才华——聪明的人写聪明的代码。大多数情况下，这种方式都很有效。少数系统部署了集成测试，但广泛的、结构化的测试极其罕见。这就像软件开发的&amp;quot;狂野西部&amp;quot;时代。&lt;/p>
+&lt;p>但在做 Google Web Server (GWS) 这个系统时，上面的方法就玩不转了。&lt;/p>
+&lt;p>这是 google 搜索的核心服务，处理每个用户查询并实时返回结果。简而言之，它对 Google 的重要性就像水之于鱼一样——是绝对不可或缺。&lt;/p>
+&lt;p>到 2005 年，GWS 的复杂性急剧膨胀。随着系统规模增长，开发效率直线下降。发布周期变慢，bug 频繁进入生产环境。开发人员开始对自己的代码修改失去信心。曾经有一段时间，超过 80%的生产部署因为产生了影响用户的 bug 而被迫回滚。&lt;/p>
+&lt;p>这成为了一个关键转折点。&lt;/p>
+&lt;p>为了扭转局面，GWS 技术负责人做出了大胆决定：每段新代码都必须配备自动化测试，并且这些测试要持续运行。这标志着 google 测试文化的转变——从被动救火转向主动的、工程师主导的质量保障。&lt;/p>
+&lt;h3 id="在快速变化的世界中测试">在快速变化的世界中测试
+&lt;/h3>&lt;p>现代软件开发与光盘包装软件的时代截然不同。如今，应用程序更新频繁——有时一天多次。每次发布的背后都有一个极其复杂的代码库。&lt;/p>
+&lt;p>在 Google，即使是一个&amp;quot;简单&amp;quot;的服务也可能包含数百万行代码，依赖数百个库，为数十个平台的用户提供服务——每个平台都有无数种硬件、操作系统和网络配置组合。手动测试根本无法应对这种规模。&lt;/p>
+&lt;p>以 Google 搜索为例。完全手工测试意味着要验证从网页结果到电影信息、航班搜索、图片搜索等所有功能。这个工作量需要在每个国家、每种语言、每种设备上重复执行——同时还要确保符合无碍访问标准和安全最佳实践。&lt;/p>
+&lt;p>在这种规模、速度和复杂性下，唯一可行的测试方法就是自动化。&lt;/p>
+&lt;h3 id="向工程师驱动的自动化测试转变">向工程师驱动的自动化测试转变
+&lt;/h3>&lt;p>从 GWS 的必要修复开始，这逐渐演变成 Google 的基本原则：测试不是开发的一个阶段，而是工程工作的内在组成部分。自动化测试嵌入到开发工作流中，确保快速迭代不会牺牲可靠性。&lt;/p>
+&lt;p>这种方法不仅仅是为了捕获 bug——更重要的是建立信心。通过持续运行测试，工程师可以快速行动而无需担忧。新功能发布更快，质量保持高水准，用户体验良好。&lt;/p>
+&lt;h2 id="编写运行响应google-测试哲学的核心">编写、运行、响应：Google 测试哲学的核心
+&lt;/h2>&lt;p>现代软件测试的核心是一个看似简单的循环：编写测试、运行测试、响应失败。&lt;/p>
+&lt;p>憋大招然后统一手工测试的时代已经过去了。今天，构建系统的工程师同时也负责系统的质量。编写测试不再是其他人的工作——它是软件开发的基本组成部分。即使在拥有专门测试团队的组织中，开发人员编写的测试仍然是质量保障的基石。&lt;/p>
+&lt;p>这种方法不仅在理念上正确，在实践中也是必需的。面对现代软件开发的速度和复杂性，没有其他方法能够跟得上。在整个工程组织中分担编写和维护测试的责任，确保测试能力与代码规模同步增长。&lt;/p>
+&lt;p>但编写和运行测试只是整个体系的一部分。自动化的真正威力体现在团队主动响应由于测试问题造成的构建失败。在大型、快速迭代的系统中，测试失败不可避免。测试策略是否有效，取决于团队处理这些失败的速度和认真程度。&lt;/p>
+&lt;p>让失败的测试长期存在，会快速降低信心并导致测试结果被忽视。但当团队能在几分钟内修复失败时，他们能更快地定位问题，维持对测试套件的高度信任，最终交付更好、更安全的代码。&lt;/p>
+&lt;p>在 Google，这种理念深入人心：将每次测试失败视为改进系统的机会，并立即采取行动。这个反馈循环——编写、运行、响应——使得工程速度能够与全球规模的软件可靠性并存。&lt;/p>
+&lt;h3 id="长期收益测试代码的益处">长期收益：测试代码的益处
+&lt;/h3>&lt;p>自动化测试不仅仅是工具——它是构建具有韧性、可维护性和快速迭代能力的软件系统的策略。在 Google，早期投入编写测试在项目的整个生命周期中都会产生回报：&lt;/p>
+&lt;h4 id="1-减少调试专注构建">1. 减少调试，专注构建
+&lt;/h4>&lt;p>经过充分测试的代码进入系统时 bug 更少——并且能保持这种状态。大多数缺陷在代码提交前就被捕获，节省了大量后续调试时间。&lt;/p>
+&lt;p>在 Google，代码不是静态的。单个组件在其生命周期中可能被修改数十次，通常由其他团队甚至自动化系统完成。没有强大的测试套件，每次变更都会带来风险。但有了测试保护，它们就像安全网一样发挥作用。如果新的变更——甚至是依赖项的变更——破坏了功能，测试基础设施会立即捕获并标记。很多情况下，有问题的变更在到达生产环境前就会被自动回滚。&lt;/p>
+&lt;h4 id="2-增强对代码变更的信心">2. 增强对代码变更的信心
+&lt;/h4>&lt;p>软件中变化是常态。但有了可靠的测试覆盖，团队可以自信地调整和演进系统。每个关键行为都被持续验证，支持安全的迭代开发。&lt;/p>
+&lt;p>这在重构时特别有用。如果变更保持了行为不变，现有测试就不需要修改——这清楚地表明重构是正确的。这种清晰性鼓励团队定期改进代码结构，而不用担心破坏功能。&lt;/p>
+&lt;h4 id="3-可执行的文档">3. 可执行的文档
+&lt;/h4>&lt;p>传统文档往往不可靠——经常过时、模糊或不完整。但清晰、专注的测试可以作为活跃的、可执行的文档形式。&lt;/p>
+&lt;p>每个测试都解释了系统在特定情况下的行为。想了解代码对某个输入应该如何响应？直接看测试用例就可以了。如果需求变更破坏了现有测试，你会立即得到明显的信号，提醒测试代码需要更新。&lt;/p>
+&lt;p>但是，测试用例只有在保持清晰、简洁和目标明确时才能很好地充当文档。良好的测试规范是必不可少的。&lt;/p>
+&lt;h4 id="4-简化代码审查">4. 简化代码审查
+&lt;/h4>&lt;p>在 Google，所有代码提交前都需要至少一次同行审查。但当代码变更配有可靠的测试时，审查过程会更顺畅、更快速。&lt;/p>
+&lt;p>审查者无需在脑海中跟踪每个边界情况的执行路径，他们可以直接看到测试结果。测试展示了正确性，处理了边界情况，并验证了失败模式。这让审查者能够专注于设计和清晰性，而不仅仅是正确性。&lt;/p>
+&lt;h4 id="5-通过可测试性改善设计">5. 通过可测试性改善设计
+&lt;/h4>&lt;p>编写测试迫使开发人员思考代码将如何被使用和维护。如果代码难以测试，通常是因为它承担了太多职责、耦合过于紧密，或者将逻辑隐藏在复杂的依赖关系后面。&lt;/p>
+&lt;p>可测试的代码通常就是设计良好的代码：模块化、专注且易于维护。当你因为测试暴露了设计问题而在早期修复它们时，你为自己节省了后续的重构工作和复杂性。&lt;/p>
+&lt;h4 id="6-更快更高质量的发布">6. 更快、更高质量的发布
+&lt;/h4>&lt;p>在 Google，许多拥有数百名工程师的大型项目每天都向生产环境发布新版本。这种速度只有通过强大的测试套件才能实现。&lt;/p>
+&lt;p>自动化测试通过早期捕获回归问题和持续验证正确性，实现了快速、安全的部署。团队能够快速行动不是因为他们跳过了测试——而是因为他们在每个步骤都自动化了测试。&lt;/p>
+&lt;h3 id="最终思考">最终思考
+&lt;/h3>&lt;p>Google 规模化的自动化测试不仅仅是大力出奇迹——它关乎智能基础设施、文化纪律以及对工程卓越的深度承诺。&lt;/p>
+&lt;h2 id="bug-管理系统该如何设计">Bug 管理系统该如何设计
+&lt;/h2>&lt;p>上周看到了&lt;a class="link" href="https://www.ruanyifeng.com/blog/2025/06/weekly-issue-352.html" target="_blank" rel="noopener"
+>科技爱好者周刊&lt;/a>讨论了这个问题，觉得深有启发。&lt;/p>
+&lt;p>bugzilla 的一个早期工程师，前不久写了&lt;a class="link" href="https://www.bozemanpass.com/everythings-a-bug-or-an-issue/" target="_blank" rel="noopener"
+>一篇文章&lt;/a>，介绍 Bugzilla 的四条设计原则。&lt;/p>
+&lt;p>他说，只有满足这四点，才是一个好的 Bug 追踪系统（bug tracking system），我感到很有启发。&lt;/p>
+&lt;p>（1）所有任务都要列入 Bug 追踪。不仅包括代码 Bug，还包括待开发的新功能、缺失的文档、令人困惑的用户体验、糟糕的性能等等。&lt;/p>
+&lt;p>换言之，Bug 追踪系统本质是任务管理，应该当作项目管理系统来用。&lt;/p>
+&lt;p>（2）Bug 的状态有多种，不只&amp;quot;打开&amp;quot;和&amp;quot;关闭&amp;quot;两种。&lt;/p>
+&lt;p>大公司的 Bug 处理流程，可能很复杂，下面是一张从 &lt;a class="link" href="https://www.bugzilla.org/docs/3.6/en/html/lifecycle.html" target="_blank" rel="noopener"
+>Bugzilla 文档&lt;/a>拷贝的流程图。&lt;/p>
+&lt;p>&lt;img src="https://cdn.beekka.com/blogimg/asset/202506/bg2025060807.webp"
+loading="lazy"
+>&lt;/p>
+&lt;p>Bug 追踪系统应该足够灵活，可以自定义优先级、严重程度、是否已分配、是否有依赖等等，以便适配各种流程。&lt;/p>
+&lt;p>（3）每个 Bug 只能由一人负责。&lt;/p>
+&lt;p>这样才能明确责任，方便查看每个人正在做什么、接下来要做什么、以及最近做了什么。这也有利于培养开发者的归属感和成就感。&lt;/p>
+&lt;p>（4）支持自定义视图。&lt;/p>
+&lt;p>由于 Bug 有多种状态，追踪系统必须支持自定义视图查看，拥有强大的查询功能。&lt;/p>
+&lt;p>系统的默认视图：按照优先级，列出当前版本的所有没有关闭的 Bug。&lt;/p>
+&lt;p>开发者的个人视图：列出分配给他们的所有 Bug，同样按优先级排序。另外，用户可以保存自己的自定义视图。&lt;/p>
+&lt;h3 id="个人感受">个人感受
+&lt;/h3>&lt;p>基本上我使用过的大部分 bug 管理系统都满足上面要求。&lt;/p>
+&lt;p>不过目前就职的公司由于很多非常复杂的原因，我们并没有统一使用缺陷管理系统。&lt;/p>
+&lt;p>取而代之的是，我们用的是飞书的多维表格来管理缺陷。&lt;/p>
+&lt;p>如果配置得当的话，多维表格是满足上面的 4 个要求的，凑合拿来用还是没有问题的。&lt;/p>
+&lt;p>但是多维表格也有不少局限性，比如&lt;/p>
+&lt;ul>
+&lt;li>缺陷分析能力有限，本质上讲根本就没有这个功能；&lt;/li>
+&lt;li>长期维护的项目，缺陷记录数量会非常多，从而导致系统性能下降&lt;/li>
+&lt;li>状态流转没有状态机保障，字段之间没有联动&lt;/li>
+&lt;li>常用图表需要自己配置，很难在多个项目中共享一套配置&lt;/li>
+&lt;/ul>
+&lt;p>所以在有条件的情况下，还是使用缺陷管理系统吧，这个对缺陷的跟踪以及工作效率的提升都有正向的收益。&lt;/p>
+&lt;h2 id="pydoll-最方便使用的自动化测试工具">pydoll 最方便使用的自动化测试工具
+&lt;/h2>&lt;p>在使用 selenium 的时候，有个比较大的痛点是随着本机安装的浏览器的更新，各种驱动，比如 chromedriver 也需要同步更新。&lt;/p>
+&lt;p>对于新手来说，找到合适版本的 driver 都是一个非常大的挑战。&lt;/p>
+&lt;p>所以后面 selenium 官方出品一个叫做&lt;a class="link" href="https://www.selenium.dev/documentation/selenium_manager/" target="_blank" rel="noopener"
+>selenium manager&lt;/a>的工具来解决 driver 更新的问题。&lt;/p>
+&lt;p>因为跟 selenium 的深度整合，所以在使用上，selenium manager 是无感的。&lt;/p>
+&lt;p>不过在第一次使用时，有可能需要下载浏览器和驱动，所以环境初始化还是有一点点挑战的。&lt;/p>
+&lt;p>至于最近风头正盛的&lt;a class="link" href="https://playwright.dev/" target="_blank" rel="noopener"
+>playwright&lt;/a>，一般情况下，在第一次初始化时也会下载几个主流的浏览器，如果网络有问题的话，容错率还是不高的，有机会安装失败。&lt;/p>
+&lt;p>那有没有一种自动化测试工具是可以不用下载任何的浏览器和驱动，就可以直接使用的呢？&lt;/p>
+&lt;p>最近就正好发现了这样一款工具&amp;ndash;&lt;a class="link" href="https://autoscrape-labs.github.io/pydoll/" target="_blank" rel="noopener"
+>pydoll&lt;/a>。&lt;/p>
+&lt;blockquote>
+&lt;p>Pydoll 通过完全摆脱 webdriver 依赖，正在革新浏览器自动化！它直接通过 DevTools 协议连接浏览器，无需外部组件，提供流畅可靠的自动化体验和原生异步性能。
+无论是数据抓取、Web 应用测试，还是重复任务自动化，Pydoll 凭借直观的 API 和强大功能，让一切变得简单易用。&lt;/p>&lt;/blockquote>
+&lt;p>还是同样的调调，一上来就革 webdirver 的命，与 cypress 和 playwright 异曲同工。&lt;/p>
+&lt;p>不过试用了一下之后，发现这个工具还是有可取之处的。&lt;/p>
+&lt;p>官方给出的优势如下：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>真正的简洁性&lt;/strong>：我们不希望您浪费时间配置驱动程序或处理兼容性问题。使用 Pydoll，安装即可开始自动化。&lt;/li>
+&lt;li>&lt;strong>真实的人类交互&lt;/strong>：我们的算法模拟真实的人类行为模式——从点击间隔到鼠标在屏幕上的移动轨迹。&lt;/li>
+&lt;li>&lt;strong>原生异步性能&lt;/strong>：基于 &lt;code>asyncio&lt;/code> 从零构建，Pydoll 不仅仅是支持异步操作——它就是为异步而设计的。&lt;/li>
+&lt;li>&lt;strong>集成智能&lt;/strong>：自动绕过 Cloudflare Turnstile 和 reCAPTCHA v3 验证码，无需外部服务或复杂配置。&lt;/li>
+&lt;li>&lt;strong>强大的网络监控&lt;/strong>：轻松拦截、修改和分析所有网络流量，让您完全掌控请求。&lt;/li>
+&lt;li>&lt;strong>事件驱动架构&lt;/strong>：实时响应页面事件、网络请求和用户交互。&lt;/li>
+&lt;li>&lt;strong>直观的元素查找&lt;/strong>：现代化的 &lt;code>find()&lt;/code> 和 &lt;code>query()&lt;/code> 方法，符合直觉且运行稳定。&lt;/li>
+&lt;li>&lt;strong>健壮的类型安全&lt;/strong>：完善的类型系统，提供更好的 IDE 支持并预防错误。&lt;/li>
+&lt;/ul>
+&lt;p>总结一下，对于测试同学和爬虫爱好者来说，下面的优点是非常有吸引力的。&lt;/p>
+&lt;ul>
+&lt;li>有 chrome 就可以用，只要不是特别老旧的机器和浏览器版本，安装好 pydoll 之后就可以直接写代码了&lt;/li>
+&lt;li>支持异步操作，也就是说可以并发进行用例执行和数据爬取工作了&lt;/li>
+&lt;li>支持网络拦截器，也就是说可以用来做 api 测试了&lt;/li>
+&lt;/ul>
+&lt;h3 id="代码示例">代码示例
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">asyncio&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">pydoll.browser.chromium&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Chrome&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">async&lt;/span> &lt;span class="k">def&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">async&lt;/span> &lt;span class="k">with&lt;/span> &lt;span class="n">Chrome&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">browser&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tab&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="n">browser&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">start&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">go_to&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;https://github.com/autoscrape-labs/pydoll&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">star_button&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">await&lt;/span> &lt;span class="n">tab&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">find&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tag_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;button&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">timeout&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">raise_exc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">star_button&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Ops! The button was not found.&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">star_button&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">click&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">await&lt;/span> &lt;span class="n">asyncio&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sleep&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">asyncio&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">run&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">main&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以看到，除了 async 和 await 之外，代码的写法跟 selenium 是极其类似的。&lt;/p>
+&lt;h2 id="言论">言论
+&lt;/h2>&lt;p>来自&lt;a class="link" href="https://medium.com/@contextdependence/orienting-test-planning-c72a84a98b46" target="_blank" rel="noopener"
+>这篇文章&lt;/a>&lt;/p>
+&lt;blockquote>
+&lt;p>Good test planning guides test execution in finding the most important bugs as quickly as practically possible by developing a strategy and associated testing scope to identify or mitigate relevant risks.&lt;/p>&lt;/blockquote>
+&lt;blockquote>
+&lt;p>良好的测试计划通过制定策略和关联的测试范围来识别或减轻相关风险，从而指导测试执行尽快发现最重要的错误。&lt;/p>&lt;/blockquote></description></item></channel></rss>

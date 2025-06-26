@@ -1,0 +1,317 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Crawl4AI应该是近期最火的 AI 爬虫项目了。\n这个项目吸引我的点有 2 个：\n引入了 AI 底层使用的是playwright 核心特性 官方的介绍是这样的。\n🆓 完全免费和开源 🚀 性能极快，超越许多付费服务 🤖 适合大语言模型的输出格式（JSON、清理过的 HTML、markdown） 🌍 支持同时爬取多个 URL 🎨 提取并返回所有媒体标签（图片、音频和视频） 🔗 提取所有外部和内部链接 📚 从页面提取元数据 🔄 用于身份验证、头部和爬取前页面修改的自定义钩子 🕵️ 用户代理自定义 🖼️ 对页面进行截图 📜 爬取前执行多个自定义 JavaScript 📊 使用 JsonCssExtractionStrategy 生成结构化输出，无需大语言模型 📚 多种切片策略：基于主题、正则表达式、句子等 🧠 高级提取策略：余弦聚类、大语言模型等 🎯 支持 CSS 选择器以精确提取数据 📝 传递指令/关键词以优化提取 🔒 支持代理以增强隐私和访问 🔄 会话管理，适用于复杂的多页面爬取场景 🌐 异步架构，提高性能和可扩展性 用的一手好 emoji👍。\n"><title>快速体验近期最火的AI爬虫项目-Crawl4AI</title><link rel=canonical href=zh.ethanhan.cc/p/%E5%BF%AB%E9%80%9F%E4%BD%93%E9%AA%8C%E8%BF%91%E6%9C%9F%E6%9C%80%E7%81%AB%E7%9A%84ai%E7%88%AC%E8%99%AB%E9%A1%B9%E7%9B%AE-crawl4ai/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css><meta property='og:title' content="快速体验近期最火的AI爬虫项目-Crawl4AI"><meta property='og:description' content="Crawl4AI应该是近期最火的 AI 爬虫项目了。\n这个项目吸引我的点有 2 个：\n引入了 AI 底层使用的是playwright 核心特性 官方的介绍是这样的。\n🆓 完全免费和开源 🚀 性能极快，超越许多付费服务 🤖 适合大语言模型的输出格式（JSON、清理过的 HTML、markdown） 🌍 支持同时爬取多个 URL 🎨 提取并返回所有媒体标签（图片、音频和视频） 🔗 提取所有外部和内部链接 📚 从页面提取元数据 🔄 用于身份验证、头部和爬取前页面修改的自定义钩子 🕵️ 用户代理自定义 🖼️ 对页面进行截图 📜 爬取前执行多个自定义 JavaScript 📊 使用 JsonCssExtractionStrategy 生成结构化输出，无需大语言模型 📚 多种切片策略：基于主题、正则表达式、句子等 🧠 高级提取策略：余弦聚类、大语言模型等 🎯 支持 CSS 选择器以精确提取数据 📝 传递指令/关键词以优化提取 🔒 支持代理以增强隐私和访问 🔄 会话管理，适用于复杂的多页面爬取场景 🌐 异步架构，提高性能和可扩展性 用的一手好 emoji👍。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E5%BF%AB%E9%80%9F%E4%BD%93%E9%AA%8C%E8%BF%91%E6%9C%9F%E6%9C%80%E7%81%AB%E7%9A%84ai%E7%88%AC%E8%99%AB%E9%A1%B9%E7%9B%AE-crawl4ai/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2024-10-17T23:02:15+08:00'><meta property='article:modified_time' content='2024-10-17T23:02:15+08:00'><meta name=twitter:title content="快速体验近期最火的AI爬虫项目-Crawl4AI"><meta name=twitter:description content="Crawl4AI应该是近期最火的 AI 爬虫项目了。\n这个项目吸引我的点有 2 个：\n引入了 AI 底层使用的是playwright 核心特性 官方的介绍是这样的。\n🆓 完全免费和开源 🚀 性能极快，超越许多付费服务 🤖 适合大语言模型的输出格式（JSON、清理过的 HTML、markdown） 🌍 支持同时爬取多个 URL 🎨 提取并返回所有媒体标签（图片、音频和视频） 🔗 提取所有外部和内部链接 📚 从页面提取元数据 🔄 用于身份验证、头部和爬取前页面修改的自定义钩子 🕵️ 用户代理自定义 🖼️ 对页面进行截图 📜 爬取前执行多个自定义 JavaScript 📊 使用 JsonCssExtractionStrategy 生成结构化输出，无需大语言模型 📚 多种切片策略：基于主题、正则表达式、句子等 🧠 高级提取策略：余弦聚类、大语言模型等 🎯 支持 CSS 选择器以精确提取数据 📝 传递指令/关键词以优化提取 🔒 支持代理以增强隐私和访问 🔄 会话管理，适用于复杂的多页面爬取场景 🌐 异步架构，提高性能和可扩展性 用的一手好 emoji👍。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_1a55c1889b9d7ad9.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#核心特性>核心特性</a></li><li><a href=#安装>安装</a></li><li><a href=#爬豆瓣上评分最高的-250-本书>爬豆瓣上评分最高的 250 本书</a></li><li><a href=#总结>总结</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E5%BF%AB%E9%80%9F%E4%BD%93%E9%AA%8C%E8%BF%91%E6%9C%9F%E6%9C%80%E7%81%AB%E7%9A%84ai%E7%88%AC%E8%99%AB%E9%A1%B9%E7%9B%AE-crawl4ai/>快速体验近期最火的AI爬虫项目-Crawl4AI</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Oct 17, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 6 分钟</time></div></footer></div></header><section class=article-content><p><a class=link href=https://github.com/unclecode/crawl4ai target=_blank rel=noopener>Crawl4AI</a>应该是近期最火的 AI 爬虫项目了。</p><p>这个项目吸引我的点有 2 个：</p><ul><li>引入了 AI</li><li>底层使用的是<a class=link href=https://playwright.dev/ target=_blank rel=noopener>playwright</a></li></ul><h2 id=核心特性>核心特性</h2><p>官方的介绍是这样的。</p><ul><li>🆓 完全免费和开源</li><li>🚀 性能极快，超越许多付费服务</li><li>🤖 适合大语言模型的输出格式（JSON、清理过的 HTML、markdown）</li><li>🌍 支持同时爬取多个 URL</li><li>🎨 提取并返回所有媒体标签（图片、音频和视频）</li><li>🔗 提取所有外部和内部链接</li><li>📚 从页面提取元数据</li><li>🔄 用于身份验证、头部和爬取前页面修改的自定义钩子</li><li>🕵️ 用户代理自定义</li><li>🖼️ 对页面进行截图</li><li>📜 爬取前执行多个自定义 JavaScript</li><li>📊 使用 JsonCssExtractionStrategy 生成结构化输出，无需大语言模型</li><li>📚 多种切片策略：基于主题、正则表达式、句子等</li><li>🧠 高级提取策略：余弦聚类、大语言模型等</li><li>🎯 支持 CSS 选择器以精确提取数据</li><li>📝 传递指令/关键词以优化提取</li><li>🔒 支持代理以增强隐私和访问</li><li>🔄 会话管理，适用于复杂的多页面爬取场景</li><li>🌐 异步架构，提高性能和可扩展性</li></ul><p>用的一手好 emoji👍。</p><p>这里面一些传统爬虫所不支持的功能基本上来自于 playwright，比如截图之类的。</p><p>比较有意思是引入了切片策略和使用大预言模型来处理爬取的内容。</p><h2 id=安装>安装</h2><p>Crawl4AI 的安装相对比较复杂，不过如果不需要深入体验本地大模型的话，使用最基本的安装方式就可以了。</p><p>基本上是 2 条命令。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>pip install crawl4ai
+</span></span><span class=line><span class=cl>python -m playwright install chromium
+</span></span></code></pre></td></tr></table></div></div><p>这里为了节约时间和空间，只安装了 playwright 的 chrome 浏览器，一般情况下够用了。</p><h2 id=爬豆瓣上评分最高的-250-本书>爬豆瓣上评分最高的 250 本书</h2><p>写了个获取豆瓣评分最高的 250 本图书的爬虫。</p><p>这个爬虫跟大语言模型没有半毛钱关系。</p><p>大概的过程就是访问<code>https://book.douban.com/top250</code>这个页面以及后面的 9 个分页，把每一页的 25 本图书都爬下来。</p><p>拿官方的例子随手改了改，代码如下。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>asyncio</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>json</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>crawl4ai</span> <span class=kn>import</span> <span class=n>AsyncWebCrawler</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>crawl4ai.extraction_strategy</span> <span class=kn>import</span> <span class=n>JsonCssExtractionStrategy</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pprint</span> <span class=kn>import</span> <span class=n>pprint</span> <span class=k>as</span> <span class=n>pp</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>async</span> <span class=k>def</span> <span class=nf>extract_books</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>schema</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Douban Book 250&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;baseSelector&#34;</span><span class=p>:</span> <span class=s2>&#34;tr.item&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;list&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;fields&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;title&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;text&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;selector&#34;</span><span class=p>:</span> <span class=s2>&#34;.pl2 &gt; a&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;url&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;attribute&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;selector&#34;</span><span class=p>:</span> <span class=s2>&#34;.pl2 &gt; a&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;attribute&#34;</span><span class=p>:</span> <span class=s2>&#34;href&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;info&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;text&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;selector&#34;</span><span class=p>:</span> <span class=s2>&#34;.pl&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;rate&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;text&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;selector&#34;</span><span class=p>:</span> <span class=s2>&#34;.rating_nums&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;quote&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;text&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;selector&#34;</span><span class=p>:</span> <span class=s2>&#34;span.inq&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>extraction_strategy</span> <span class=o>=</span> <span class=n>JsonCssExtractionStrategy</span><span class=p>(</span><span class=n>schema</span><span class=p>,</span> <span class=n>verbose</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>async</span> <span class=k>with</span> <span class=n>AsyncWebCrawler</span><span class=p>(</span><span class=n>verbose</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span> <span class=k>as</span> <span class=n>crawler</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>10</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=n>result</span> <span class=o>=</span> <span class=k>await</span> <span class=n>crawler</span><span class=o>.</span><span class=n>arun</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>                <span class=n>url</span> <span class=o>=</span> <span class=sa>f</span><span class=s2>&#34;https://book.douban.com/top250?start=</span><span class=si>{</span><span class=n>i</span> <span class=o>*</span> <span class=mi>25</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>extraction_strategy</span><span class=o>=</span><span class=n>extraction_strategy</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>bypass_cache</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>assert</span> <span class=n>result</span><span class=o>.</span><span class=n>success</span><span class=p>,</span> <span class=s2>&#34;Failed to crawl the page&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>books</span> <span class=o>=</span> <span class=n>json</span><span class=o>.</span><span class=n>loads</span><span class=p>(</span><span class=n>result</span><span class=o>.</span><span class=n>extracted_content</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>pp</span><span class=p>(</span><span class=n>books</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Successfully extracted </span><span class=si>{</span><span class=nb>len</span><span class=p>(</span><span class=n>books</span><span class=p>)</span><span class=si>}</span><span class=s2> books&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>asyncio</span><span class=o>.</span><span class=n>run</span><span class=p>(</span><span class=n>extract_books</span><span class=p>())</span>
+</span></span></code></pre></td></tr></table></div></div><p>部分结果如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span><span class=lnt>86
+</span><span class=lnt>87
+</span><span class=lnt>88
+</span><span class=lnt>89
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>[{&#39;info&#39;: &#39;[清] 曹雪芹 著 / 人民文学出版社 / 1996-12 / 59.70元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;都云作者痴，谁解其中味？&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.6&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;红楼梦&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1007305/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;余华 / 作家出版社 / 2012-8 / 20.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;生的苦难与伟大&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.4&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;活着&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/4913064/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[英] 乔治·奥威尔 / 刘绍铭 / 北京十月文艺出版社 / 2010-4-1 / 28.00&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;栗树荫下，我出卖你，你出卖我&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.4&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;1984&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/4820710/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;J.K.罗琳 (J.K.Rowling) / 苏农 / 人民文学出版社 / 2008-12-1 / 498.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;从9¾站台开始的旅程&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.7&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;哈利·波特&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/24531956/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;刘慈欣 / 重庆出版社 / 2012-1 / 168.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;地球往事三部曲&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.5&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;三体全集: 地球往事三部曲&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/6518605/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[哥伦比亚] 加西亚·马尔克斯 / 范晔 / 南海出版公司 / 2011-6 / 39.50元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;魔幻现实主义文学代表作&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.3&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;百年孤独&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/6082808/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[美国] 玛格丽特·米切尔 / 李美华 / 译林出版社 / 2000-9 / 40.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;革命时期的爱情，随风而逝&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.3&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;飘&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1068920/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[英] 乔治·奥威尔 / 荣如德 / 上海译文出版社 / 2007-3 / 10.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;太阳底下并无新事&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.3&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;动物农场&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/2035179/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;林奕含 / 北京联合出版公司 / 2018-2 / 45.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;向死而生的文学绝唱&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.2&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;房思琪的初恋乐园&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/27614904/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[明] 罗贯中 / 人民文学出版社 / 1998-05 / 39.50元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;是非成败转头空&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.3&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;三国演义（全二册）&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1019568/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[英] 阿·柯南道尔 / 丁钟华 等 / 群众出版社 / 1981-8 / 53.00元/68.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;名侦探的代名词&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.3&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;福尔摩斯探案全集（上中下）&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1040211/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[日] 东野圭吾 / 刘姿君 / 南海出版公司 / 2013-1-1 / 39.50元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;一宗离奇命案牵出跨度近20年步步惊心的故事&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.2&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;白夜行&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/10554308/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;[法] 圣埃克苏佩里 / 马振骋 / 人民文学出版社 / 2003-8 / 22.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;献给长成了大人的孩子们&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.1&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;小王子&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1084336/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;（丹麦）安徒生 / 叶君健 / 人民文学出版社 / 1997-08 / 25.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;为了争取未来的一代&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.3&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;安徒生童话故事集&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1046209/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;鲁迅 / 人民文学出版社 / 1973-3 / 0.36元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;新文学的第一声呐喊&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.2&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;呐喊&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1449351/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;金庸 / 生活·读书·新知三联书店 / 1994-5 / 96.00元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;有情皆孽，无人不冤&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.2&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;天龙八部&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1255625/&#39;},
+</span></span><span class=line><span class=cl> {&#39;info&#39;: &#39;三毛 / 哈尔滨出版社 / 2003-8 / 15.80元&#39;,
+</span></span><span class=line><span class=cl>  &#39;quote&#39;: &#39;游荡的自由灵魂&#39;,
+</span></span><span class=line><span class=cl>  &#39;rate&#39;: &#39;9.2&#39;,
+</span></span><span class=line><span class=cl>  &#39;title&#39;: &#39;撒哈拉的故事&#39;,
+</span></span><span class=line><span class=cl>  &#39;url&#39;: &#39;https://book.douban.com/subject/1060068/&#39;},
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>]
+</span></span></code></pre></td></tr></table></div></div><h2 id=总结>总结</h2><p>写这个爬虫大概花了半小时时间，所以这个库上手还是不太困难的。</p><p>然而最基本的使用场景里，ai 完全没有出场的机会。</p><p>后面有时间的话体验再体验一下完全使用 ai 来抓取网页内容的功能吧。</p><p>这次试用我觉得亮点如下：</p><ul><li>使用 playwright，极大的提升了爬虫的可用性和使用场景</li><li>默认使用异步的方式使得爬虫的性能非常不错</li><li>现在一些站点的前端页面会做 css 混淆，传统的基于 css 选择器的爬虫鞭长莫及，引入 ai 进行内容的爬取非常有必要</li></ul><p>不足的地方：</p><ul><li>官方文档关于 ai 使用方法的那几篇，代码格式是乱的，搞得我不好 copy，所以下次再体验吧</li><li><code>JsonCssExtractionStrategy</code>的 schema 没有完整的规格说明，只能靠猜</li><li>代码库里跟 llm 相关的例子太少</li></ul></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
