@@ -1,0 +1,147 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="最近一些大公司在进行去测试化的操作，这一切的根源大概可以从几年前微软一刀切砍掉所有内部正式的测试人员开始说起，当时微软内部的测试工程师有一部分转职成了开发工程师，他们的职能中有很大一部分的职责是教会普通开发人员如何进行测试。我们都知道开发人员进行的测试一般以单元测试为主，假如有一天你所在的组织需要你转变成一名测试方面的教练，除了自动化测试之外还需要去推广单元测试，那么你该如何去定义单元测试用例的设计方法论呢？这里给大家一些思路，看看简单的单元测试用例究竟该如何设计。\n"><title>单元测试用例该如何设计</title><link rel=canonical href=zh.ethanhan.cc/p/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AF%A5%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css><meta property='og:title' content="单元测试用例该如何设计"><meta property='og:description' content="最近一些大公司在进行去测试化的操作，这一切的根源大概可以从几年前微软一刀切砍掉所有内部正式的测试人员开始说起，当时微软内部的测试工程师有一部分转职成了开发工程师，他们的职能中有很大一部分的职责是教会普通开发人员如何进行测试。我们都知道开发人员进行的测试一般以单元测试为主，假如有一天你所在的组织需要你转变成一名测试方面的教练，除了自动化测试之外还需要去推广单元测试，那么你该如何去定义单元测试用例的设计方法论呢？这里给大家一些思路，看看简单的单元测试用例究竟该如何设计。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AF%A5%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-04-07T14:39:24+08:00'><meta property='article:modified_time' content='2023-04-07T14:39:24+08:00'><meta name=twitter:title content="单元测试用例该如何设计"><meta name=twitter:description content="最近一些大公司在进行去测试化的操作，这一切的根源大概可以从几年前微软一刀切砍掉所有内部正式的测试人员开始说起，当时微软内部的测试工程师有一部分转职成了开发工程师，他们的职能中有很大一部分的职责是教会普通开发人员如何进行测试。我们都知道开发人员进行的测试一般以单元测试为主，假如有一天你所在的组织需要你转变成一名测试方面的教练，除了自动化测试之外还需要去推广单元测试，那么你该如何去定义单元测试用例的设计方法论呢？这里给大家一些思路，看看简单的单元测试用例究竟该如何设计。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_1a55c1889b9d7ad9.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#使用参数方法创建测试用例><strong>使用参数方法创建测试用例</strong></a></li><li><a href=#使用执行路径方法创建测试用例><strong>使用执行路径方法创建测试用例</strong></a></li><li><a href=#总结>总结</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AF%A5%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1/>单元测试用例该如何设计</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 07, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 4 分钟</time></div></footer></div></header><section class=article-content><p>最近一些大公司在进行去测试化的操作，这一切的根源大概可以从几年前微软一刀切砍掉所有内部正式的测试人员开始说起，当时微软内部的测试工程师有一部分转职成了开发工程师，他们的职能中有很大一部分的职责是教会普通开发人员如何进行测试。我们都知道开发人员进行的测试一般以单元测试为主，假如有一天你所在的组织需要你转变成一名测试方面的教练，除了自动化测试之外还需要去推广单元测试，那么你该如何去定义单元测试用例的设计方法论呢？这里给大家一些思路，看看简单的单元测试用例究竟该如何设计。</p><p>一个方法可以有任意数量的有效测试用例；它最终取决于方法的结构。有两种简单的方式可以帮助我们设计单元测试用例。</p><ul><li>参数方法</li><li>执行路径方法</li></ul><p>我将通过提供真实的代码来进行演示。所有代码片段都将用 C# 编写，断言将使用我最喜欢的单元测试包 Fluent Assertions。</p><p>我们将为以下方法提供测试用例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=kd>static</span> <span class=kt>bool</span> <span class=n>ContainsNamelessItems</span><span class=p>(</span><span class=k>this</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;</span> <span class=n>items</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>items</span><span class=p>.</span><span class=n>Any</span><span class=p>(</span><span class=n>item</span> <span class=p>=&gt;</span> <span class=n>item</span><span class=p>.</span><span class=n>Name</span><span class=p>.</span><span class=n>IsNullOrEmpty</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>此方法将项目集合作为参数。它遍历项目列表，并针对每个项目<code>Item</code>检查其name属性是否为空。如果name存在且不为空，我们返回<code>True</code>，否则我们返回<code>False</code>。</p><h3 id=使用参数方法创建测试用例><strong>使用参数方法创建测试用例</strong></h3><p>这种方式主要考虑的是入参可以传递哪些值。</p><p>查看该方法的参数ContainsNamelessItems，我们有一个List<item>名为items. 此参数可能有几个可能的值：</p><ul><li>items 是空的</li><li>items至少包含 1 个Item具有Name未定义的属性</li><li>items不包含具有未定义Name属性的项目</li><li>items 是 null</li></ul><p>这些可能的值中的每一个都可以作为单独的用例存在。</p><p>以下是一些可能的测试用例和断言：</p><p>1，当<code>List&lt;Item></code>为空时，我们期望返回值是<code>False</code>因为其的<code>List&lt;Item></code>无name属性。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=k>void</span> <span class=n>WhenItemsIsEmpty_ReturnFalse</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>var</span> <span class=n>items</span> <span class=p>=</span> <span class=k>new</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=n>items</span><span class=p>.</span><span class=n>ContainsNamelessItems</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>result</span><span class=p>.</span><span class=n>Should</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>BeFalse</span><span class=p>(</span><span class=s>&#34;because an empty collection cannot contain nameless items&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>2，当<code>List&lt;Item></code>包含至少 1 项没有name属性的<code>Item</code>时，我们期望返回值是<code>True</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=k>void</span> <span class=n>WhenItemsContainsANamelessItem_ReturnTrue</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>var</span> <span class=n>items</span> <span class=p>=</span> <span class=k>new</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span> <span class=k>new</span> <span class=n>Item</span> <span class=p>{</span> <span class=n>Name</span> <span class=p>=</span> <span class=s>&#34;Item1&#34;</span> <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span> <span class=k>new</span> <span class=n>Item</span> <span class=p>{</span> <span class=n>Name</span> <span class=p>=</span> <span class=kt>string</span><span class=p>.</span><span class=n>Empty</span> <span class=p>}</span> <span class=c1>// nameless item</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=n>items</span><span class=p>.</span><span class=n>ContainsNamelessItems</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>result</span><span class=p>.</span><span class=n>Should</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>BeTrue</span><span class=p>(</span><span class=s>&#34;because there is a nameless item in the collection&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>3，当<code>List&lt;Item></code>不包含任何没有name属性的项目时，我们期望返回值是<code>False</code>，因为所有项目都有name。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=k>void</span> <span class=n>WhenItemsDoesNotContainANamelessItem_ReturnFalse</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>var</span> <span class=n>items</span> <span class=p>=</span> <span class=k>new</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span> <span class=k>new</span> <span class=n>Item</span> <span class=p>{</span> <span class=n>Name</span> <span class=p>=</span> <span class=s>&#34;Item1&#34;</span> <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span> <span class=k>new</span> <span class=n>Item</span> <span class=p>{</span> <span class=n>Name</span> <span class=p>=</span> <span class=s>&#34;Item2&#34;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kt>var</span> <span class=n>result</span> <span class=p>=</span> <span class=n>items</span><span class=p>.</span><span class=n>ContainsNamelessItems</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>result</span><span class=p>.</span><span class=n>Should</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>BeFalse</span><span class=p>(</span><span class=s>&#34;because there are no nameless items in the collection&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>4，当<code>List&lt;Item></code>is <code>null</code>的时候，我们期望抛出<code>ArgumentNullException</code>异常，这往往是最难想到的。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=k>void</span> <span class=n>WhenItemsIsNull_ThrowArgumentException</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;</span> <span class=n>items</span> <span class=p>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Action</span> <span class=n>act</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=n>items</span><span class=p>.</span><span class=n>ContainsNamelessItems</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>act</span><span class=p>.</span><span class=n>Should</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>Throw</span><span class=p>&lt;</span><span class=n>ArgumentNullException</span><span class=p>&gt;(</span><span class=s>&#34;because the collection is null&#34;</span><span class=p>);</span>  
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=使用执行路径方法创建测试用例><strong>使用执行路径方法创建测试用例</strong></h3><p>路径方式需要遍历被测方法并找到所有不同的执行路径。</p><p>我们上面定义的方法只有一条执行路径，因为除了直接到达方法的末尾之外，没有任何条件驱动路径。要改变路径，我们就需要引入某种条件，可以通过if&mldr;else、 switch以及try/catch语句。在这些条件块中，方法可能会在达到某个条件的情况下直接退出，而不是运行到方法的最后一行。</p><p>下面我们就引入条件。假设我们不希望方法在入参为空时候抛出ArgumentNullException异常，而是想抛出一个我们自定义的ArgumentException异常。那么我们必须向检查项目列表是否为空的方法添加一个条件。</p><p>流程图如下：</p><p><img src=/zh.ethanhan.cc/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AF%A5%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%20dc486bcdbe0746d988f477636b84de79/Untitled.png loading=lazy alt=Untitled></p><p>现在，如果项目为空，则有可能提前退出，而不是走到方法的末尾，具体实现如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=kd>static</span> <span class=kt>bool</span> <span class=n>ContainsNamelessItems</span><span class=p>(</span><span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;</span> <span class=n>items</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>items</span> <span class=p>==</span> <span class=kc>null</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>throw</span> <span class=k>new</span> <span class=n>ArgumentException</span><span class=p>(</span><span class=s>&#34;The collection of items should not be null.&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>items</span><span class=p>.</span><span class=n>Any</span><span class=p>(</span><span class=n>item</span> <span class=p>=&gt;</span> <span class=n>item</span><span class=p>.</span><span class=n>Name</span><span class=p>.</span><span class=n>IsNullOrEmpty</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>这个测试用例的相应测试看起来像这样：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=k>void</span> <span class=n>WhenItemCollectionIsNull_ThrowArgumentException</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>List</span><span class=p>&lt;</span><span class=n>Item</span><span class=p>&gt;</span> <span class=n>items</span> <span class=p>=</span> <span class=kc>null</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>Action</span> <span class=n>act</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=n>items</span><span class=p>.</span><span class=n>ContainsNamelessItems</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>act</span><span class=p>.</span><span class=n>Should</span><span class=p>().</span><span class=n>Throw</span><span class=p>&lt;</span><span class=n>ArgumentException</span><span class=p>&gt;()</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>WithMessage</span><span class=p>(</span><span class=s>&#34;The collection of items should not be null.&#34;</span><span class=p>);</span>  
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=总结>总结</h3><ul><li>在入参的时候可以用等价类的方式构造任意参数，强类型语言里无效类用的会相对少一些，毕竟编译器会进行校验；而弱类型语言里无效类比较隐蔽，是测试的重点；</li><li>执行路径方法其实就是分支覆盖，通过不通的输入参数去覆盖所有分支，比如同样是有效类的输入情况下，空集合和非空集合可能会走到不通的路径；</li><li>在方法或函数特别复杂的情况下，可以试着去把方法拆小，从而获得更好的可测试性；</li></ul></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
