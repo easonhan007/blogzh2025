@@ -2,6 +2,7 @@
 title: "Openclaw如何接入飞书"
 date: 2026-01-30T15:37:18+08:00
 draft: false
+weight: -999
 ---
 
 之前在 Linux 机器上装了 OpenClaw，每次访问 Dashboard 都得用 SSH 端口转发，用起来不太方便。
