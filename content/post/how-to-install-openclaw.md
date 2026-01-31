@@ -1,7 +1,8 @@
 ---
 title: "完全免费！如何安装openclaw"
-date: 2026-01-29T09:36:02+08:00
+date: 2026-01-31T09:36:02+08:00
 draft: false
+weight: -999
 ---
 
 这几天clawdbot的改名风波闹的沸沸扬扬。
