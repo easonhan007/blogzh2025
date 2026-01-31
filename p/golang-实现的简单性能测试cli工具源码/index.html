@@ -1,0 +1,1017 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="项目结构 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 apistress/ ├── go.mod ├── main.go # 主入口 ├── cmd/ │ └── root.go # CLI 命令定义 └── internal/ ├── types/ │ └── config.go # 数据结构定义 ├── client/ │ └── http.go # HTTP 客户端 ├── utils/ │ └── parser.go # 解析工具函数 ├── stress/ │ └── test.go # 压力测试核心逻辑 └── output/ └── printer.go # 结果输出格式化 包结构说明 main - 程序入口点，调用 cmd 包\n"><title>Golang 实现的简单性能测试CLI工具源码</title><link rel=canonical href=zh.ethanhan.cc/p/golang-%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95cli%E5%B7%A5%E5%85%B7%E6%BA%90%E7%A0%81/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="Golang 实现的简单性能测试CLI工具源码"><meta property='og:description' content="项目结构 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 apistress/ ├── go.mod ├── main.go # 主入口 ├── cmd/ │ └── root.go # CLI 命令定义 └── internal/ ├── types/ │ └── config.go # 数据结构定义 ├── client/ │ └── http.go # HTTP 客户端 ├── utils/ │ └── parser.go # 解析工具函数 ├── stress/ │ └── test.go # 压力测试核心逻辑 └── output/ └── printer.go # 结果输出格式化 包结构说明 main - 程序入口点，调用 cmd 包\n"><meta property='og:url' content='zh.ethanhan.cc/p/golang-%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95cli%E5%B7%A5%E5%85%B7%E6%BA%90%E7%A0%81/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2025-08-27T07:52:03+08:00'><meta property='article:modified_time' content='2025-08-27T07:52:03+08:00'><meta name=twitter:title content="Golang 实现的简单性能测试CLI工具源码"><meta name=twitter:description content="项目结构 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 apistress/ ├── go.mod ├── main.go # 主入口 ├── cmd/ │ └── root.go # CLI 命令定义 └── internal/ ├── types/ │ └── config.go # 数据结构定义 ├── client/ │ └── http.go # HTTP 客户端 ├── utils/ │ └── parser.go # 解析工具函数 ├── stress/ │ └── test.go # 压力测试核心逻辑 └── output/ └── printer.go # 结果输出格式化 包结构说明 main - 程序入口点，调用 cmd 包\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#项目结构>项目结构</a></li><li><a href=#包结构说明>包结构说明</a></li><li><a href=#使用方法>使用方法</a></li><li><a href=#代码>代码</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/golang-%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%AE%80%E5%8D%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95cli%E5%B7%A5%E5%85%B7%E6%BA%90%E7%A0%81/>Golang 实现的简单性能测试CLI工具源码</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2025-08-27T07:52:03+08:00>Aug 27, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><h2 id=项目结构>项目结构</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>apistress/
+</span></span><span class=line><span class=cl>├── go.mod
+</span></span><span class=line><span class=cl>├── main.go                    # 主入口
+</span></span><span class=line><span class=cl>├── cmd/
+</span></span><span class=line><span class=cl>│   └── root.go               # CLI 命令定义
+</span></span><span class=line><span class=cl>└── internal/
+</span></span><span class=line><span class=cl>    ├── types/
+</span></span><span class=line><span class=cl>    │   └── config.go         # 数据结构定义
+</span></span><span class=line><span class=cl>    ├── client/
+</span></span><span class=line><span class=cl>    │   └── http.go           # HTTP 客户端
+</span></span><span class=line><span class=cl>    ├── utils/
+</span></span><span class=line><span class=cl>    │   └── parser.go         # 解析工具函数
+</span></span><span class=line><span class=cl>    ├── stress/
+</span></span><span class=line><span class=cl>    │   └── test.go           # 压力测试核心逻辑
+</span></span><span class=line><span class=cl>    └── output/
+</span></span><span class=line><span class=cl>        └── printer.go        # 结果输出格式化
+</span></span></code></pre></td></tr></table></div></div><h2 id=包结构说明>包结构说明</h2><p><strong><code>main</code></strong> - 程序入口点，调用 cmd 包</p><p><strong><code>cmd</code></strong> - 命令行接口，使用 cobra 处理 CLI 参数</p><p><strong><code>internal/types</code></strong> - 内部类型定义</p><ul><li><code>RequestConfig</code> - 请求配置</li><li><code>TestResult</code> - 测试结果</li><li><code>JSONOutput</code> - JSON 输出格式</li></ul><p><strong><code>internal/client</code></strong> - HTTP 客户端封装</p><ul><li><code>MakeRequest</code> - 执行 HTTP 请求</li></ul><p><strong><code>internal/utils</code></strong> - 工具函数</p><ul><li><code>ParseDuration</code> - 解析时间字符串</li><li><code>ParseHeaders</code> - 解析头部参数</li></ul><p><strong><code>internal/stress</code></strong> - 压力测试核心</p><ul><li><code>RunStressTest</code> - 主要测试逻辑</li><li><code>runWorker</code> - 工作协程</li><li><code>updateResults</code> - 结果更新</li></ul><p><strong><code>internal/output</code></strong> - 输出格式化</p><ul><li><code>PrintResults</code> - 结果打印</li><li><code>printTextResults</code> - 文本格式</li><li><code>printJSONResults</code> - JSON 格式</li></ul><h2 id=使用方法>使用方法</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建项目目录</span>
+</span></span><span class=line><span class=cl>mkdir apistress <span class=o>&amp;&amp;</span> <span class=nb>cd</span> apistress
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 初始化 Go 模块</span>
+</span></span><span class=line><span class=cl>go mod init apistress
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建对应的目录结构</span>
+</span></span><span class=line><span class=cl>mkdir -p cmd internal/<span class=o>{</span>types,client,utils,stress,output<span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 将对应代码保存到各自文件中</span>
+</span></span><span class=line><span class=cl><span class=c1># main.go</span>
+</span></span><span class=line><span class=cl><span class=c1># cmd/root.go</span>
+</span></span><span class=line><span class=cl><span class=c1># internal/types/config.go</span>
+</span></span><span class=line><span class=cl><span class=c1># internal/client/http.go</span>
+</span></span><span class=line><span class=cl><span class=c1># internal/utils/parser.go</span>
+</span></span><span class=line><span class=cl><span class=c1># internal/stress/test.go</span>
+</span></span><span class=line><span class=cl><span class=c1># internal/output/printer.go</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装依赖</span>
+</span></span><span class=line><span class=cl>go mod tidy
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运行测试</span>
+</span></span><span class=line><span class=cl>go run . rest --url https://httpbin.org/get --duration 5s
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 编译</span>
+</span></span><span class=line><span class=cl>go build -o apistress
+</span></span><span class=line><span class=cl>./apistress rest --url https://httpbin.org/post --method POST --body <span class=s1>&#39;{&#34;test&#34;:&#34;data&#34;}&#39;</span> --output json
+</span></span></code></pre></td></tr></table></div></div><h2 id=代码>代码</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span><span class=lnt>307
+</span><span class=lnt>308
+</span><span class=lnt>309
+</span><span class=lnt>310
+</span><span class=lnt>311
+</span><span class=lnt>312
+</span><span class=lnt>313
+</span><span class=lnt>314
+</span><span class=lnt>315
+</span><span class=lnt>316
+</span><span class=lnt>317
+</span><span class=lnt>318
+</span><span class=lnt>319
+</span><span class=lnt>320
+</span><span class=lnt>321
+</span><span class=lnt>322
+</span><span class=lnt>323
+</span><span class=lnt>324
+</span><span class=lnt>325
+</span><span class=lnt>326
+</span><span class=lnt>327
+</span><span class=lnt>328
+</span><span class=lnt>329
+</span><span class=lnt>330
+</span><span class=lnt>331
+</span><span class=lnt>332
+</span><span class=lnt>333
+</span><span class=lnt>334
+</span><span class=lnt>335
+</span><span class=lnt>336
+</span><span class=lnt>337
+</span><span class=lnt>338
+</span><span class=lnt>339
+</span><span class=lnt>340
+</span><span class=lnt>341
+</span><span class=lnt>342
+</span><span class=lnt>343
+</span><span class=lnt>344
+</span><span class=lnt>345
+</span><span class=lnt>346
+</span><span class=lnt>347
+</span><span class=lnt>348
+</span><span class=lnt>349
+</span><span class=lnt>350
+</span><span class=lnt>351
+</span><span class=lnt>352
+</span><span class=lnt>353
+</span><span class=lnt>354
+</span><span class=lnt>355
+</span><span class=lnt>356
+</span><span class=lnt>357
+</span><span class=lnt>358
+</span><span class=lnt>359
+</span><span class=lnt>360
+</span><span class=lnt>361
+</span><span class=lnt>362
+</span><span class=lnt>363
+</span><span class=lnt>364
+</span><span class=lnt>365
+</span><span class=lnt>366
+</span><span class=lnt>367
+</span><span class=lnt>368
+</span><span class=lnt>369
+</span><span class=lnt>370
+</span><span class=lnt>371
+</span><span class=lnt>372
+</span><span class=lnt>373
+</span><span class=lnt>374
+</span><span class=lnt>375
+</span><span class=lnt>376
+</span><span class=lnt>377
+</span><span class=lnt>378
+</span><span class=lnt>379
+</span><span class=lnt>380
+</span><span class=lnt>381
+</span><span class=lnt>382
+</span><span class=lnt>383
+</span><span class=lnt>384
+</span><span class=lnt>385
+</span><span class=lnt>386
+</span><span class=lnt>387
+</span><span class=lnt>388
+</span><span class=lnt>389
+</span><span class=lnt>390
+</span><span class=lnt>391
+</span><span class=lnt>392
+</span><span class=lnt>393
+</span><span class=lnt>394
+</span><span class=lnt>395
+</span><span class=lnt>396
+</span><span class=lnt>397
+</span><span class=lnt>398
+</span><span class=lnt>399
+</span><span class=lnt>400
+</span><span class=lnt>401
+</span><span class=lnt>402
+</span><span class=lnt>403
+</span><span class=lnt>404
+</span><span class=lnt>405
+</span><span class=lnt>406
+</span><span class=lnt>407
+</span><span class=lnt>408
+</span><span class=lnt>409
+</span><span class=lnt>410
+</span><span class=lnt>411
+</span><span class=lnt>412
+</span><span class=lnt>413
+</span><span class=lnt>414
+</span><span class=lnt>415
+</span><span class=lnt>416
+</span><span class=lnt>417
+</span><span class=lnt>418
+</span><span class=lnt>419
+</span><span class=lnt>420
+</span><span class=lnt>421
+</span><span class=lnt>422
+</span><span class=lnt>423
+</span><span class=lnt>424
+</span><span class=lnt>425
+</span><span class=lnt>426
+</span><span class=lnt>427
+</span><span class=lnt>428
+</span><span class=lnt>429
+</span><span class=lnt>430
+</span><span class=lnt>431
+</span><span class=lnt>432
+</span><span class=lnt>433
+</span><span class=lnt>434
+</span><span class=lnt>435
+</span><span class=lnt>436
+</span><span class=lnt>437
+</span><span class=lnt>438
+</span><span class=lnt>439
+</span><span class=lnt>440
+</span><span class=lnt>441
+</span><span class=lnt>442
+</span><span class=lnt>443
+</span><span class=lnt>444
+</span><span class=lnt>445
+</span><span class=lnt>446
+</span><span class=lnt>447
+</span><span class=lnt>448
+</span><span class=lnt>449
+</span><span class=lnt>450
+</span><span class=lnt>451
+</span><span class=lnt>452
+</span><span class=lnt>453
+</span><span class=lnt>454
+</span><span class=lnt>455
+</span><span class=lnt>456
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl><span class=c1>// go.mod</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>module</span><span class=w> </span><span class=nx>apistress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>go</span><span class=w> </span><span class=mf>1.21</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nf>require</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>spf13</span><span class=o>/</span><span class=nx>cobra</span><span class=w> </span><span class=nx>v1</span><span class=mf>.8.0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>schollz</span><span class=o>/</span><span class=nx>progressbar</span><span class=o>/</span><span class=nx>v3</span><span class=w> </span><span class=nx>v3</span><span class=mf>.14.1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nf>require</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>inconshreveable</span><span class=o>/</span><span class=nx>mousetrap</span><span class=w> </span><span class=nx>v1</span><span class=mf>.1.0</span><span class=w> </span><span class=c1>// indirect</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>mitchellh</span><span class=o>/</span><span class=nx>colorstring</span><span class=w> </span><span class=nx>v0</span><span class=mf>.0.0</span><span class=o>-</span><span class=mi>20190213212951</span><span class=o>-</span><span class=nx>d06e56a500db</span><span class=w> </span><span class=c1>// indirect</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>rivo</span><span class=o>/</span><span class=nx>uniseg</span><span class=w> </span><span class=nx>v0</span><span class=mf>.4.4</span><span class=w> </span><span class=c1>// indirect</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>spf13</span><span class=o>/</span><span class=nx>pflag</span><span class=w> </span><span class=nx>v1</span><span class=mf>.0.5</span><span class=w> </span><span class=c1>// indirect</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>golang</span><span class=p>.</span><span class=nx>org</span><span class=o>/</span><span class=nx>x</span><span class=o>/</span><span class=nx>sys</span><span class=w> </span><span class=nx>v0</span><span class=mf>.14.0</span><span class=w> </span><span class=c1>// indirect</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>golang</span><span class=p>.</span><span class=nx>org</span><span class=o>/</span><span class=nx>x</span><span class=o>/</span><span class=nx>term</span><span class=w> </span><span class=nx>v0</span><span class=mf>.14.0</span><span class=w> </span><span class=c1>// indirect</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// main.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/cmd&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;os&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>cmd</span><span class=p>.</span><span class=nf>Execute</span><span class=p>();</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Fprintf</span><span class=p>(</span><span class=nx>os</span><span class=p>.</span><span class=nx>Stderr</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Error: %v\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>os</span><span class=p>.</span><span class=nf>Exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// cmd/root.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>cmd</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/stress&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/types&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/utils&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;strings&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;github.com/spf13/cobra&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>rootCmd</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=o>&amp;</span><span class=nx>cobra</span><span class=p>.</span><span class=nx>Command</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Use</span><span class=p>:</span><span class=w> </span><span class=s>&#34;apistress&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Short</span><span class=p>:</span><span class=w> </span><span class=s>&#34;A CLI tool for stress testing REST APIs&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Long</span><span class=p>:</span><span class=w> </span><span class=s>&#34;A powerful CLI tool for stress testing REST APIs with configurable concurrency, rate limiting, and detailed reporting.&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>restCmd</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=o>&amp;</span><span class=nx>cobra</span><span class=p>.</span><span class=nx>Command</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Use</span><span class=p>:</span><span class=w> </span><span class=s>&#34;rest&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Short</span><span class=p>:</span><span class=w> </span><span class=s>&#34;Perform REST API stress test&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>RunE</span><span class=p>:</span><span class=w> </span><span class=nx>runRestStressTest</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>url</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>method</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>body</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>headers</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>concurrency</span><span class=w> </span><span class=kt>int</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>duration</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>rate</span><span class=w> </span><span class=kt>int</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>output</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>init</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>StringVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>url</span><span class=p>,</span><span class=w> </span><span class=s>&#34;url&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Target URL (required)&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>StringVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>method</span><span class=p>,</span><span class=w> </span><span class=s>&#34;method&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;GET&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;HTTP method&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>StringVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>body</span><span class=p>,</span><span class=w> </span><span class=s>&#34;body&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Request body (JSON)&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>StringSliceVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>headers</span><span class=p>,</span><span class=w> </span><span class=s>&#34;header&#34;</span><span class=p>,</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=p>{},</span><span class=w> </span><span class=s>&#34;Headers in format &#39;Key: Value&#39;&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>IntVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>concurrency</span><span class=p>,</span><span class=w> </span><span class=s>&#34;concurrency&#34;</span><span class=p>,</span><span class=w> </span><span class=mi>10</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Number of concurrent requests&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>StringVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>duration</span><span class=p>,</span><span class=w> </span><span class=s>&#34;duration&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;10s&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Test duration (e.g., &#39;30s&#39;, &#39;5m&#39;)&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>IntVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>rate</span><span class=p>,</span><span class=w> </span><span class=s>&#34;rate&#34;</span><span class=p>,</span><span class=w> </span><span class=mi>0</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Requests per second limit (0 = unlimited)&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>restCmd</span><span class=p>.</span><span class=nf>Flags</span><span class=p>().</span><span class=nf>StringVar</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>output</span><span class=p>,</span><span class=w> </span><span class=s>&#34;output&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;text&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Output format (text|json)&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>restCmd</span><span class=p>.</span><span class=nf>MarkFlagRequired</span><span class=p>(</span><span class=s>&#34;url&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>rootCmd</span><span class=p>.</span><span class=nf>AddCommand</span><span class=p>(</span><span class=nx>restCmd</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>Execute</span><span class=p>()</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>rootCmd</span><span class=p>.</span><span class=nf>Execute</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>runRestStressTest</span><span class=p>(</span><span class=nx>cmd</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>cobra</span><span class=p>.</span><span class=nx>Command</span><span class=p>,</span><span class=w> </span><span class=nx>args</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=p>)</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parse duration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>testDuration</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>utils</span><span class=p>.</span><span class=nf>ParseDuration</span><span class=p>(</span><span class=nx>duration</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;invalid duration: %w&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parse headers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>headerMap</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>utils</span><span class=p>.</span><span class=nf>ParseHeaders</span><span class=p>(</span><span class=nx>headers</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;invalid headers: %w&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>config</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=o>&amp;</span><span class=nx>types</span><span class=p>.</span><span class=nx>RequestConfig</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>URL</span><span class=p>:</span><span class=w> </span><span class=nx>url</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Method</span><span class=p>:</span><span class=w> </span><span class=nx>strings</span><span class=p>.</span><span class=nf>ToUpper</span><span class=p>(</span><span class=nx>method</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Body</span><span class=p>:</span><span class=w> </span><span class=nx>body</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Headers</span><span class=p>:</span><span class=w> </span><span class=nx>headerMap</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Validate output format</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>output</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=s>&#34;text&#34;</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=nx>output</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=s>&#34;json&#34;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;invalid output format: %s (must be &#39;text&#39; or &#39;json&#39;)&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>output</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>stress</span><span class=p>.</span><span class=nf>RunStressTest</span><span class=p>(</span><span class=nx>config</span><span class=p>,</span><span class=w> </span><span class=nx>concurrency</span><span class=p>,</span><span class=w> </span><span class=nx>testDuration</span><span class=p>,</span><span class=w> </span><span class=nx>rate</span><span class=p>,</span><span class=w> </span><span class=nx>output</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// internal/types/config.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>types</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=s>&#34;time&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>RequestConfig</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>URL</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Method</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Body</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Headers</span><span class=w> </span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>TestResult</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TotalRequests</span><span class=w> </span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;total_requests&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>SuccessfulReqs</span><span class=w> </span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;successful_requests&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>FailedReqs</span><span class=w> </span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;failed_requests&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MinLatency</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w> </span><span class=s>`json:&#34;min_latency_ns&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MaxLatency</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w> </span><span class=s>`json:&#34;max_latency_ns&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TotalLatency</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w> </span><span class=s>`json:&#34;total_latency_ns&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>StatusCodes</span><span class=w> </span><span class=kd>map</span><span class=p>[</span><span class=kt>int</span><span class=p>]</span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;status_codes&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Errors</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;errors&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TestDuration</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w> </span><span class=s>`json:&#34;test_duration_ns&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>JSONOutput</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Summary</span><span class=w> </span><span class=nx>TestSummary</span><span class=w> </span><span class=s>`json:&#34;summary&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Latency</span><span class=w> </span><span class=nx>LatencyStats</span><span class=w> </span><span class=s>`json:&#34;latency&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>StatusCodes</span><span class=w> </span><span class=kd>map</span><span class=p>[</span><span class=kt>int</span><span class=p>]</span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;status_codes&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Errors</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;errors&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>TestSummary</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TotalRequests</span><span class=w> </span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;total_requests&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>SuccessfulReqs</span><span class=w> </span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;successful_requests&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>FailedReqs</span><span class=w> </span><span class=kt>int64</span><span class=w> </span><span class=s>`json:&#34;failed_requests&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>RequestsPerSecond</span><span class=w> </span><span class=kt>float64</span><span class=w> </span><span class=s>`json:&#34;requests_per_second&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TestDurationSec</span><span class=w> </span><span class=kt>float64</span><span class=w> </span><span class=s>`json:&#34;test_duration_seconds&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>LatencyStats</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MinMs</span><span class=w> </span><span class=kt>float64</span><span class=w> </span><span class=s>`json:&#34;min_ms&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MaxMs</span><span class=w> </span><span class=kt>float64</span><span class=w> </span><span class=s>`json:&#34;max_ms&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>AvgMs</span><span class=w> </span><span class=kt>float64</span><span class=w> </span><span class=s>`json:&#34;avg_ms&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// internal/client/http.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>client</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/types&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;net/http&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;strings&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;time&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>MakeRequest</span><span class=p>(</span><span class=nx>client</span><span class=w> </span><span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Client</span><span class=p>,</span><span class=w> </span><span class=nx>config</span><span class=w> </span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>RequestConfig</span><span class=p>)</span><span class=w> </span><span class=p>(</span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>start</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Now</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>reqBody</span><span class=w> </span><span class=nx>strings</span><span class=p>.</span><span class=nx>Reader</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>config</span><span class=p>.</span><span class=nx>Body</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>reqBody</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>strings</span><span class=p>.</span><span class=nf>NewReader</span><span class=p>(</span><span class=nx>config</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>req</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>http</span><span class=p>.</span><span class=nf>NewRequest</span><span class=p>(</span><span class=nx>config</span><span class=p>.</span><span class=nx>Method</span><span class=p>,</span><span class=w> </span><span class=nx>config</span><span class=p>.</span><span class=nx>URL</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>reqBody</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Since</span><span class=p>(</span><span class=nx>start</span><span class=p>),</span><span class=w> </span><span class=mi>0</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Add headers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=nx>key</span><span class=p>,</span><span class=w> </span><span class=nx>value</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>config</span><span class=p>.</span><span class=nx>Headers</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>req</span><span class=p>.</span><span class=nx>Header</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=nx>key</span><span class=p>,</span><span class=w> </span><span class=nx>value</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Set default content type for POST/PUT with body</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>config</span><span class=p>.</span><span class=nx>Body</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=nx>req</span><span class=p>.</span><span class=nx>Header</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;Content-Type&#34;</span><span class=p>)</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>req</span><span class=p>.</span><span class=nx>Header</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;Content-Type&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;application/json&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>resp</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>client</span><span class=p>.</span><span class=nf>Do</span><span class=p>(</span><span class=nx>req</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Since</span><span class=p>(</span><span class=nx>start</span><span class=p>),</span><span class=w> </span><span class=mi>0</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>defer</span><span class=w> </span><span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>latency</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Since</span><span class=p>(</span><span class=nx>start</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>latency</span><span class=p>,</span><span class=w> </span><span class=nx>resp</span><span class=p>.</span><span class=nx>StatusCode</span><span class=p>,</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// internal/utils/parser.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>utils</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;strings&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;time&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>ParseDuration</span><span class=p>(</span><span class=nx>durationStr</span><span class=w> </span><span class=kt>string</span><span class=p>)</span><span class=w> </span><span class=p>(</span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>ParseDuration</span><span class=p>(</span><span class=nx>durationStr</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>ParseHeaders</span><span class=p>(</span><span class=nx>headerStrs</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=p>)</span><span class=w> </span><span class=p>(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>headers</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nb>make</span><span class=p>(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=err>\</span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>headerStr</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>headerStrs</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>parts</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>strings</span><span class=p>.</span><span class=nf>SplitN</span><span class=p>(</span><span class=nx>headerStr</span><span class=p>,</span><span class=w> </span><span class=s>&#34;:&#34;</span><span class=p>,</span><span class=w> </span><span class=mi>2</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>parts</span><span class=p>)</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=mi>2</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=kc>nil</span><span class=p>,</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;invalid header format: %s&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>headerStr</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>key</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>strings</span><span class=p>.</span><span class=nf>TrimSpace</span><span class=p>(</span><span class=nx>parts</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>value</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>strings</span><span class=p>.</span><span class=nf>TrimSpace</span><span class=p>(</span><span class=nx>parts</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>headers</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>value</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>headers</span><span class=p>,</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// internal/stress/test.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>stress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/client&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/output&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/types&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;context&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;net/http&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;sync&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;sync/atomic&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;time&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;github.com/schollz/progressbar/v3&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>RunStressTest</span><span class=p>(</span><span class=nx>config</span><span class=w> </span><span class=nx>_types</span><span class=p>.</span><span class=nx>RequestConfig</span><span class=p>,</span><span class=w> </span><span class=nx>workers</span><span class=w> </span><span class=kt>int</span><span class=p>,</span><span class=w> </span><span class=nx>testDuration</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>,</span><span class=w> </span><span class=nx>rateLimit</span><span class=w> </span><span class=kt>int</span><span class=p>,</span><span class=w> </span><span class=nx>outputFormat</span><span class=w> </span><span class=kt>string</span><span class=p>)</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Initialize result tracking</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=o>&amp;</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>StatusCodes</span><span class=p>:</span><span class=w> </span><span class=nb>make</span><span class=p>(</span><span class=kd>map</span><span class=p>[</span><span class=kt>int</span><span class=p>]</span><span class=kt>int64</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Errors</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=kt>string</span><span class=p>{},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MinLatency</span><span class=p>:</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Hour</span><span class=p>,</span><span class=w> </span><span class=c1>// Initialize to large value</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>mutex</span><span class=w> </span><span class=nx>sync</span><span class=p>.</span><span class=nx>Mutex</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>wg</span><span class=w> </span><span class=nx>sync</span><span class=p>.</span><span class=nx>WaitGroup</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Create HTTP client</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>httpClient</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=o>&amp;</span><span class=nx>http</span><span class=p>.</span><span class=nx>Client</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Timeout</span><span class=p>:</span><span class=w> </span><span class=mi>30</span><span class=w> </span><span class=nx>_</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Setup context for cancellation</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>ctx</span><span class=p>,</span><span class=w> </span><span class=nx>cancel</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>context</span><span class=p>.</span><span class=nf>Background</span><span class=p>(),</span><span class=w> </span><span class=nx>testDuration</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>defer</span><span class=w> </span><span class=nf>cancel</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Rate limiter channel</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>rateLimiter</span><span class=w> </span><span class=kd>chan</span><span class=w> </span><span class=kd>struct</span><span class=p>{}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>rateLimit</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>rateLimiter</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>make</span><span class=p>(</span><span class=kd>chan</span><span class=w> </span><span class=kd>struct</span><span class=p>{},</span><span class=w> </span><span class=nx>rateLimit</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Start rate limiter goroutine</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>go</span><span class=w> </span><span class=kd>func</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>ticker</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>NewTicker</span><span class=p>(</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Duration</span><span class=p>(</span><span class=nx>rateLimit</span><span class=p>))</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>defer</span><span class=w> </span><span class=nx>ticker</span><span class=p>.</span><span class=nf>Stop</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>select</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>ctx</span><span class=p>.</span><span class=nf>Done</span><span class=p>():</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>ticker</span><span class=p>.</span><span class=nx>C</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>select</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=nx>rateLimiter</span><span class=w> </span><span class=o>&lt;-</span><span class=w> </span><span class=kd>struct</span><span class=p>{}{}:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>default</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Channel full, skip this tick</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Progress bar</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>bar</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>progressbar</span><span class=p>.</span><span class=nf>NewOptions</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>progressbar</span><span class=p>.</span><span class=nf>OptionSetDescription</span><span class=p>(</span><span class=s>&#34;Running stress test...&#34;</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>progressbar</span><span class=p>.</span><span class=nf>OptionSpinnerType</span><span class=p>(</span><span class=mi>14</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Start workers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=nx>i</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w> </span><span class=nx>i</span><span class=w> </span><span class=p>&lt;</span><span class=w> </span><span class=nx>workers</span><span class=p>;</span><span class=w> </span><span class=nx>i</span><span class=o>++</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>wg</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>go</span><span class=w> </span><span class=kd>func</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>defer</span><span class=w> </span><span class=nx>wg</span><span class=p>.</span><span class=nf>Done</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nf>runWorker</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span><span class=w> </span><span class=nx>httpClient</span><span class=p>,</span><span class=w> </span><span class=nx>config</span><span class=p>,</span><span class=w> </span><span class=nx>result</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>mutex</span><span class=p>,</span><span class=w> </span><span class=nx>rateLimiter</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Update progress bar</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>go</span><span class=w> </span><span class=kd>func</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>ticker</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>NewTicker</span><span class=p>(</span><span class=mi>100</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Millisecond</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>defer</span><span class=w> </span><span class=nx>ticker</span><span class=p>.</span><span class=nf>Stop</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>select</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>ctx</span><span class=p>.</span><span class=nf>Done</span><span class=p>():</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>ticker</span><span class=p>.</span><span class=nx>C</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>bar</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Wait for all workers to complete</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>wg</span><span class=p>.</span><span class=nf>Wait</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>bar</span><span class=p>.</span><span class=nf>Finish</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>testDuration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>output</span><span class=p>.</span><span class=nf>PrintResults</span><span class=p>(</span><span class=nx>result</span><span class=p>,</span><span class=w> </span><span class=nx>outputFormat</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>runWorker</span><span class=p>(</span><span class=nx>ctx</span><span class=w> </span><span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span><span class=w> </span><span class=nx>httpClient</span><span class=w> </span><span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Client</span><span class=p>,</span><span class=w> </span><span class=nx>config</span><span class=w> </span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>RequestConfig</span><span class=p>,</span><span class=w> </span><span class=nx>result</span><span class=w> </span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>,</span><span class=w> </span><span class=nx>mutex</span><span class=w> </span><span class=o>*</span><span class=nx>sync</span><span class=p>.</span><span class=nx>Mutex</span><span class=p>,</span><span class=w> </span><span class=nx>rateLimiter</span><span class=w> </span><span class=kd>chan</span><span class=w> </span><span class=kd>struct</span><span class=p>{})</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>select</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>ctx</span><span class=p>.</span><span class=nf>Done</span><span class=p>():</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>default</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Rate limiting</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>rateLimiter</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>select</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>rateLimiter</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Got permission to make request</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=o>&lt;-</span><span class=nx>ctx</span><span class=p>.</span><span class=nf>Done</span><span class=p>():</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Make request</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>latency</span><span class=p>,</span><span class=w> </span><span class=nx>statusCode</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>client</span><span class=p>.</span><span class=nf>MakeRequest</span><span class=p>(</span><span class=nx>httpClient</span><span class=p>,</span><span class=w> </span><span class=nx>config</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Update results</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>mutex</span><span class=p>.</span><span class=nf>Lock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nf>updateResults</span><span class=p>(</span><span class=nx>result</span><span class=p>,</span><span class=w> </span><span class=nx>latency</span><span class=p>,</span><span class=w> </span><span class=nx>statusCode</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>mutex</span><span class=p>.</span><span class=nf>Unlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>updateResults</span><span class=p>(</span><span class=nx>result</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>,</span><span class=w> </span><span class=nx>latency</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>,</span><span class=w> </span><span class=nx>statusCode</span><span class=w> </span><span class=kt>int</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>atomic</span><span class=p>.</span><span class=nf>AddInt64</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=p>,</span><span class=w> </span><span class=mi>1</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>atomic</span><span class=p>.</span><span class=nf>AddInt64</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>result</span><span class=p>.</span><span class=nx>FailedReqs</span><span class=p>,</span><span class=w> </span><span class=mi>1</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>Errors</span><span class=p>)</span><span class=w> </span><span class=p>&lt;</span><span class=w> </span><span class=mi>10</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=c1>// Limit error collection</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=p>.</span><span class=nx>Errors</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>Errors</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>atomic</span><span class=p>.</span><span class=nf>AddInt64</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>result</span><span class=p>.</span><span class=nx>SuccessfulReqs</span><span class=p>,</span><span class=w> </span><span class=mi>1</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=p>.</span><span class=nx>StatusCodes</span><span class=p>[</span><span class=nx>statusCode</span><span class=p>]</span><span class=o>++</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Update latency stats</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=p>.</span><span class=nx>TotalLatency</span><span class=w> </span><span class=o>+=</span><span class=w> </span><span class=nx>latency</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>latency</span><span class=w> </span><span class=p>&lt;</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>MinLatency</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=p>.</span><span class=nx>MinLatency</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>latency</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>latency</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>MaxLatency</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>result</span><span class=p>.</span><span class=nx>MaxLatency</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>latency</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// calculateAverageLatency calculates the average latency from total latency and request count</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>calculateAverageLatency</span><span class=p>(</span><span class=nx>result</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>)</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalLatency</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Duration</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// internal/output/printer.go</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>output</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;apistress/internal/types&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;encoding/json&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=s>&#34;time&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>PrintResults</span><span class=p>(</span><span class=nx>result</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>,</span><span class=w> </span><span class=nx>outputFormat</span><span class=w> </span><span class=kt>string</span><span class=p>)</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>switch</span><span class=w> </span><span class=nx>outputFormat</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=s>&#34;text&#34;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nf>printTextResults</span><span class=p>(</span><span class=nx>result</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=s>&#34;json&#34;</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nf>printJSONResults</span><span class=p>(</span><span class=nx>result</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>default</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;unsupported output format: %s&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>outputFormat</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>printTextResults</span><span class=p>(</span><span class=nx>result</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>)</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;\n=== Stress Test Results ===&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Total Requests: %d\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Successful: %d\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>SuccessfulReqs</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Failed: %d\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>FailedReqs</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Test Duration: %.2fs\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=p>.</span><span class=nf>Seconds</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=p>.</span><span class=nf>Seconds</span><span class=p>()</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>rps</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=p>)</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=p>.</span><span class=nf>Seconds</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;Requests/sec: %.2f\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>rps</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>avgLatency</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nf>calculateAverageLatency</span><span class=p>(</span><span class=nx>result</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;\nLatency:&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34; Min: %.2fms\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>MinLatency</span><span class=p>.</span><span class=nf>Nanoseconds</span><span class=p>())</span><span class=o>/</span><span class=mf>1e6</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34; Max: %.2fms\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>MaxLatency</span><span class=p>.</span><span class=nf>Nanoseconds</span><span class=p>())</span><span class=o>/</span><span class=mf>1e6</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34; Avg: %.2fms\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>avgLatency</span><span class=p>.</span><span class=nf>Nanoseconds</span><span class=p>())</span><span class=o>/</span><span class=mf>1e6</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>StatusCodes</span><span class=p>)</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;\nStatus Codes:&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=nx>code</span><span class=p>,</span><span class=w> </span><span class=nx>count</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>StatusCodes</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34; %d: %d\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>code</span><span class=p>,</span><span class=w> </span><span class=nx>count</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>Errors</span><span class=p>)</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;\nSample Errors:&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=nx>i</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>Errors</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>i</span><span class=w> </span><span class=o>&gt;=</span><span class=w> </span><span class=mi>5</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>break</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34; %d: %s\n&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>i</span><span class=o>+</span><span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>printJSONResults</span><span class=p>(</span><span class=nx>result</span><span class=w> </span><span class=err>\</span><span class=o>*</span><span class=nx>types</span><span class=p>.</span><span class=nx>TestResult</span><span class=p>)</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>avgLatency</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nf>calculateAverageLatency</span><span class=p>(</span><span class=nx>result</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>avgLatencyMs</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>avgLatency</span><span class=p>.</span><span class=nf>Nanoseconds</span><span class=p>())</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=mf>1e6</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>rps</span><span class=w> </span><span class=kt>float64</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=p>.</span><span class=nf>Seconds</span><span class=p>()</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>rps</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=p>)</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=p>.</span><span class=nf>Seconds</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>minLatencyMs</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>MinLatency</span><span class=p>.</span><span class=nf>Nanoseconds</span><span class=p>())</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=mf>1e6</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>MinLatency</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Hour</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>minLatencyMs</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>output</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>types</span><span class=p>.</span><span class=nx>JSONOutput</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Summary</span><span class=p>:</span><span class=w> </span><span class=nx>types</span><span class=p>.</span><span class=nx>TestSummary</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TotalRequests</span><span class=p>:</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TotalRequests</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>SuccessfulReqs</span><span class=p>:</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>SuccessfulReqs</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>FailedReqs</span><span class=p>:</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>FailedReqs</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>RequestsPerSecond</span><span class=p>:</span><span class=w> </span><span class=nx>rps</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>TestDurationSec</span><span class=p>:</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>TestDuration</span><span class=p>.</span><span class=nf>Seconds</span><span class=p>(),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Latency</span><span class=p>:</span><span class=w> </span><span class=nx>types</span><span class=p>.</span><span class=nx>LatencyStats</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MinMs</span><span class=p>:</span><span class=w> </span><span class=nx>minLatencyMs</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>MaxMs</span><span class=p>:</span><span class=w> </span><span class=nb>float64</span><span class=p>(</span><span class=nx>result</span><span class=p>.</span><span class=nx>MaxLatency</span><span class=p>.</span><span class=nf>Nanoseconds</span><span class=p>())</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=mf>1e6</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>AvgMs</span><span class=p>:</span><span class=w> </span><span class=nx>avgLatencyMs</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>StatusCodes</span><span class=p>:</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>StatusCodes</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>Errors</span><span class=p>:</span><span class=w> </span><span class=nx>result</span><span class=p>.</span><span class=nx>Errors</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>jsonBytes</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>json</span><span class=p>.</span><span class=nf>MarshalIndent</span><span class=p>(</span><span class=nx>output</span><span class=p>,</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34; &#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;failed to marshal JSON: %w&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nb>string</span><span class=p>(</span><span class=nx>jsonBytes</span><span class=p>))</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>return</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

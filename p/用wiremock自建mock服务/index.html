@@ -1,0 +1,347 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="我们很多时候都需要mock服务，比如\n在做性能测试的时候，我们希望调用第三方服务的接口可以被mock掉，这样就不会因为压测而对第三方依赖造成巨大的负载 第三方服务归属于其他团队，不同环境之间的沟通和协调其实比较麻烦 消除不同测试环境之间的差异 控制请求的时延 如果是使用云服务的话，使用mock接口还可以节约出口的带宽 提升第三方服务的稳定性 所以mock的作用就是用最小的代价实现跟第三方接口几乎一样的假的接口，最好返回的内容是动态可配置的，这样我们在测试环境就可以直接去调用这个假接口，从而消除了对第三方的依赖。\n"><title>用wiremock自建mock服务</title><link rel=canonical href=zh.ethanhan.cc/p/%E7%94%A8wiremock%E8%87%AA%E5%BB%BAmock%E6%9C%8D%E5%8A%A1/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="用wiremock自建mock服务"><meta property='og:description' content="我们很多时候都需要mock服务，比如\n在做性能测试的时候，我们希望调用第三方服务的接口可以被mock掉，这样就不会因为压测而对第三方依赖造成巨大的负载 第三方服务归属于其他团队，不同环境之间的沟通和协调其实比较麻烦 消除不同测试环境之间的差异 控制请求的时延 如果是使用云服务的话，使用mock接口还可以节约出口的带宽 提升第三方服务的稳定性 所以mock的作用就是用最小的代价实现跟第三方接口几乎一样的假的接口，最好返回的内容是动态可配置的，这样我们在测试环境就可以直接去调用这个假接口，从而消除了对第三方的依赖。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E7%94%A8wiremock%E8%87%AA%E5%BB%BAmock%E6%9C%8D%E5%8A%A1/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-04-07T14:39:24+08:00'><meta property='article:modified_time' content='2023-04-07T14:39:24+08:00'><meta name=twitter:title content="用wiremock自建mock服务"><meta name=twitter:description content="我们很多时候都需要mock服务，比如\n在做性能测试的时候，我们希望调用第三方服务的接口可以被mock掉，这样就不会因为压测而对第三方依赖造成巨大的负载 第三方服务归属于其他团队，不同环境之间的沟通和协调其实比较麻烦 消除不同测试环境之间的差异 控制请求的时延 如果是使用云服务的话，使用mock接口还可以节约出口的带宽 提升第三方服务的稳定性 所以mock的作用就是用最小的代价实现跟第三方接口几乎一样的假的接口，最好返回的内容是动态可配置的，这样我们在测试环境就可以直接去调用这个假接口，从而消除了对第三方的依赖。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#mock-as-a-service>Mock as a Service</a></li><li><a href=#wiremock>wiremock</a></li><li><a href=#安装>安装</a></li><li><a href=#静态mock一个接口>静态mock一个接口</a></li><li><a href=#反向代理模式>反向代理模式</a></li><li><a href=#更高的流量要求>更高的流量要求</a></li><li><a href=#总结>总结</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E7%94%A8wiremock%E8%87%AA%E5%BB%BAmock%E6%9C%8D%E5%8A%A1/>用wiremock自建mock服务</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2023-04-07T14:39:24+08:00>Apr 07, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><p>我们很多时候都需要mock服务，比如</p><ul><li>在做性能测试的时候，我们希望调用第三方服务的接口可以被mock掉，这样就不会因为压测而对第三方依赖造成巨大的负载</li><li>第三方服务归属于其他团队，不同环境之间的沟通和协调其实比较麻烦</li><li>消除不同测试环境之间的差异</li><li>控制请求的时延</li><li>如果是使用云服务的话，使用mock接口还可以节约出口的带宽</li><li>提升第三方服务的稳定性</li></ul><p>所以mock的作用就是用最小的代价实现跟第三方接口几乎一样的假的接口，最好返回的内容是动态可配置的，这样我们在测试环境就可以直接去调用这个假接口，从而消除了对第三方的依赖。</p><p>实现mock的方式很多，最简单的做法就是随机应变，自行实现，比如在python技术栈里，我们可以用flask去这样实现</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>flask</span> <span class=kn>import</span> <span class=n>Flask</span><span class=p>,</span> <span class=n>jsonify</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>app</span> <span class=o>=</span> <span class=n>Flask</span><span class=p>(</span><span class=vm>__name__</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@app.route</span><span class=p>(</span><span class=s1>&#39;/api/get-json&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>hello</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>jsonify</span><span class=p>(</span><span class=n>hello</span><span class=o>=</span><span class=s1>&#39;world&#39;</span><span class=p>)</span> <span class=c1># Returns HTTP Response with {&#34;hello&#34;: &#34;world&#34;}</span>
+</span></span></code></pre></td></tr></table></div></div><p>用go实现起来也不难，下面的例子来自go的官方文档，使用了gin框架。<a class=link href=https://go.dev/doc/tutorial/web-service-gin target=_blank rel=noopener>https://go.dev/doc/tutorial/web-service-gin</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;net/http&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;github.com/gin-gonic/gin&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// album represents data about a record album.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>album</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>ID</span><span class=w>     </span><span class=kt>string</span><span class=w>  </span><span class=s>`json:&#34;id&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>Title</span><span class=w>  </span><span class=kt>string</span><span class=w>  </span><span class=s>`json:&#34;title&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>Artist</span><span class=w> </span><span class=kt>string</span><span class=w>  </span><span class=s>`json:&#34;artist&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>Price</span><span class=w>  </span><span class=kt>float64</span><span class=w> </span><span class=s>`json:&#34;price&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// albums slice to seed record album data.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>var</span><span class=w> </span><span class=nx>albums</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=p>[]</span><span class=nx>album</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=nx>ID</span><span class=p>:</span><span class=w> </span><span class=s>&#34;1&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Title</span><span class=p>:</span><span class=w> </span><span class=s>&#34;Blue Train&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Artist</span><span class=p>:</span><span class=w> </span><span class=s>&#34;John Coltrane&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Price</span><span class=p>:</span><span class=w> </span><span class=mf>56.99</span><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=nx>ID</span><span class=p>:</span><span class=w> </span><span class=s>&#34;2&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Title</span><span class=p>:</span><span class=w> </span><span class=s>&#34;Jeru&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Artist</span><span class=p>:</span><span class=w> </span><span class=s>&#34;Gerry Mulligan&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Price</span><span class=p>:</span><span class=w> </span><span class=mf>17.99</span><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=nx>ID</span><span class=p>:</span><span class=w> </span><span class=s>&#34;3&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Title</span><span class=p>:</span><span class=w> </span><span class=s>&#34;Sarah Vaughan and Clifford Brown&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Artist</span><span class=p>:</span><span class=w> </span><span class=s>&#34;Sarah Vaughan&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>Price</span><span class=p>:</span><span class=w> </span><span class=mf>39.99</span><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>router</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>gin</span><span class=p>.</span><span class=nf>Default</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>router</span><span class=p>.</span><span class=nf>GET</span><span class=p>(</span><span class=s>&#34;/albums&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>getAlbums</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>router</span><span class=p>.</span><span class=nf>GET</span><span class=p>(</span><span class=s>&#34;/albums/:id&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>getAlbumByID</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>router</span><span class=p>.</span><span class=nf>POST</span><span class=p>(</span><span class=s>&#34;/albums&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>postAlbums</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>router</span><span class=p>.</span><span class=nf>Run</span><span class=p>(</span><span class=s>&#34;localhost:8080&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// getAlbums responds with the list of all albums as JSON.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>getAlbums</span><span class=p>(</span><span class=nx>c</span><span class=w> </span><span class=o>*</span><span class=nx>gin</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>c</span><span class=p>.</span><span class=nf>IndentedJSON</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusOK</span><span class=p>,</span><span class=w> </span><span class=nx>albums</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// postAlbums adds an album from JSON received in the request body.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>postAlbums</span><span class=p>(</span><span class=nx>c</span><span class=w> </span><span class=o>*</span><span class=nx>gin</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>newAlbum</span><span class=w> </span><span class=nx>album</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Call BindJSON to bind the received JSON to</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// newAlbum.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>c</span><span class=p>.</span><span class=nf>BindJSON</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>newAlbum</span><span class=p>);</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Add the new album to the slice.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>albums</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=nx>albums</span><span class=p>,</span><span class=w> </span><span class=nx>newAlbum</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>c</span><span class=p>.</span><span class=nf>IndentedJSON</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusCreated</span><span class=p>,</span><span class=w> </span><span class=nx>newAlbum</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// getAlbumByID locates the album whose ID value matches the id</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// parameter sent by the client, then returns that album as a response.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>getAlbumByID</span><span class=p>(</span><span class=nx>c</span><span class=w> </span><span class=o>*</span><span class=nx>gin</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>id</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>c</span><span class=p>.</span><span class=nf>Param</span><span class=p>(</span><span class=s>&#34;id&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Loop through the list of albums, looking for</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// an album whose ID value matches the parameter.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>a</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>albums</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=nx>a</span><span class=p>.</span><span class=nx>ID</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=nx>id</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nx>c</span><span class=p>.</span><span class=nf>IndentedJSON</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusOK</span><span class=p>,</span><span class=w> </span><span class=nx>a</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>return</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>c</span><span class=p>.</span><span class=nf>IndentedJSON</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusNotFound</span><span class=p>,</span><span class=w> </span><span class=nx>gin</span><span class=p>.</span><span class=nx>H</span><span class=p>{</span><span class=s>&#34;message&#34;</span><span class=p>:</span><span class=w> </span><span class=s>&#34;album not found&#34;</span><span class=p>})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>从上面的代码可以看出来，如果不需要实现创建接口的话，代码量还能少三分之一左右，总的来看其实难度也不算大。</p><p>对于有兴趣写代码的同学来说，上面两种做法都是值得赞赏的，不过后面的部署和维护问题可能会随着代码量的增加而变得麻烦起来。这时候使用通用的mock服务可能会更简单一些。</p><h3 id=mock-as-a-service>Mock as a Service</h3><p>这是一种提供mock能力的通用方式，相比于写代码，mock as a service可以提供更加简单灵活的创建mock接口的方式，比如</p><ul><li>通过ui界面上的表单</li><li>发送http请求</li><li>配置文件</li></ul><p>我们可以自己实现这样的mock服务，不过这样会有一定的难度，比如</p><ul><li>平台的形态是什么样的？</li><li>如果有ui，那么谁来设计，谁来实现？</li><li>如果这是command line，那么用户会不会从入门到放弃？</li><li>如何保证灵活性和扩展性？</li><li>谁来部署和维护？</li></ul><p>另外mock平台其实不同企业之间的共性也是很明显的，所以如果市面上有通用解决方案的话，我们直接拿来用也不是不可以。</p><h3 id=wiremock>wiremock</h3><p>wiremock就是这样一款工具，项目地址：<a class=link href=https://github.com/wiremock/wiremock target=_blank rel=noopener>https://github.com/wiremock/wiremock</a></p><p>其主要的特性有</p><ul><li>更高级的请求匹配方式</li><li>动态响应模板</li><li>可以在单元测试里运行</li><li>故障注入和时延注入</li><li>支持录制和回放</li><li>支持通过java python http 和json文件来定义mock接口</li></ul><p>我简单看了一下，比我自己写的话要好很多。</p><h3 id=安装>安装</h3><p>建议docker安装。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>docker run -it --rm <span class=se>\
+</span></span></span><span class=line><span class=cl>  -p 8080:8080 <span class=se>\
+</span></span></span><span class=line><span class=cl>  --name wiremock <span class=se>\
+</span></span></span><span class=line><span class=cl>  -v <span class=nv>$PWD</span>:/home/wiremock <span class=se>\
+</span></span></span><span class=line><span class=cl>  wiremock/wiremock:2.33.1
+</span></span></code></pre></td></tr></table></div></div><p>本文写作的时候，wiremock的最新版本是2.33.1。</p><p>这里重点解释一下 -v 参数，这里我们把当前文件夹映射到了容器的<code>/home/wiremock/</code> 路径下，运行之后当前路径会生成2个新的文件夹，分别是</p><ul><li><code>__files</code></li><li><code>__mappings</code></li></ul><p>运行之后命令行展示如下，看到这个界面就是服务启动成功了，可以用<code>ctrl+c</code>来停止服务</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=n>SLF4J</span><span class=p>:</span> <span class=n>Failed</span> <span class=n>to</span> <span class=nb>load</span> <span class=k>class</span> <span class=s2>&#34;org.slf4j.impl.StaticLoggerBinder&#34;</span><span class=o>.</span>
+</span></span><span class=line><span class=cl><span class=n>SLF4J</span><span class=p>:</span> <span class=n>Defaulting</span> <span class=n>to</span> <span class=n>no</span><span class=o>-</span><span class=n>operation</span> <span class=p>(</span><span class=n>NOP</span><span class=p>)</span> <span class=n>logger</span> <span class=n>implementation</span>
+</span></span><span class=line><span class=cl><span class=n>SLF4J</span><span class=p>:</span> <span class=n>See</span> <span class=n>http</span><span class=p>:</span><span class=o>//</span><span class=n>www</span><span class=o>.</span><span class=n>slf4j</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>codes</span><span class=o>.</span><span class=n>html</span><span class=c1>#StaticLoggerBinder for further details.</span>
+</span></span><span class=line><span class=cl> <span class=o>/$$</span>      <span class=o>/$$</span> <span class=o>/$$</span>                     <span class=o>/$$</span>      <span class=o>/$$</span>                     <span class=o>/$$</span>
+</span></span><span class=line><span class=cl><span class=o>|</span> <span class=o>$$</span>  <span class=o>/$</span> <span class=o>|</span> <span class=o>$$|</span><span class=n>__</span><span class=o>/</span>                    <span class=o>|</span> <span class=o>$$$</span>    <span class=o>/$$$</span>                    <span class=o>|</span> <span class=o>$$</span>
+</span></span><span class=line><span class=cl><span class=o>|</span> <span class=o>$$</span> <span class=o>/$$$|</span> <span class=o>$$</span> <span class=o>/$$</span>  <span class=o>/$$$$$$</span>   <span class=o>/$$$$$$</span> <span class=o>|</span> <span class=o>$$$$</span>  <span class=o>/$$$$</span>  <span class=o>/$$$$$$</span>   <span class=o>/$$$$$$$|</span> <span class=o>$$</span>   <span class=o>/$$</span>
+</span></span><span class=line><span class=cl><span class=o>|</span> <span class=o>$$/$$</span> <span class=o>$$</span> <span class=o>$$|</span> <span class=o>$$</span> <span class=o>/$$</span><span class=n>__</span>  <span class=o>$$</span> <span class=o>/$$</span><span class=n>__</span>  <span class=o>$$|</span> <span class=o>$$</span> <span class=o>$$/$$</span> <span class=o>$$</span> <span class=o>/$$</span><span class=n>__</span>  <span class=o>$$</span> <span class=o>/$$</span><span class=n>_____</span><span class=o>/|</span> <span class=o>$$</span>  <span class=o>/$$/</span>
+</span></span><span class=line><span class=cl><span class=o>|</span> <span class=o>$$$$</span><span class=n>_</span>  <span class=o>$$$$|</span> <span class=o>$$|</span> <span class=o>$$</span>  \<span class=n>__</span><span class=o>/|</span> <span class=o>$$$$$$$$|</span> <span class=o>$$</span>  <span class=o>$$$|</span> <span class=o>$$|</span> <span class=o>$$</span>  \ <span class=o>$$|</span> <span class=o>$$</span>      <span class=o>|</span> <span class=o>$$$$$$/</span>
+</span></span><span class=line><span class=cl><span class=o>|</span> <span class=o>$$$/</span> \  <span class=o>$$$|</span> <span class=o>$$|</span> <span class=o>$$</span>      <span class=o>|</span> <span class=o>$$</span><span class=n>_____</span><span class=o>/|</span> <span class=o>$$</span>\  <span class=o>$</span> <span class=o>|</span> <span class=o>$$|</span> <span class=o>$$</span>  <span class=o>|</span> <span class=o>$$|</span> <span class=o>$$</span>      <span class=o>|</span> <span class=o>$$</span><span class=n>_</span>  <span class=o>$$</span>
+</span></span><span class=line><span class=cl><span class=o>|</span> <span class=o>$$/</span>   \  <span class=o>$$|</span> <span class=o>$$|</span> <span class=o>$$</span>      <span class=o>|</span>  <span class=o>$$$$$$$|</span> <span class=o>$$</span> \<span class=o>/</span>  <span class=o>|</span> <span class=o>$$|</span>  <span class=o>$$$$$$/|</span>  <span class=o>$$$$$$$|</span> <span class=o>$$</span> \  <span class=o>$$</span>
+</span></span><span class=line><span class=cl><span class=o>|</span><span class=n>__</span><span class=o>/</span>     \<span class=n>__</span><span class=o>/|</span><span class=n>__</span><span class=o>/|</span><span class=n>__</span><span class=o>/</span>       \<span class=n>_______</span><span class=o>/|</span><span class=n>__</span><span class=o>/</span>     <span class=o>|</span><span class=n>__</span><span class=o>/</span> \<span class=n>______</span><span class=o>/</span>  \<span class=n>_______</span><span class=o>/|</span><span class=n>__</span><span class=o>/</span>  \<span class=n>__</span><span class=o>/</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>port</span><span class=p>:</span>                         <span class=mi>8080</span>
+</span></span><span class=line><span class=cl><span class=n>enable</span><span class=o>-</span><span class=n>browser</span><span class=o>-</span><span class=n>proxying</span><span class=p>:</span>      <span class=bp>false</span>
+</span></span><span class=line><span class=cl><span class=n>disable</span><span class=o>-</span><span class=n>banner</span><span class=p>:</span>               <span class=bp>false</span>
+</span></span><span class=line><span class=cl><span class=n>no</span><span class=o>-</span><span class=n>request</span><span class=o>-</span><span class=n>journal</span><span class=p>:</span>           <span class=bp>false</span>
+</span></span><span class=line><span class=cl><span class=n>verbose</span><span class=p>:</span>                      <span class=bp>false</span>
+</span></span></code></pre></td></tr></table></div></div><p>当然，因为wiremock是使用java实现的，我们也可以用启动jar包的方式来运行，前提是需要安装jdk或者是jre。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>java -jar wiremock-jre8-standalone-2.33.1.jar
+</span></span></code></pre></td></tr></table></div></div><p>更多配置项可以参考文档：<a class=link href=https://wiremock.org/docs/running-standalone/ target=_blank rel=noopener>https://wiremock.org/docs/running-standalone/</a></p><h3 id=静态mock一个接口>静态mock一个接口</h3><p>下面我们来写一个静态的mock接口，静态的意思是接口的返回是写死的，不是动态的。</p><p>创建一个名为example.json的文件，内容如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;request&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;method&#34;</span><span class=p>:</span> <span class=s2>&#34;GET&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;url&#34;</span><span class=p>:</span> <span class=s2>&#34;/products/1&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;response&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;status&#34;</span><span class=p>:</span> <span class=mi>200</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;fixedDelayMilliseconds&#34;</span><span class=p>:</span> <span class=mi>1000</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;jsonBody&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;data&#34;</span><span class=p>:</span> <span class=p>[{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;product&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;id&#34;</span><span class=p>:</span> <span class=s2>&#34;1&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;attributes&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;productName&#34;</span><span class=p>:</span> <span class=s2>&#34;Raspberry PI&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;productDescription&#34;</span><span class=p>:</span> <span class=s2>&#34;Best product ever&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;price&#34;</span><span class=p>:</span> <span class=mi>42</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&#34;stock&#34;</span><span class=p>:</span> <span class=mi>500</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}]</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>把这个文件放到/mappings路径下面，然后重新启动服务，然后浏览器访问或者curl:<code>http://localhost:8080/products/1</code>，响应结果如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;data&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;product&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;id&#34;</span><span class=p>:</span> <span class=s2>&#34;1&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;attributes&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;productName&#34;</span><span class=p>:</span> <span class=s2>&#34;Raspberry PI&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;productDescription&#34;</span><span class=p>:</span> <span class=s2>&#34;Best product ever&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;price&#34;</span><span class=p>:</span> <span class=mi>42</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;stock&#34;</span><span class=p>:</span> <span class=mi>500</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=反向代理模式>反向代理模式</h3><p>我们可以使用nginx的反向代理模式来提升wiremock的容量。docker-compose.yml如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>services</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>wiremock</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>wiremock/wiremock:2.33.1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>../mappings:/home/wiremock/mappings:ro</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>8080</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>nginx-load-balancer</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>nginx:alpine</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>./nginx.conf:/etc/nginx/nginx.conf:ro</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>depends_on</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>wiremock</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=s2>&#34;80:8080&#34;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>ng的配置如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>user  nginx;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>events {
+</span></span><span class=line><span class=cl>    worker_connections   1000;
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>http {
+</span></span><span class=line><span class=cl>        server {
+</span></span><span class=line><span class=cl>              listen 8080;
+</span></span><span class=line><span class=cl>              location / {
+</span></span><span class=line><span class=cl>                proxy_pass http://wiremock:8080;
+</span></span><span class=line><span class=cl>              }
+</span></span><span class=line><span class=cl>        }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></td></tr></table></div></div><p>运行：<code>docker-compose up -d</code></p><p>停止: <code>docker-compose stop</code></p><h3 id=更高的流量要求>更高的流量要求</h3><p>如果我们需要部署一个企业级的mock服务，那么ng+wiremock的方式可能达不到一个很高的容量上限，这时候我们可以使用ks8，通过k8s serivce的负载均衡机制，多启动一些wiremock pod来提升系统的整体吞吐量。</p><h3 id=总结>总结</h3><p>在时间有限和需求变化相对较快的情况下，wiremock+ng应该是一个不错的通用mock服务解决方案。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
