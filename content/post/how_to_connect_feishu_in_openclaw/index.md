@@ -3,6 +3,21 @@ title: "Openclaw如何接入飞书"
 date: 2026-01-31T15:37:18+08:00
 draft: false
 weight: -999
+tags: ["AI", "openclaw", "feishu"]
+categories: ["AI", "openclaw"]
+image: "2026-02-05-11-20-23.png"
+---
+
+## B站视频
+
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=115990172015212&bvid=BV12V6nBvEkf&cid=35736060484&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
+---
+
+## YouTube视频
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YgGW60AwEuQ?si=1x90RfB17KNBbsyd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ---
 
 之前在 Linux 机器上装了 OpenClaw，每次访问 Dashboard 都得用 SSH 端口转发，用起来不太方便。

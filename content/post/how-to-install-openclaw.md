@@ -3,11 +3,23 @@ title: "完全免费！如何安装openclaw"
 date: 2026-01-31T09:36:02+08:00
 draft: false
 weight: -999
+tags: ["AI", "openclaw"]
+categories: ["AI", "openclaw"]
 ---
 
 这几天clawdbot的改名风波闹的沸沸扬扬。
 
 从clawdbot到moltbot再到openclaw，一周装了我3个版本，搞得我都有点精神分裂了。
+
+## B站视频版
+
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=115984132282338&bvid=BV17p6qBeEBy&cid=35712336955&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
+## YouTube视频版
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3zggEv39Voc?si=RLTFx_QYITE4sOYv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+---
 
 两个月前，clawdbot的作者peter花了一个周末搞了个叫“WhatsApp Relay”的小项目，结果现在GitHub星标破10万，一周内吸引了200万访问者。完全超出预期。
 
