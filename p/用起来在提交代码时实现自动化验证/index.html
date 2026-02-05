@@ -1,0 +1,372 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="不怕开发写 bug，就怕开发带私货，这应该是很多小伙伴都经历过的职场噩梦。目前看来一个比较好的方案就是在开发提交的时候进行一些自动化的检查，让夹带私货这件事情成本提高，从而减少这种情况的发生。\n"><title>用起来，在提交代码时实现自动化验证</title><link rel=canonical href=zh.ethanhan.cc/p/%E7%94%A8%E8%B5%B7%E6%9D%A5%E5%9C%A8%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E6%97%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="用起来，在提交代码时实现自动化验证"><meta property='og:description' content="不怕开发写 bug，就怕开发带私货，这应该是很多小伙伴都经历过的职场噩梦。目前看来一个比较好的方案就是在开发提交的时候进行一些自动化的检查，让夹带私货这件事情成本提高，从而减少这种情况的发生。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E7%94%A8%E8%B5%B7%E6%9D%A5%E5%9C%A8%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E6%97%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2024-05-10T09:27:45+08:00'><meta property='article:modified_time' content='2024-05-10T09:27:45+08:00'><meta name=twitter:title content="用起来，在提交代码时实现自动化验证"><meta name=twitter:description content="不怕开发写 bug，就怕开发带私货，这应该是很多小伙伴都经历过的职场噩梦。目前看来一个比较好的方案就是在开发提交的时候进行一些自动化的检查，让夹带私货这件事情成本提高，从而减少这种情况的发生。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#1-我们可以在代码提交时进行哪些检查>1. 我们可以在代码提交时进行哪些检查</a></li><li><a href=#2-pre-commit>2. Pre-commit</a><ol><li><a href=#21-pre-commit-安装>2.1 Pre-commit: 安装</a></li><li><a href=#22-pre-commit-仓库结构>2.2 Pre-commit: 仓库结构</a></li><li><a href=#23-pre-commit-qa-流水线>2.3 Pre-commit: QA 流水线</a></li><li><a href=#24-pre-commit-执行>2.4 Pre-commit: 执行</a></li><li><a href=#25-自定义钩子>2.5 自定义钩子</a></li></ol></li><li><a href=#3-pre-commit-配置实例>3. Pre-commit 配置实例</a></li><li><a href=#总结>总结</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E7%94%A8%E8%B5%B7%E6%9D%A5%E5%9C%A8%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E6%97%B6%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%8C%96%E9%AA%8C%E8%AF%81/>用起来，在提交代码时实现自动化验证</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2024-05-10T09:27:45+08:00>May 10, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 8 分钟</time></div></footer></div></header><section class=article-content><p>不怕开发写 bug，就怕开发带私货，这应该是很多小伙伴都经历过的职场噩梦。目前看来一个比较好的方案就是在开发提交的时候进行一些自动化的检查，让夹带私货这件事情成本提高，从而减少这种情况的发生。</p><h3 id=1-我们可以在代码提交时进行哪些检查>1. 我们可以在代码提交时进行哪些检查</h3><ul><li>Linters：Linters 是分析源代码以找到编程问题、语法错误和其他潜在问题的工具。流行的例子包括 pylint、flake8 和 pyflakes。</li><li>代码格式化器：代码格式化器自动化根据预定义的样式约定格式化源代码的过程。示例包括 black、autopep8 和 yapf。</li><li>自动化测试：自动化测试，如单元和集成测试，对于确保代码的功能性和质量至关重要。框架如 unittest、pytest 和 nose 允许以自动化方式编写和运行测试。</li><li>静态代码分析：静态分析工具如 bandit（用于检测安全问题）、mypy（用于静态类型检查）和 prospector（集成了几个静态分析器）可以在不需要运行代码的情况下识别潜在问题。这些工具可以帮助找到安全漏洞、逻辑错误和可能的性能改进。</li></ul><p>好的，那么……我们如何在我们的项目中应用这些测试/分析呢？别担心，这就是 Pre-commit 的用武之地。</p><h3 id=2-pre-commit>2. Pre-commit</h3><p>pre-commit 是一个用于管理和维护多语言 pre-commit 钩子的框架。我们称之为“钩子”的是一个脚本或一组命令，它们会自动执行。但是，我们什么时候要执行这些测试呢？</p><p>这个工具允许我们配置一组质量测试，在运行 git 命令（commit、push 等）之前自动执行。这在某种意义上非常强大，因为每次我们修改 git 仓库时，我们都可以确保添加的代码遵循我们设定的质量规则。</p><h4 id=21-pre-commit-安装>2.1 Pre-commit: 安装</h4><p>要安装 pre-commit，首先执行以下命令行：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>pip install pre-commit
+</span></span></code></pre></td></tr></table></div></div><h4 id=22-pre-commit-仓库结构>2.2 Pre-commit: 仓库结构</h4><p>为了配置 pre-commit，我们需要 2 个文件，这些文件必须位于根文件夹中。这些文件是.pre-commit-config.yaml 和 pyproject.toml。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>project/
+</span></span><span class=line><span class=cl>├── src/
+</span></span><span class=line><span class=cl>├── .pre-commit-config.yaml
+</span></span><span class=line><span class=cl>└── pyproject.toml
+</span></span></code></pre></td></tr></table></div></div><p>.pre-commit-config.yaml：必需。配置 QA 流水线。它包含要在执行 git 命令之前执行的每个钩子。
+pyproject.toml：可选。配置文件，由打包工具以及其他工具（如 linters、类型检查器等）使用。它允许更具体的钩子配置。</p><h4 id=23-pre-commit-qa-流水线>2.3 Pre-commit: QA 流水线</h4><p>现在，让我们看看如何修改这些文件。首先，我们将看到一个简单的.pre-commit-config.yaml 配置示例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>repos:
+</span></span><span class=line><span class=cl>-   repo: https://github.com/pre-commit/pre-commit-hooks
+</span></span><span class=line><span class=cl>    rev: v2.3.0
+</span></span><span class=line><span class=cl>    hooks:
+</span></span><span class=line><span class=cl>    -   id: check-yaml
+</span></span><span class=line><span class=cl>    -   id: end-of-file-fixer
+</span></span><span class=line><span class=cl>    -   id: trailing-whitespace
+</span></span><span class=line><span class=cl>-   repo: https://github.com/astral-sh/ruff-pre-commit
+</span></span><span class=line><span class=cl>    rev: v0.4.2
+</span></span><span class=line><span class=cl>    hooks:
+</span></span><span class=line><span class=cl>    -   id: ruff
+</span></span><span class=line><span class=cl>        args: [ --fix ]
+</span></span><span class=line><span class=cl>    -   id: ruff-format
+</span></span></code></pre></td></tr></table></div></div><p>在这种情况下，我们定义了 5 个步骤（每个 ID 一个），其中前三个将检查 yaml 语法、文件结尾和尾随空格。最后两个钩子来自 Ruff（一个新的强大的 linter）。让我们了解文件的结构。</p><ul><li>repo：存储库位于的 URL。否则可以是本地的，如果我们要执行自定义钩子。</li><li>rev：我们要使用的版本标签。</li><li>hooks：我们在其中指定我们要使用的该 repo 的所有钩子。</li><li>id：特定钩子的 ID。</li></ul><p>对于每个钩子，我们可以指定更多参数，如 types、stages 等。我们可以在官方文档中查看列表。</p><p>另一方面，有些工具还可以加入进来，所以，在这种情况下，我们将在 pyproject.toml 文件中更具体：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=c1># 其他Pyproject内容</span>
+</span></span><span class=line><span class=cl><span class=c1># ...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Ruff钩子配置</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=k>tool</span><span class=o>.</span><span class=n>ruff</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>line</span><span class=o>-</span><span class=n>length</span> <span class=o>=</span> <span class=mi>88</span>
+</span></span></code></pre></td></tr></table></div></div><p>在这个示例中，我们配置了 Ruff，以强制我们的代码行长度不超过 88 个字符。要知道您可以在此文件中设置哪些配置，您将需要访问官方包网站并进行研究。</p><h4 id=24-pre-commit-执行>2.4 Pre-commit: 执行</h4><p>在执行它们之前，我们需要安装使用的钩子。Pre-commit 默认会在隔离的虚拟环境中安装所有来自钩子的依赖项，所以我们不必担心与我们的包发生冲突。这很酷！然而，如果我们想强制 pre-commit 使用与同一环境中安装的库，我们将需要强制所有执行的钩子都是自定义的（在下一节中解释）。</p><p>因此，无论钩子是否使用隔离的 venv 来处理依赖项，我们都需要安装它们。为此，我们使用以下命令行：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>pre-commit install
+</span></span></code></pre></td></tr></table></div></div><p>之后，如果需要，我们可以安装额外的钩子类型。在这种情况下，我发现安装 commit-msg 和 pre-push 很有趣。这使我们能够在提交消息或进行推送之前配置自动执行。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>pre-commit install --hook-type commit-msg --hook-type pre-push
+</span></span></code></pre></td></tr></table></div></div><p>从现在开始，pre-commit 将监听所有 git 执行（commit、push 等）并将在其 stages 参数中定义的所有钩子执行。默认情况下，所有都设置为在每次 git 提交时执行。</p><p>否则，我们可以使用以下命令行手动运行它：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># 在一组文件上运行
+</span></span><span class=line><span class=cl>pre-commit run --files file1 file2 ...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># 在所有文件上运行
+</span></span><span class=line><span class=cl>pre-commit run --all-files
+</span></span></code></pre></td></tr></table></div></div><h4 id=25-自定义钩子>2.5 自定义钩子</h4><p>自定义钩子可以提供更加灵活和强大的检查。</p><p>接下来是自定义钩子的实现（check_file_extensions.py）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pathlib</span> <span class=kn>import</span> <span class=n>Path</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>typing</span> <span class=kn>import</span> <span class=n>List</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>configargparse</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>check_file_extensions</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=n>file_extensions</span><span class=p>:</span> <span class=n>List</span><span class=p>[</span><span class=n>Path</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=n>files</span><span class=p>:</span> <span class=n>List</span><span class=p>[</span><span class=n>Path</span><span class=p>],</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>List</span><span class=p>[</span><span class=n>Path</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>    查找具有不需要的格式的文件。
+</span></span></span><span class=line><span class=cl><span class=s2>    参数
+</span></span></span><span class=line><span class=cl><span class=s2>    ----------
+</span></span></span><span class=line><span class=cl><span class=s2>    file_extensions : List[Path]
+</span></span></span><span class=line><span class=cl><span class=s2>        我们要检查的扩展名。
+</span></span></span><span class=line><span class=cl><span class=s2>    files : List[Path]
+</span></span></span><span class=line><span class=cl><span class=s2>        要检查的文件。
+</span></span></span><span class=line><span class=cl><span class=s2>    返回
+</span></span></span><span class=line><span class=cl><span class=s2>    -------
+</span></span></span><span class=line><span class=cl><span class=s2>    List[Path]
+</span></span></span><span class=line><span class=cl><span class=s2>        返回具有不正确格式的文件列表。
+</span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>invalid_files</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>file_path</span> <span class=ow>in</span> <span class=n>files</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=n>file_path</span><span class=o>.</span><span class=n>is_file</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=ow>and</span> <span class=n>file_path</span><span class=o>.</span><span class=n>suffix</span><span class=o>.</span><span class=n>lower</span><span class=p>()</span> <span class=ow>in</span> <span class=n>file_extensions</span>
+</span></span><span class=line><span class=cl>            <span class=ow>and</span> <span class=ow>not</span> <span class=nb>str</span><span class=p>(</span><span class=n>file_path</span><span class=p>)</span><span class=o>.</span><span class=n>startswith</span><span class=p>(</span><span class=s2>&#34;.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=n>invalid_files</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>file_path</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>invalid_files</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 解析参数</span>
+</span></span><span class=line><span class=cl>    <span class=n>parser</span> <span class=o>=</span> <span class=n>configargparse</span><span class=o>.</span><span class=n>ArgumentParser</span><span class=p>(</span><span class=n>description</span><span class=o>=</span><span class=s2>&#34;文件扩展名检查器&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>parser</span><span class=o>.</span><span class=n>add_argument</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;--formats&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>nargs</span><span class=o>=</span><span class=s2>&#34;+&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>required</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>help</span><span class=o>=</span><span class=s2>&#34;不需要的文件扩展名列表&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nb>type</span><span class=o>=</span><span class=nb>str</span><span class=o>.</span><span class=n>lower</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>parser</span><span class=o>.</span><span class=n>add_argument</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;--files&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>nargs</span><span class=o>=</span><span class=s2>&#34;+&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>required</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>help</span><span class=o>=</span><span class=s2>&#34;文件列表&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nb>type</span><span class=o>=</span><span class=n>Path</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>args</span> <span class=o>=</span> <span class=n>parser</span><span class=o>.</span><span class=n>parse_args</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 检查无效格式文件</span>
+</span></span><span class=line><span class=cl>    <span class=n>invalid_files</span> <span class=o>=</span> <span class=n>check_file_extensions</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>args</span><span class=o>.</span><span class=n>formats</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>args</span><span class=o>.</span><span class=n>files</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>invalid_files</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;文件具有与以下不同的格式：&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>file_path</span> <span class=ow>in</span> <span class=n>invalid_files</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=n>file_path</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>一旦实现了钩子，它需要以以下方式添加到配置文件.pre-commit-config.yaml 中：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>repos:
+</span></span><span class=line><span class=cl>  # 自定义钩子
+</span></span><span class=line><span class=cl>  - repo: local
+</span></span><span class=line><span class=cl>    hooks:
+</span></span><span class=line><span class=cl>    - id: my-custom-hook
+</span></span><span class=line><span class=cl>      name: extension-file-checker
+</span></span><span class=line><span class=cl>      entry: python qa_code/custom_hooks/check_file_extensions.py  # 脚本路径
+</span></span><span class=line><span class=cl>      types: [file]
+</span></span><span class=line><span class=cl>      language: system
+</span></span><span class=line><span class=cl>      args: [&#34;--formats&#34;, &#34;.json&#34;, &#34;--files&#34;]
+</span></span><span class=line><span class=cl>      require_serial: true
+</span></span><span class=line><span class=cl>      pass_filenames: true
+</span></span><span class=line><span class=cl>      stages: [commit, manual]
+</span></span></code></pre></td></tr></table></div></div><p>这个配置指定了以下内容：</p><ul><li>repo: 由于它是本地的，定义了一个自定义钩子。</li><li>id: 显示的新钩子的 ID。</li><li>name: 显示的新钩子的名称。</li><li>entry: 执行钩子的命令。</li><li>language: 执行钩子的语言。设置为 system 将强制使用当前环境中安装的库。否则，pre-commit 将创建一个虚拟环境来安装必要的依赖项。</li><li>args: 脚本接收的参数。</li><li>require_serial: 强制执行不并行完成。</li><li>additional_dependencies: 启动钩子所需的依赖项。</li><li>pass_filenames: 定义是否将所有要分析的文件作为参数传递。</li><li>stages: 我们希望钩子在什么阶段执行 在这种情况下，每次我们想进行 git 提交时，也可以手动使用 pre-commit 命令。</li></ul><h3 id=3-pre-commit-配置实例>3. Pre-commit 配置实例</h3><p>下面一些钩子都比较实用。</p><ul><li>check-added-large-files：来自 Pre commit hooks。检查是否上传了大文件。</li><li>check-yaml：来自 Pre commit hooks。检查.yaml 文件是否正确编写。</li><li>check-toml：来自 Pre commit hooks。检查.toml 文件是否正确编写。</li><li>end-of-file-fixer：来自 Pre commit hooks。检查文件是否以新行结束。</li><li>trailing-whitespace：来自 Pre commit hooks。删除尾随空格。</li><li>ruff：来自 Ruff。运行代码质量检查。应用 PEP8 约定、语法错误、代码复杂性等检查。</li><li>ruff-format：来自 Ruff。根据特定样式自动格式化代码。一些示例包括：代码对齐、空白、行长度等。</li><li>numpydoc：来自 Numpydoc。验证 docstrings 是否符合 numpy 格式。</li><li>mypy：来自 Mypy。分析代码中与数据类型相关的错误，并在代码执行前提供可能的类型问题信息。</li><li>vulture：来自 Vulture。帮助识别不运行的代码，可能安全地删除。</li><li>commitizen：来自 Commitizen。用于确保确认消息遵循特定格式。</li><li>commitizen-branch：来自 Commitizen。用于确保分支名称遵循特定格式。</li><li>nbstripout：来自 Nbstripout。允许您在提交更改之前从 Jupyter 笔记本单元格中删除运行输出。</li><li>pytest-check：来自自定义钩子。使用 pytest 运行一组单元测试。</li><li>extension-file-checker：来自自定义钩子。允许您检查是否添加了具有特定扩展名的文件。</li></ul><p>这是一个.pre-commit-config.yaml 例子。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># 适用于python&gt;=3.8的pre-commit配置文件
+</span></span><span class=line><span class=cl>repos:
+</span></span><span class=line><span class=cl>  - repo: local
+</span></span><span class=line><span class=cl>    hooks:
+</span></span><span class=line><span class=cl>      # Pre commit hooks https://github.com/pre-commit/pre-commit-hooks
+</span></span><span class=line><span class=cl>      - id: check-added-large-files
+</span></span><span class=line><span class=cl>        name: check for added large files
+</span></span><span class=line><span class=cl>        description: prevents giant files from being committed.
+</span></span><span class=line><span class=cl>        entry: check-added-large-files
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        args: [&#39;--maxkb=123&#39;]
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      - id: check-yaml
+</span></span><span class=line><span class=cl>        name: check yaml
+</span></span><span class=line><span class=cl>        description: checks yaml files for parseable syntax.
+</span></span><span class=line><span class=cl>        entry: check-yaml
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        types: [yaml]
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      - id: check-toml
+</span></span><span class=line><span class=cl>        name: check toml
+</span></span><span class=line><span class=cl>        description: checks toml files for parseable syntax.
+</span></span><span class=line><span class=cl>        entry: check-toml
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        types: [toml]
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      - id: end-of-file-fixer
+</span></span><span class=line><span class=cl>        name: fix end of files
+</span></span><span class=line><span class=cl>        description: ensures that a file is either empty, or ends with one newline.
+</span></span><span class=line><span class=cl>        entry: end-of-file-fixer
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        types: [python]
+</span></span><span class=line><span class=cl>        exclude: ^data/mlruns/
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      - id: trailing-whitespace
+</span></span><span class=line><span class=cl>        name: trim trailing whitespace
+</span></span><span class=line><span class=cl>        description: trims trailing whitespace.
+</span></span><span class=line><span class=cl>        entry: trailing-whitespace-fixer
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        types: [text]
+</span></span><span class=line><span class=cl>        exclude: ^data/mlruns/
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      # Ruff hooks https://github.com/astral-sh/ruff-pre-commit
+</span></span><span class=line><span class=cl>      - id: ruff # Linter
+</span></span><span class=line><span class=cl>        name: ruff
+</span></span><span class=line><span class=cl>        description: &#34;Run &#39;ruff&#39; for extremely fast Python linting&#34;
+</span></span><span class=line><span class=cl>        entry: ruff check --force-exclude
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        require_serial: true
+</span></span><span class=line><span class=cl>        types_or: [ python, pyi ]
+</span></span><span class=line><span class=cl>        args: [ --fix]
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      - id: ruff-format # Formatter
+</span></span><span class=line><span class=cl>        name: ruff-format
+</span></span><span class=line><span class=cl>        description: &#34;Run &#39;ruff format&#39; for extremely fast Python formatting&#34;
+</span></span><span class=line><span class=cl>        entry: ruff format --force-exclude
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        exclude:
+</span></span><span class=line><span class=cl>          &#39;^(docs/|notebooks/demo_custom_argparse/)&#39;
+</span></span><span class=line><span class=cl>        types_or: [ python, pyi, jupyter ]
+</span></span><span class=line><span class=cl>        require_serial: true
+</span></span><span class=line><span class=cl>        stages: [commit, manual]
+</span></span><span class=line><span class=cl>      # Numpy docstrings https://github.com/numpy/numpydoc
+</span></span><span class=line><span class=cl>      - id: numpydoc-validation
+</span></span><span class=line><span class=cl>        name: numpydoc-validation
+</span></span><span class=line><span class=cl>        description: This hook validates that docstrings in committed files adhere to numpydoc standards.
+</span></span><span class=line><span class=cl>        entry: python -m numpydoc.hooks.validate_docstrings
+</span></span><span class=line><span class=cl>        require_serial: true
+</span></span><span class=line><span class=cl>        language: system
+</span></span><span class=line><span class=cl>        exclude:
+</span></span><span class=line><span class=cl>          &#39;^(docs/|notebooks/demo_custom_argparse/)&#39;
+</span></span><span class=line><span class=cl>        types: [python]
+</span></span></code></pre></td></tr></table></div></div><h3 id=总结>总结</h3><p>总的来说下面这些钩子是完全可以用起来的。</p><ul><li>代码风格扫描，代码语法扫描，静态代码分析，代码自动格式化</li><li>配置文件扫描，比如 yaml 和 json 的语法扫描</li><li>文件保护扫描，一些核心文件我们不希望进行变动</li><li>自动化用例执行，一般情况下推荐执行单元测试，毕竟扫描的时候需要速度优先</li></ul></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

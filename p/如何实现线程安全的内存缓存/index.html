@@ -1,0 +1,493 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="这两天正好看到一个用go实现的线程安全的内存缓存，实现代码非常简洁高效，不卖弄不烧脑，非常值得初学者拿来学习。\n项目地址 项目地址在https://github.com/muesli/cache2go，目前已经有1.8k的star。\n"><title>如何实现线程安全的内存缓存</title><link rel=canonical href=zh.ethanhan.cc/p/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%86%85%E5%AD%98%E7%BC%93%E5%AD%98/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="如何实现线程安全的内存缓存"><meta property='og:description' content="这两天正好看到一个用go实现的线程安全的内存缓存，实现代码非常简洁高效，不卖弄不烧脑，非常值得初学者拿来学习。\n项目地址 项目地址在https://github.com/muesli/cache2go，目前已经有1.8k的star。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%86%85%E5%AD%98%E7%BC%93%E5%AD%98/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-04-07T14:39:24+08:00'><meta property='article:modified_time' content='2023-04-07T14:39:24+08:00'><meta name=twitter:title content="如何实现线程安全的内存缓存"><meta name=twitter:description content="这两天正好看到一个用go实现的线程安全的内存缓存，实现代码非常简洁高效，不卖弄不烧脑，非常值得初学者拿来学习。\n项目地址 项目地址在https://github.com/muesli/cache2go，目前已经有1.8k的star。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#项目地址>项目地址</a></li><li><a href=#如何使用>如何使用</a></li><li><a href=#key-value存储>key value存储</a></li><li><a href=#缓存对象的实现cachetable>缓存对象的实现CacheTable</a></li><li><a href=#添加一个key-value>添加一个key value</a></li><li><a href=#扫描并清理过期的key>扫描并清理过期的key</a></li><li><a href=#删除key的实现>删除key的实现</a></li><li><a href=#总结>总结</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%86%85%E5%AD%98%E7%BC%93%E5%AD%98/>如何实现线程安全的内存缓存</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2023-04-07T14:39:24+08:00>Apr 07, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><p>这两天正好看到一个用go实现的线程安全的内存缓存，实现代码非常简洁高效，不卖弄不烧脑，非常值得初学者拿来学习。</p><h3 id=项目地址>项目地址</h3><p>项目地址在<a class=link href=https://github.com/muesli/cache2go target=_blank rel=noopener>https://github.com/muesli/cache2go</a>，目前已经有1.8k的star。</p><h3 id=如何使用>如何使用</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;github.com/muesli/cache2go&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;time&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Keys &amp; values in cache2go can be of arbitrary types, e.g. a struct.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>myStruct</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>text</span><span class=w>     </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>moreData</span><span class=w> </span><span class=p>[]</span><span class=kt>byte</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Accessing a new cache table for the first time will create it.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cache</span><span class=w> </span><span class=o>:=</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// We will put a new item in the cache. It will expire after</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// not being accessed via Value(key) for more than 5 seconds.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>val</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>myStruct</span><span class=p>{</span><span class=s>&#34;This is a test!&#34;</span><span class=p>,</span><span class=w> </span><span class=p>[]</span><span class=kt>byte</span><span class=p>{}}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cache</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=s>&#34;someKey&#34;</span><span class=p>,</span><span class=w> </span><span class=mi>5</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>val</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Let&#39;s retrieve the item from the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>res</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>cache</span><span class=p>.</span><span class=nf>Value</span><span class=p>(</span><span class=s>&#34;someKey&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Found value in cache:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>res</span><span class=p>.</span><span class=nf>Data</span><span class=p>().(</span><span class=o>*</span><span class=nx>myStruct</span><span class=p>).</span><span class=nx>text</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Error retrieving value from cache:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Wait for the item to expire in cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>time</span><span class=p>.</span><span class=nf>Sleep</span><span class=p>(</span><span class=mi>6</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>res</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>cache</span><span class=p>.</span><span class=nf>Value</span><span class=p>(</span><span class=s>&#34;someKey&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Item is not cached (anymore).&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Add another item that never expires.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cache</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=s>&#34;someKey&#34;</span><span class=p>,</span><span class=w> </span><span class=mi>0</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>val</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// cache2go supports a few handy callbacks and loading mechanisms.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cache</span><span class=p>.</span><span class=nf>SetAboutToDeleteItemCallback</span><span class=p>(</span><span class=kd>func</span><span class=p>(</span><span class=nx>e</span><span class=w> </span><span class=o>*</span><span class=nx>cache2go</span><span class=p>.</span><span class=nx>CacheItem</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Deleting:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>e</span><span class=p>.</span><span class=nf>Key</span><span class=p>(),</span><span class=w> </span><span class=nx>e</span><span class=p>.</span><span class=nf>Data</span><span class=p>().(</span><span class=o>*</span><span class=nx>myStruct</span><span class=p>).</span><span class=nx>text</span><span class=p>,</span><span class=w> </span><span class=nx>e</span><span class=p>.</span><span class=nf>CreatedOn</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Remove the item from the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cache</span><span class=p>.</span><span class=nf>Delete</span><span class=p>(</span><span class=s>&#34;someKey&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// And wipe the entire cache table.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cache</span><span class=p>.</span><span class=nf>Flush</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>简单看一下核心api</p><ul><li>创建缓存对象: <code>cache2go.Cache("myCache")</code></li><li>设置一个key:value对：<code>cache.Add("someKey", 5*time.Second, &amp;val)</code> 设置的时候需要指定缓存的过期时间</li><li>获取key对应的value值: <code>res, err = cache.Value("someKey")</code></li></ul><p>这里就简单分析一下对应接口的实现原理。</p><h3 id=key-value存储>key value存储</h3><p>这里使用的是CacheItem这个结构体来实现的key value存储。相应的数据结构是</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// CacheItem is an individual cache item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter data contains the user-set value in the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>CacheItem</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>sync</span><span class=p>.</span><span class=nx>RWMutex</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// The item&#39;s key.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// The item&#39;s data.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>data</span><span class=w> </span><span class=kd>interface</span><span class=p>{}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// How long will the item live in the cache when not being accessed/kept alive.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>lifeSpan</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Creation timestamp.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>createdOn</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Time</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Last access timestamp.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>accessedOn</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Time</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// How often the item was accessed.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>accessCount</span><span class=w> </span><span class=kt>int64</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Callback method triggered right before removing the item from the cache</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>aboutToExpire</span><span class=w> </span><span class=p>[]</span><span class=kd>func</span><span class=p>(</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>值得注意的点有</p><ul><li>读写锁: <code>sync.RWMutex</code> 多线程访问的时候用来进行资源的排他锁定</li><li>键的实现: <code>key interface{}</code> 所以key可以是任意类型</li><li>值的实现: <code>data interface{}</code> 跟key类似，value可以是任意类型</li><li>存活时间: <code>lifeSpan time.Duration</code> 大于这个时间间隔没有被访问的话，的话key就会过期被清理</li><li>上次被访问的时间: <code>accessedOn time.Time</code></li><li>key被访问的次数: <code>accessCount</code></li></ul><p>再看一下CacheItem初始化的代码</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// NewCacheItem returns a newly created CacheItem.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter key is the item&#39;s cache-key.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter lifeSpan determines after which time period without an access the item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// will get removed from the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter data is the item&#39;s value.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>NewCacheItem</span><span class=p>(</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{},</span><span class=w> </span><span class=nx>lifeSpan</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>,</span><span class=w> </span><span class=nx>data</span><span class=w> </span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=o>*</span><span class=nx>CacheItem</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>t</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Now</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=o>&amp;</span><span class=nx>CacheItem</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>key</span><span class=p>:</span><span class=w>           </span><span class=nx>key</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>lifeSpan</span><span class=p>:</span><span class=w>      </span><span class=nx>lifeSpan</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>createdOn</span><span class=p>:</span><span class=w>     </span><span class=nx>t</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>accessedOn</span><span class=p>:</span><span class=w>    </span><span class=nx>t</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>accessCount</span><span class=p>:</span><span class=w>   </span><span class=mi>0</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>aboutToExpire</span><span class=p>:</span><span class=w> </span><span class=kc>nil</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>data</span><span class=p>:</span><span class=w>          </span><span class=nx>data</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>可以看出来创建时间和上次访问时间都被设置成了当前时间，访问次数是0.</p><h3 id=缓存对象的实现cachetable>缓存对象的实现CacheTable</h3><p>CacheTable对象包含了n个CacheItem，看一下具体的数据结构</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>CacheTable</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>sync</span><span class=p>.</span><span class=nx>RWMutex</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// The table&#39;s name.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>name</span><span class=w> </span><span class=kt>string</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// All cached items.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>items</span><span class=w> </span><span class=kd>map</span><span class=p>[</span><span class=kd>interface</span><span class=p>{}]</span><span class=o>*</span><span class=nx>CacheItem</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Timer responsible for triggering cleanup.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cleanupTimer</span><span class=w> </span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Timer</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Current timer duration.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>cleanupInterval</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// The logger used for this table.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>logger</span><span class=w> </span><span class=o>*</span><span class=nx>log</span><span class=p>.</span><span class=nx>Logger</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Callback method triggered when trying to load a non-existing key.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>loadData</span><span class=w> </span><span class=kd>func</span><span class=p>(</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{},</span><span class=w> </span><span class=nx>args</span><span class=w> </span><span class=o>...</span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=o>*</span><span class=nx>CacheItem</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Callback method triggered when adding a new item to the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>addedItem</span><span class=w> </span><span class=p>[]</span><span class=kd>func</span><span class=p>(</span><span class=nx>item</span><span class=w> </span><span class=o>*</span><span class=nx>CacheItem</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Callback method triggered before deleting an item from the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>aboutToDeleteItem</span><span class=w> </span><span class=p>[]</span><span class=kd>func</span><span class=p>(</span><span class=nx>item</span><span class=w> </span><span class=o>*</span><span class=nx>CacheItem</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>这里需要关注的地方是</p><ul><li><code>items map[interface{}]*CacheItem</code> : 每个item其实都是这个map里的一项，其实map的key就是item的key</li><li><code>cleanupTimer *time.Timer</code> : 用来做缓存过期的定时器</li><li><code>cleanupInterval time.Duration</code> ： 扫描所有的items进行缓存过期清理的时间间隔</li></ul><h3 id=添加一个key-value>添加一个key value</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// Add adds a key/value pair to the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter key is the item&#39;s cache-key.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter lifeSpan determines after which time period without an access the item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// will get removed from the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Parameter data is the item&#39;s value.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>table</span><span class=w> </span><span class=o>*</span><span class=nx>CacheTable</span><span class=p>)</span><span class=w> </span><span class=nf>Add</span><span class=p>(</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{},</span><span class=w> </span><span class=nx>lifeSpan</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>,</span><span class=w> </span><span class=nx>data</span><span class=w> </span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=o>*</span><span class=nx>CacheItem</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>item</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nf>NewCacheItem</span><span class=p>(</span><span class=nx>key</span><span class=p>,</span><span class=w> </span><span class=nx>lifeSpan</span><span class=p>,</span><span class=w> </span><span class=nx>data</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Add item to cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Lock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>addInternal</span><span class=p>(</span><span class=nx>item</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=nx>item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>table</span><span class=w> </span><span class=o>*</span><span class=nx>CacheTable</span><span class=p>)</span><span class=w> </span><span class=nf>addInternal</span><span class=p>(</span><span class=nx>item</span><span class=w> </span><span class=o>*</span><span class=nx>CacheItem</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Careful: do not run this method unless the table-mutex is locked!</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// It will unlock it for the caller before running the callbacks and checks</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>log</span><span class=p>(</span><span class=s>&#34;Adding item with key&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>item</span><span class=p>.</span><span class=nx>key</span><span class=p>,</span><span class=w> </span><span class=s>&#34;and lifespan of&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>item</span><span class=p>.</span><span class=nx>lifeSpan</span><span class=p>,</span><span class=w> </span><span class=s>&#34;to table&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>name</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nx>items</span><span class=p>[</span><span class=nx>item</span><span class=p>.</span><span class=nx>key</span><span class=p>]</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>item</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Cache values so we don&#39;t keep blocking the mutex.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>expDur</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupInterval</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>addedItem</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>addedItem</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Unlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Trigger callback after adding an item to cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>addedItem</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>callback</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>addedItem</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=nf>callback</span><span class=p>(</span><span class=nx>item</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// If we haven&#39;t set up any expiration check timer or found a more imminent item.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>item</span><span class=p>.</span><span class=nx>lifeSpan</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=p>(</span><span class=nx>expDur</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=o>||</span><span class=w> </span><span class=nx>item</span><span class=p>.</span><span class=nx>lifeSpan</span><span class=w> </span><span class=p>&lt;</span><span class=w> </span><span class=nx>expDur</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>table</span><span class=p>.</span><span class=nf>expirationCheck</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>梳理一下流程</p><ul><li>创建cache item</li><li>加读写锁</li><li>调用<code>addInternal</code> 方法</li><li>在items map里添加一项，key就是item的key，value就是item</li><li>获取整个CacheTable的清理缓存间隔时间</li><li>解锁，到这一步基本上就完成了数据的持久化</li><li>运行添加item时的回调函数，如果有的话</li><li>如果item设置了过期时间，并且table的过期扫描间隔是0（首次添加）或者item的过期间隔小于table的过期间隔时间的话，调用<code>expirationCheck</code> 函数，进行过期扫描</li></ul><h3 id=扫描并清理过期的key>扫描并清理过期的key</h3><p>代码如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// Expiration check loop, triggered by a self-adjusting timer.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>table</span><span class=w> </span><span class=o>*</span><span class=nx>CacheTable</span><span class=p>)</span><span class=w> </span><span class=nf>expirationCheck</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Lock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupTimer</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupTimer</span><span class=p>.</span><span class=nf>Stop</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupInterval</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>table</span><span class=p>.</span><span class=nf>log</span><span class=p>(</span><span class=s>&#34;Expiration check triggered after&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupInterval</span><span class=p>,</span><span class=w> </span><span class=s>&#34;for table&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>name</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>table</span><span class=p>.</span><span class=nf>log</span><span class=p>(</span><span class=s>&#34;Expiration check installed for table&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>name</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// To be more accurate with timers, we would need to update &#39;now&#39; on every</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// loop iteration. Not sure it&#39;s really efficient though.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>now</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>Now</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>smallestDuration</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>for</span><span class=w> </span><span class=nx>key</span><span class=p>,</span><span class=w> </span><span class=nx>item</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>items</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=c1>// Cache values so we don&#39;t keep blocking the mutex.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>item</span><span class=p>.</span><span class=nf>RLock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>lifeSpan</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>item</span><span class=p>.</span><span class=nx>lifeSpan</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>accessedOn</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>item</span><span class=p>.</span><span class=nx>accessedOn</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>item</span><span class=p>.</span><span class=nf>RUnlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>if</span><span class=w> </span><span class=nx>lifeSpan</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=k>continue</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>if</span><span class=w> </span><span class=nx>now</span><span class=p>.</span><span class=nf>Sub</span><span class=p>(</span><span class=nx>accessedOn</span><span class=p>)</span><span class=w> </span><span class=o>&gt;=</span><span class=w> </span><span class=nx>lifeSpan</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=c1>// Item has excessed its lifespan.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=nx>table</span><span class=p>.</span><span class=nf>deleteInternal</span><span class=p>(</span><span class=nx>key</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=c1>// Find the item chronologically closest to its end-of-lifespan.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=k>if</span><span class=w> </span><span class=nx>smallestDuration</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=o>||</span><span class=w> </span><span class=nx>lifeSpan</span><span class=o>-</span><span class=nx>now</span><span class=p>.</span><span class=nf>Sub</span><span class=p>(</span><span class=nx>accessedOn</span><span class=p>)</span><span class=w> </span><span class=p>&lt;</span><span class=w> </span><span class=nx>smallestDuration</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=nx>smallestDuration</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>lifeSpan</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=nx>now</span><span class=p>.</span><span class=nf>Sub</span><span class=p>(</span><span class=nx>accessedOn</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Setup the interval for the next cleanup run.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupInterval</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>smallestDuration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>smallestDuration</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>table</span><span class=p>.</span><span class=nx>cleanupTimer</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>time</span><span class=p>.</span><span class=nf>AfterFunc</span><span class=p>(</span><span class=nx>smallestDuration</span><span class=p>,</span><span class=w> </span><span class=kd>func</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=k>go</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nf>expirationCheck</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Unlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>简单过一起逻辑</p><ul><li>加读写锁</li><li>如果启动了扫描定时器，关闭定时器先</li><li>扫描所有的key，对每一个key<ul><li>加读锁</li><li>获取key的存活周期</li><li>获取key的上次访问时间</li><li>如果存活周期是0，则不处理，这是持续保活的逻辑，可以先不管</li><li>如果现在的时间距离上次访问时间已经大于了key的存活时间，则删除这个key</li><li>否则的话算出所有key里面最快要到期的那个key的时间间隔</li></ul></li><li>如果有拿到了最快要到期那个key的时间间隔，则运行定时器，在下这个时间间隔之后运行清理函数</li><li>解锁</li></ul><h3 id=删除key的实现>删除key的实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// Delete an item from the cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>table</span><span class=w> </span><span class=o>*</span><span class=nx>CacheTable</span><span class=p>)</span><span class=w> </span><span class=nf>Delete</span><span class=p>(</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=p>(</span><span class=o>*</span><span class=nx>CacheItem</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Lock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>defer</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nf>Unlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nf>deleteInternal</span><span class=p>(</span><span class=nx>key</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>table</span><span class=w> </span><span class=o>*</span><span class=nx>CacheTable</span><span class=p>)</span><span class=w> </span><span class=nf>deleteInternal</span><span class=p>(</span><span class=nx>key</span><span class=w> </span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=p>(</span><span class=o>*</span><span class=nx>CacheItem</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>r</span><span class=p>,</span><span class=w> </span><span class=nx>ok</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>items</span><span class=p>[</span><span class=nx>key</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=p>!</span><span class=nx>ok</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=kc>nil</span><span class=p>,</span><span class=w> </span><span class=nx>ErrKeyNotFound</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Cache value so we don&#39;t keep blocking the mutex.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>aboutToDeleteItem</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>aboutToDeleteItem</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Unlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Trigger callbacks before deleting an item from cache.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>aboutToDeleteItem</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>callback</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>aboutToDeleteItem</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=nf>callback</span><span class=p>(</span><span class=nx>r</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>r</span><span class=p>.</span><span class=nf>RLock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>defer</span><span class=w> </span><span class=nx>r</span><span class=p>.</span><span class=nf>RUnlock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>r</span><span class=p>.</span><span class=nx>aboutToExpire</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>callback</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>r</span><span class=p>.</span><span class=nx>aboutToExpire</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=nf>callback</span><span class=p>(</span><span class=nx>key</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>Lock</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>table</span><span class=p>.</span><span class=nf>log</span><span class=p>(</span><span class=s>&#34;Deleting item with key&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>key</span><span class=p>,</span><span class=w> </span><span class=s>&#34;created on&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>r</span><span class=p>.</span><span class=nx>createdOn</span><span class=p>,</span><span class=w> </span><span class=s>&#34;and hit&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>r</span><span class=p>.</span><span class=nx>accessCount</span><span class=p>,</span><span class=w> </span><span class=s>&#34;times from table&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>table</span><span class=p>.</span><span class=nx>name</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nb>delete</span><span class=p>(</span><span class=nx>table</span><span class=p>.</span><span class=nx>items</span><span class=p>,</span><span class=w> </span><span class=nx>key</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=nx>r</span><span class=p>,</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>删除的逻辑相对简单一些，主要是需要注意加锁解锁以及运行之前注册的回调函数。</p><h3 id=总结>总结</h3><p>这应该是我见过代码最简单但是star相对比较多的开源项目了。这个项目非常适合我们进行学习，因为</p><ul><li>可以帮助我们理解锁的使用以及如何使用锁来保证线程安全；</li><li>帮助我们理解key value内存缓存的实现</li><li>提供了一种使用定时器来实现定时任务的思路</li><li>帮助我们理解如何注册和运行回调函数</li></ul></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,214 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="前几天看到有老外发微博说selenium不是自动化测试工具，在震惊之余我陷入了沉思，这种说法其实是有道理的，原来这个工具用了这么多年，这个隐藏的秘密我竟然一直没有发现。\n"><title>震惊：selenium竟然不是自动化测试工具</title><link rel=canonical href=zh.ethanhan.cc/p/%E9%9C%87%E6%83%8Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="震惊：selenium竟然不是自动化测试工具"><meta property='og:description' content="前几天看到有老外发微博说selenium不是自动化测试工具，在震惊之余我陷入了沉思，这种说法其实是有道理的，原来这个工具用了这么多年，这个隐藏的秘密我竟然一直没有发现。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E9%9C%87%E6%83%8Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-04-07T14:39:24+08:00'><meta property='article:modified_time' content='2023-04-07T14:39:24+08:00'><meta name=twitter:title content="震惊：selenium竟然不是自动化测试工具"><meta name=twitter:description content="前几天看到有老外发微博说selenium不是自动化测试工具，在震惊之余我陷入了沉思，这种说法其实是有道理的，原来这个工具用了这么多年，这个隐藏的秘密我竟然一直没有发现。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E9%9C%87%E6%83%8Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/>震惊：selenium竟然不是自动化测试工具</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2023-04-07T14:39:24+08:00>Apr 07, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><p>前几天看到有老外发微博说selenium不是自动化测试工具，在震惊之余我陷入了沉思，这种说法其实是有道理的，原来这个工具用了这么多年，这个隐藏的秘密我竟然一直没有发现。</p><p>很久很久之前，我在各种国外的测试论坛发现大家都在讨论一种新的工具：selenium，先入为主，由于在测试论坛最先产生的大范围讨论和关注，我一直把selenium当作是根正苗红的测试工具，这么多年来一直没有对这个观点产生过一点点的怀疑，哪怕selenium其实很多时候被人用作爬虫，很多时候被别有用心的人拿来做自动化的工具以获取不法收入，哪怕很多时候被用来做一些效率提升的工具，我都没有过一丝丝的动摇，在我心里，selenium就是最硬核的浏览器自动化测试工具之一。</p><p><img src=/zh.ethanhan.cc/%E9%9C%87%E6%83%8A%EF%BC%9Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%2030f03d4d165f45b8b4c84e4ca80e1e6f/Screenshot_2021-07-08-13-53-09-44_0b2fce7a16bf2b728d6ffa28c8d60efb.jpg loading=lazy alt=%E9%9C%87%E6%83%8A%EF%BC%9Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%2030f03d4d165f45b8b4c84e4ca80e1e6f/Screenshot_2021-07-08-13-53-09-44_0b2fce7a16bf2b728d6ffa28c8d60efb.jpg></p><p>直到最近几天不经意间看到有人说(以下内容来自机翻)</p><blockquote><p>测试工具供应商能否请停止将他们的工具与 Selenium 进行比较！ 我厌倦了这个！
+Selenium webdriver 是一种自动化工具，而不是用于测试！ 当然，与非专业的测试工具相比，你开发的专门用于测试的测试工具看起来当然是很不错的了。拜托，歇歇吧。</p></blockquote><p>看到上面的这条言论我才突然间意识到，selenium webdriver一直在不停的迭代，尽管速度很慢，但webdriver的各个版本里似乎总缺少点什么。于是有人总在搜索selenium的时候加上关键字pytest或者junit，于是我总是喜欢在面试的时候问你们用selenium的时候用的是拿个测试框架，于是专门有人写文章描述如何在断言里使用expected_conditions。这些证据都非常肯定的证明了selenium其实并不是专门为自动化测试设计的工具，selenium的核心是自动化工具，测试只是其应用的一部分场景而已，selenium明显格局更大，路走的更宽，真正掩耳盗铃的是我，我才是那个永远不能被叫醒的装睡的人。</p><p>渐渐的我意识到，怪不得我之前在公开课里演示selenium的应用时总是喜欢用selenium做爬虫的例子，怪不得我之前跟一些同学留的练习里，selenium扮演的角色也只是做效率提升的工作，比如每天签到之类，其实大部分时间我使用selenium只是把它当作是自动化的工具，测试真的只是我使用selenium的一个特别的场景，在这个场景里，一些工作变得很难，比如断言；一些情况我需要考虑的更多，比如各种环境和配置问题；一些问题变得很棘手，比如用例的修改速度往往赶不上页面重构的速度等等；我写selenium最有成就感，最得心应手，写着写着有点像读爽文的场景往往是</p><ul><li>对爬取速度没有要求的爬虫</li><li>君子能不动手就不动手的场景，比如每天签到领金币</li></ul><p>这些场景往往跟测试无关，与兴趣有关。</p><p>很久之前写的从知乎爬内容的selenium脚本，那时候firefox driver还是webdriver的自带驱动。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span><span class=lnt>86
+</span><span class=lnt>87
+</span><span class=lnt>88
+</span><span class=lnt>89
+</span><span class=lnt>90
+</span><span class=lnt>91
+</span><span class=lnt>92
+</span><span class=lnt>93
+</span><span class=lnt>94
+</span><span class=lnt>95
+</span><span class=lnt>96
+</span><span class=lnt>97
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-powershell data-lang=powershell><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>从zhihu.com获取每日最热和每月最热
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>from</span> <span class=n>selenium</span> <span class=n>import</span> <span class=n>webdriver</span>
+</span></span><span class=line><span class=cl><span class=n>from</span> <span class=n>datetime</span> <span class=n>import</span> <span class=n>date</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>import</span> <span class=n>sys</span>
+</span></span><span class=line><span class=cl><span class=n>reload</span><span class=p>(</span><span class=n>sys</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>sys</span><span class=p>.</span><span class=py>setdefaultencoding</span><span class=p>(</span><span class=s2>&#34;utf-8&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>class</span><span class=w> </span><span class=nb>Zhihu:
+</span></span></span><span class=line><span class=cl><span class=nb>	</span><span class=n>def</span> <span class=n>__init__</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>daily_url</span> <span class=p>=</span> <span class=s1>&#39;https://www.zhihu.com/explore#daily-hot&#39;</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>monthly_url</span> <span class=p>=</span> <span class=s1>&#39;https://www.zhihu.com/explore#monthly-hot&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>def</span> <span class=n>__enter__</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>dr</span> <span class=p>=</span> <span class=n>webdriver</span><span class=p>.</span><span class=py>Firefox</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=n>self</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>def</span> <span class=n>__exit__</span><span class=p>(</span><span class=n>self</span><span class=p>,</span> <span class=n>p1</span><span class=p>,</span> <span class=n>p2</span><span class=p>,</span> <span class=n>p3</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>quit</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>def</span> <span class=n>get_daily_hots</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>result</span> <span class=p>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>		<span class=n>hots_urls</span> <span class=p>=</span> <span class=n>self</span><span class=p>.</span><span class=py>get_daily_hots_urls</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=n>url</span> <span class=k>in</span> <span class=n>hots_urls</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>			<span class=n>result</span><span class=p>.</span><span class=py>append</span><span class=p>(</span><span class=n>self</span><span class=p>.</span><span class=py>get_answer</span><span class=p>(</span><span class=n>url</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=n>result</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>def</span> <span class=n>get_answer</span><span class=p>(</span><span class=n>self</span><span class=p>,</span> <span class=n>url</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>get</span><span class=p>(</span><span class=n>url</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=c># wrap_div = self.dr.find_element_by_css_selector(&#39;.zm-item-answer.zm-item-expanded&#39;)</span>
+</span></span><span class=line><span class=cl>		<span class=n>article</span> <span class=p>=</span> <span class=p>{}</span>
+</span></span><span class=line><span class=cl>		<span class=n>article</span><span class=p>[</span><span class=s1>&#39;question&#39;</span><span class=p>]</span> <span class=p>=</span> <span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>find_element_by_css_selector</span><span class=p>(</span><span class=s1>&#39;#zh-question-title&#39;</span><span class=p>).</span><span class=py>text</span>
+</span></span><span class=line><span class=cl>		<span class=n>article</span><span class=p>[</span><span class=s1>&#39;author&#39;</span><span class=p>]</span> <span class=p>=</span> <span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>find_element_by_css_selector</span><span class=p>(</span><span class=s1>&#39;.author-link&#39;</span><span class=p>).</span><span class=py>text</span>
+</span></span><span class=line><span class=cl>		<span class=n>article</span><span class=p>[</span><span class=s1>&#39;answer&#39;</span><span class=p>]</span> <span class=p>=</span> <span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>find_element_by_css_selector</span><span class=p>(</span><span class=s1>&#39;.zm-editable-content.clearfix&#39;</span><span class=p>).</span><span class=py>get_attribute</span><span class=p>(</span><span class=s1>&#39;innerHTML&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=n>article</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>def</span> <span class=n>get_monthly_hots</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>def</span> <span class=n>get_daily_hots_urls</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>get</span><span class=p>(</span><span class=n>self</span><span class=p>.</span><span class=n>daily_url</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>wrap_div</span> <span class=p>=</span> <span class=n>self</span><span class=p>.</span><span class=py>dr</span><span class=p>.</span><span class=py>find_element_by_class_name</span><span class=p>(</span><span class=s1>&#39;tab-panel&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>title_url_elements</span> <span class=p>=</span> <span class=n>wrap_div</span><span class=p>.</span><span class=py>find_elements_by_class_name</span><span class=p>(</span><span class=s1>&#39;question_link&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>assert</span> <span class=n>len</span><span class=p>(</span><span class=n>title_url_elements</span><span class=p>)</span> <span class=p>==</span> <span class=mf>5</span>
+</span></span><span class=line><span class=cl>		<span class=n>urls</span> <span class=p>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=n>title</span> <span class=k>in</span> <span class=n>title_url_elements</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>			<span class=n>urls</span><span class=p>.</span><span class=py>append</span><span class=p>(</span><span class=n>title</span><span class=p>.</span><span class=py>get_attribute</span><span class=p>(</span><span class=s1>&#39;href&#39;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=n>urls</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>class</span><span class=w> </span><span class=nb>ZhihuReporter:
+</span></span></span><span class=line><span class=cl><span class=nb>  </span><span class=n>def</span> <span class=n>__init__</span><span class=p>(</span><span class=n>self</span><span class=p>,</span> <span class=n>path</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>report_path</span> <span class=p>=</span> <span class=n>path</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span> <span class=p>=</span> <span class=n>open</span><span class=p>(</span><span class=n>path</span><span class=p>,</span> <span class=s1>&#39;wb&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=n>write_header</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;html&gt;&lt;head&gt;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;link rel=&#34;stylesheet&#34; href=&#34;http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css&#34;&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;title&gt;Zhihu Report&lt;/title&gt;&lt;/head&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=n>write_body</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;body&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=n>finish_body</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;/body&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=n>write_article</span><span class=p>(</span><span class=n>self</span><span class=p>,</span> <span class=n>articles</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;h3&gt;知乎%s最热&lt;/h3&gt;&#39;</span> <span class=p>%(</span><span class=n>date</span><span class=p>.</span><span class=py>today</span><span class=p>().</span><span class=py>strftime</span><span class=p>(</span><span class=s1>&#39;%Y_%m_%d&#39;</span><span class=p>)))</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>article</span> <span class=k>in</span> <span class=n>articles</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;div class=&#34;container&#34;&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>article_html</span> <span class=p>=</span> <span class=s1>&#39;&lt;h3&gt;%s&lt;small&gt;%s&lt;/small&gt;&lt;/h3&gt;&#39;</span> <span class=p>%(</span><span class=n>article</span><span class=p>[</span><span class=s1>&#39;question&#39;</span><span class=p>],</span> <span class=n>article</span><span class=p>[</span><span class=s1>&#39;author&#39;</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>		<span class=n>article_html</span> <span class=p>+=</span> <span class=n>article</span><span class=p>[</span><span class=s1>&#39;answer&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=n>article_html</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;/div&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;hr&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=n>finish_report</span><span class=p>(</span><span class=n>self</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>  	<span class=n>self</span><span class=p>.</span><span class=py>finish_body</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>write</span><span class=p>(</span><span class=s1>&#39;&lt;/html&gt;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>f</span><span class=p>.</span><span class=py>close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=n>build_article_report</span><span class=p>(</span><span class=n>self</span><span class=p>,</span> <span class=n>articles</span><span class=p>)</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>write_header</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>write_body</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>write_article</span><span class=p>(</span><span class=n>articles</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=p>.</span><span class=py>finish_report</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=n>__name__</span> <span class=p>==</span> <span class=s1>&#39;__main__&#39;</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>	<span class=n>with</span> <span class=n>Zhihu</span><span class=p>()</span> <span class=n>as</span> <span class=n>zhihu</span><span class=err>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>articles</span> <span class=p>=</span> <span class=n>zhihu</span><span class=p>.</span><span class=py>get_daily_hots</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>		<span class=n>report_name</span> <span class=p>=</span> <span class=s1>&#39;zhihu_%s.html&#39;</span> <span class=p>%(</span><span class=n>date</span><span class=p>.</span><span class=py>today</span><span class=p>().</span><span class=py>strftime</span><span class=p>(</span><span class=s1>&#39;%Y_%m_%d&#39;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=n>reporter</span> <span class=p>=</span> <span class=n>ZhihuReporter</span><span class=p>(</span><span class=n>report_name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>reporter</span><span class=p>.</span><span class=py>build_article_report</span><span class=p>(</span><span class=n>articles</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>其实这样看来，selenium作为自动化测试工具其实是有一定门槛的，比如需要结合测试框架，需要自定义po，需要手动维护一些复杂的等待情况，需要自己实现重试机制，更被说框架，断言，报告这祖传的三座大山了，正是因为这些痛点的存在，一些新的测试工具应运而生，这些工具为测试这个精准的场景提供了自己的解决方案，比如内置断言，自带测试报告等等，让自动化测试更容易，更稳定，更专业，也正是因为这些工具补齐了selenium所谓的一些“短板”，工具提开发商们便会不停的把selenium拿出来各种比较，以体现自己的先进性和革命性。不过这种比较是偏颇的，就像是在足球的世界里很多球员的头球能力都比梅西要强，但在进攻综合实力上梅西还是独一档的存在。这些专业的自动化测试工具就像是锤子或者起子，在某一方面很强，但selenium更像是个工具箱，适用的场景更多元化一些。</p><p><img src=/zh.ethanhan.cc/%E9%9C%87%E6%83%8A%EF%BC%9Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%2030f03d4d165f45b8b4c84e4ca80e1e6f/Screenshot_2021-07-16-08-25-18-81_0b2fce7a16bf2b728d6ffa28c8d60efb.jpg loading=lazy alt=%E9%9C%87%E6%83%8A%EF%BC%9Aselenium%E7%AB%9F%E7%84%B6%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%2030f03d4d165f45b8b4c84e4ca80e1e6f/Screenshot_2021-07-16-08-25-18-81_0b2fce7a16bf2b728d6ffa28c8d60efb.jpg></p><p>如果你问我这些专业的自动化测试工具我是不是不推荐，其实我的答案是否定的。</p><p>如果这些工具能让我们以更小的代价更低的成本来实现自动化测试的工作，我们何乐而不为呢？让工作变得更有效率，有更多的时间去做一些自己感兴趣的事情其实一直都是很多测试同学努力的方向。也许在未来的某一天，我会在工作中使用一些专业的自动化测试工具来帮我低成本实现测试的自动化，然后节省下来的时间写一些随性的selenium脚本，实现一些有趣的功能，这也未尝不是一件令人感到身心愉悦的事情。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

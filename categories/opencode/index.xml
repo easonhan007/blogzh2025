@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Opencode on 乙醇的博客</title><link>zh.ethanhan.cc/categories/opencode/</link><description>Recent content in Opencode on 乙醇的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 04 Feb 2026 11:36:21 +0800</lastBuildDate><atom:link href="zh.ethanhan.cc/categories/opencode/index.xml" rel="self" type="application/rss+xml"/><item><title>还真不要钱！我用opencode做了个小学生的积分应用</title><link>zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/</link><pubDate>Wed, 04 Feb 2026 11:36:21 +0800</pubDate><guid>zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/</guid><description>&lt;img src="zh.ethanhan.cc/zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-05-11-18-07.png" alt="Featured image of post 还真不要钱！我用opencode做了个小学生的积分应用" /&gt;&lt;p&gt;事情是这样的，为了提升家里小学生的自主学习意识，所以我想做一个简单的小学生积分系统。&lt;/p&gt;
+&lt;p&gt;如果小朋友的行为值得鼓励，那么就给他奖励一些积分。积分可以用来兑换奖励，但是如果小朋友的行为是需要纠正的，那么就给他扣掉一些积分。&lt;/p&gt;
+&lt;p&gt;正好最近opencode很火，所以就用AI来帮我们实现一下吧。&lt;/p&gt;
+&lt;h2 id="功能演示"&gt;功能演示
+&lt;/h2&gt;&lt;p&gt;我这个应用叫做kidcions，一个纯的react前端单页项目，没有后台没有存储，用户数据是放在localstorage里面的。&lt;/p&gt;
+&lt;p&gt;项目我部署在cloudflare的page上了，大家有兴趣可以体验一下,地址是&lt;a class="link" href="https://kid.ethanhan.cc/" target="_blank" rel="noopener"
+&gt;https://kid.ethanhan.cc/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;简单介绍一下功能。&lt;/p&gt;
+&lt;p&gt;家长可以添加小朋友。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-48-05.png"
+width="1218"
+height="748"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-48-05_hu_5122f027a1ea53c5.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-48-05_hu_76977ee38380e617.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="162"
+data-flex-basis="390px"
+&gt;&lt;/p&gt;
+&lt;p&gt;可以给小朋友换个头像。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-49-20.png"
+width="876"
+height="828"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-49-20_hu_ff92908c3a48983c.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-49-20_hu_c7e5d92caf105f2f.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="105"
+data-flex-basis="253px"
+&gt;&lt;/p&gt;
+&lt;p&gt;可以增加积分。应用默认给了一些积分项。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-49-55.png"
+width="930"
+height="1086"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-49-55_hu_43a1b4a34b8f434d.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-49-55_hu_9c26ef5acbc5e825.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="85"
+data-flex-basis="205px"
+&gt;&lt;/p&gt;
+&lt;p&gt;当然，也可以自己设置积分项。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-52-35.png"
+width="1134"
+height="446"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-52-35_hu_3381116ca9b48e43.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-52-35_hu_7e8ea79f2d4c9884.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="254"
+data-flex-basis="610px"
+&gt;&lt;/p&gt;
+&lt;p&gt;有了积分就可以兑换奖品。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-53-07.png"
+width="930"
+height="868"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-53-07_hu_a61e715c421987e5.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-53-07_hu_541e6dfe7c72f4f6.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="107"
+data-flex-basis="257px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-53-39.png"
+width="924"
+height="858"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-53-39_hu_edfe6a06ec8bac31.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-53-39_hu_e770f8347a642048.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="107"
+data-flex-basis="258px"
+&gt;&lt;/p&gt;
+&lt;p&gt;奖品也是可以自己设置的。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-54-24.png"
+width="1126"
+height="414"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-54-24_hu_46ddbe97edd5226c.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-54-24_hu_c18282c3e09cee55.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="271"
+data-flex-basis="652px"
+&gt;&lt;/p&gt;
+&lt;p&gt;最后所有的积分记录都可以导出。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-55-28.png"
+width="1122"
+height="1328"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-55-28_hu_d77e689a8641fbab.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-55-28_hu_21e7842ec7596fbf.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="84"
+data-flex-basis="202px"
+&gt;&lt;/p&gt;
+&lt;p&gt;添加多个小朋友也是支持的。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-56-23.png"
+width="1732"
+height="702"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-56-23_hu_981d2de56a54a430.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-56-23_hu_74b9a0683a01071b.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="246"
+data-flex-basis="592px"
+&gt;&lt;/p&gt;
+&lt;p&gt;还支持暗夜模式。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-57-06.png"
+width="1130"
+height="1430"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-57-06_hu_f151be6656919a92.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-57-06_hu_5966dd291d22e189.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="79"
+data-flex-basis="189px"
+&gt;&lt;/p&gt;
+&lt;p&gt;移动端也适配了。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-57-53.png"
+width="794"
+height="1488"
+srcset="zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-57-53_hu_46a201cf5fe24afb.png 480w, zh.ethanhan.cc/p/%E8%BF%98%E7%9C%9F%E4%B8%8D%E8%A6%81%E9%92%B1%E6%88%91%E7%94%A8opencode%E5%81%9A%E4%BA%86%E4%B8%AA%E5%B0%8F%E5%AD%A6%E7%94%9F%E7%9A%84%E7%A7%AF%E5%88%86%E5%BA%94%E7%94%A8/2026-02-04-11-57-53_hu_dfb536f713670700.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="53"
+data-flex-basis="128px"
+&gt;&lt;/p&gt;
+&lt;h2 id="实现过程"&gt;实现过程
+&lt;/h2&gt;&lt;p&gt;实现过程其实比较的枯燥。&lt;/p&gt;
+&lt;p&gt;大致总结一下就是。&lt;/p&gt;
+&lt;p&gt;首先描述需求，描述的时候最好可以举几个例子，比如kid选择器的样式；&lt;/p&gt;
+&lt;p&gt;然后就是等待AI编码完成，因为项目非常简单，所以这一步其实不算慢；&lt;/p&gt;
+&lt;p&gt;最后就是自己上手去试用生成的应用，遇到问题就记录下来，让AI去解决。&lt;/p&gt;
+&lt;p&gt;要注意一下这里有个最小闭环原则，每次提出1个需求或者1个bug，实现了之后再去逐步推进。&lt;/p&gt;
+&lt;h2 id="关于模型"&gt;关于模型
+&lt;/h2&gt;&lt;p&gt;opencode可以直接拿来免费就用的。&lt;/p&gt;
+&lt;p&gt;因为每个免费的模型似乎都是有额度的，而单一的额度没办法支持把这个项目写完。&lt;/p&gt;
+&lt;p&gt;所以这个应用我用到了3个模型。&lt;/p&gt;
+&lt;p&gt;分别是开始的时候用到了kimi2.5，额度用完了之后换到了glm4.7，再次没有token之后换成了minimax。&lt;/p&gt;
+&lt;p&gt;所以如果想要用opencode愉快的玩耍的话，大家最好还是要买个稳定的套餐。&lt;/p&gt;
+&lt;h2 id="一些感想"&gt;一些感想
+&lt;/h2&gt;&lt;p&gt;最后来说说使用过程中的一些感想。&lt;/p&gt;
+&lt;p&gt;第一点就是整个过程有点像是先当产品经理，把想要实现的需求先列出来，然后当项目经理，给这些需求排期，先实现哪个，再实现哪个，最后当测试人员，自己试用，然后提bug，跟进缺陷的修复。&lt;/p&gt;
+&lt;p&gt;第二点就是如果你完全不会写代码的话，那么有可能有些描述就可能不会特别精确，从而需要进行多轮的对话和改进。举个例子，应用里有个区域的class是&lt;code&gt;.item-card&lt;/code&gt;，在移动端下，样式出现了点问题，因为我会一点css，能看出来是&lt;code&gt;overflow&lt;/code&gt;这个属性有问题问题，因此可以直接告诉ai问题的根本所在，否则的话，可能需要反复描述细节才能解决问题了吧。&lt;/p&gt;</description></item></channel></rss>

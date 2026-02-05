@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Feishu on 乙醇的博客</title><link>zh.ethanhan.cc/tags/feishu/</link><description>Recent content in Feishu on 乙醇的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 31 Jan 2026 15:37:18 +0800</lastBuildDate><atom:link href="zh.ethanhan.cc/tags/feishu/index.xml" rel="self" type="application/rss+xml"/><item><title>Openclaw如何接入飞书</title><link>zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/</link><pubDate>Sat, 31 Jan 2026 15:37:18 +0800</pubDate><guid>zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/</guid><description>&lt;img src="zh.ethanhan.cc/zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-02-05-11-20-23.png" alt="Featured image of post Openclaw如何接入飞书" /&gt;&lt;h2 id="b站视频"&gt;B站视频
+&lt;/h2&gt;&lt;iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=115990172015212&amp;bvid=BV12V6nBvEkf&amp;cid=35736060484&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"&gt;&lt;/iframe&gt;
+&lt;hr&gt;
+&lt;h2 id="youtube视频"&gt;YouTube视频
+&lt;/h2&gt;&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/YgGW60AwEuQ?si=1x90RfB17KNBbsyd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;hr&gt;
+&lt;p&gt;之前在 Linux 机器上装了 OpenClaw，每次访问 Dashboard 都得用 SSH 端口转发，用起来不太方便。&lt;/p&gt;
+&lt;p&gt;更合理的方式是把飞书和 OpenClaw 做集成，直接在飞书里就能聊天交互，这样更自然一点。&lt;/p&gt;
+&lt;h2 id="使用到的plugin"&gt;使用到的plugin
+&lt;/h2&gt;&lt;p&gt;这里用到了&lt;a class="link" href="https://github.com/m1heng/Clawdbot-feishu?tab=readme-ov-file#%E4%B8%AD%E6%96%87" target="_blank" rel="noopener"
+&gt;clawdbot-feishu&lt;/a&gt;插件，直接在命令行里安装。&lt;/p&gt;
+&lt;h2 id="安装clawdbot-feishu插件"&gt;安装clawdbot-feishu插件
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;openclaw plugins install @m1heng-clawd/feishu
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="创建飞书应用"&gt;创建飞书应用
+&lt;/h2&gt;&lt;p&gt;然后在 在 &lt;a class="link" href="https://open.feishu.cn" target="_blank" rel="noopener"
+&gt;飞书开放平台&lt;/a&gt; 创建自建应用。&lt;/p&gt;
+&lt;p&gt;应用名称和描述都不重要。&lt;/p&gt;
+&lt;p&gt;然后添加应用能力，加个机器人。&lt;/p&gt;
+&lt;p&gt;接下来在权限管理里面增加下面的权限。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;权限&lt;/th&gt;
+&lt;th&gt;范围&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;contact:user.base:readonly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;用户信息&lt;/td&gt;
+&lt;td&gt;获取用户基本信息（用于解析发送者姓名，避免群聊/私聊把不同人当成同一说话者）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;消息&lt;/td&gt;
+&lt;td&gt;发送和接收消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message.p2p_msg:readonly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;私聊&lt;/td&gt;
+&lt;td&gt;读取发给机器人的私聊消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message.group_at_msg:readonly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;群聊&lt;/td&gt;
+&lt;td&gt;接收群内 @机器人 的消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message:send_as_bot&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;发送&lt;/td&gt;
+&lt;td&gt;以机器人身份发送消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:resource&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;媒体&lt;/td&gt;
+&lt;td&gt;上传和下载图片/文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="在-openclaw-中增加channel"&gt;在 openclaw 中增加channel
+&lt;/h2&gt;&lt;p&gt;回到命令行，用下面的命令添加channel。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;openclaw channels add
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;选择飞书，各种下一步，然后去飞书的开发者后台把App ID 和 App Secret拿到，贴到命令行里。&lt;/p&gt;
+&lt;p&gt;然后就各种下一步。&lt;/p&gt;
+&lt;h2 id="设置事件与回调"&gt;设置事件与回调
+&lt;/h2&gt;&lt;p&gt;接下来设置事件与回调，这一步非常重要。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-31-36.png"
+width="1760"
+height="1084"
+srcset="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-31-36_hu_e31e1fa0a0f905ff.png 480w, zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-31-36_hu_b57e0bc92036abc9.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="162"
+data-flex-basis="389px"
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;事件配置方式&lt;/strong&gt;：选择 &lt;strong&gt;使用长连接接收事件&lt;/strong&gt;（推荐）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;添加事件订阅&lt;/strong&gt;，勾选以下事件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;事件&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.message.receive_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;接收消息（必需）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.message.message_read_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;消息已读回执&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.chat.member.bot.added_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;机器人进群&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.chat.member.bot.deleted_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;机器人被移出群&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="发布并审核"&gt;发布并审核。
+&lt;/h2&gt;&lt;p&gt;然后在飞书开发者后台的版本管理与发布页面，创建一个版本，并提交。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;下面这一步也非常重要，第一次配置的时候我就没弄明白。去飞书的管理后台里面，把应用审核，正式发布一下。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="测试一下"&gt;测试一下
+&lt;/h2&gt;&lt;p&gt;发布成功之后，在飞书会发一条审核通过的消息，在消息里打开应用，就可以跟机器人聊天了。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-29-32.png"
+width="1216"
+height="1530"
+srcset="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-29-32_hu_70e0b5959dacf3e6.png 480w, zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-29-32_hu_4f6bb7dc595db928.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="79"
+data-flex-basis="190px"
+&gt;&lt;/p&gt;
+&lt;p&gt;我的机器人比较笨，跟它说了半天才弄明白了我是谁。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-33-13.png"
+width="1116"
+height="1562"
+srcset="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-33-13_hu_dc86f18a7a3d5d51.png 480w, zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-33-13_hu_5f3ce1f574bfeb48.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="71"
+data-flex-basis="171px"
+&gt;&lt;/p&gt;
+&lt;p&gt;不过能聊天就代表配置成功了。&lt;/p&gt;</description></item></channel></rss>
