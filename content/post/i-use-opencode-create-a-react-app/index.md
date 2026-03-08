@@ -17,11 +17,11 @@ categories: ["AI", "opencode"]
 
 如果小朋友的行为值得鼓励，那么就给他奖励一些积分。积分可以用来兑换奖励，但是如果小朋友的行为是需要纠正的，那么就给他扣掉一些积分。
 
-正好最近opencode很火，所以就用AI来帮我们实现一下吧。
+正好最近opencode很火，所以就体验一下opencode，顺便让AI来帮我们实现一下代码。
 
 ## 功能演示
 
-我这个应用叫做kidcions，一个纯的react前端单页项目，没有后台没有存储，用户数据是放在localstorage里面的。
+我这个应用叫做kidcions，一个纯的react前端的单页项目，没有后台没有存储，用户数据是放在local storage里面的。
 
 项目我部署在cloudflare的page上了，大家有兴趣可以体验一下,地址是[https://kid.ethanhan.cc/](https://kid.ethanhan.cc/)
 
@@ -90,6 +90,8 @@ opencode可以直接拿来免费就用的。
 因为每个免费的模型似乎都是有额度的，而单一的额度没办法支持把这个项目写完。
 
 所以这个应用我用到了3个模型。
+
+![](2026-02-05-12-09-58.png)
 
 分别是开始的时候用到了kimi2.5，额度用完了之后换到了glm4.7，再次没有token之后换成了minimax。
 
