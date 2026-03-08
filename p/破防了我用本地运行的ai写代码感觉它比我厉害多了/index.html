@@ -1,0 +1,379 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="事情是这样的，前几天 facebook 发布了最新的llama3 模型，我第一时间就用ollama下载运行了一下，8b 模型的 size 很小，只有 4.6G 的样子，在我 16g 显存的台式机上，速度相当快，快到有点恍惚，现在的本地模型这么强了吗？\n"><title>破防了，我用本地运行的ai写代码，感觉它比我厉害多了</title><link rel=canonical href=zh.ethanhan.cc/p/%E7%A0%B4%E9%98%B2%E4%BA%86%E6%88%91%E7%94%A8%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C%E7%9A%84ai%E5%86%99%E4%BB%A3%E7%A0%81%E6%84%9F%E8%A7%89%E5%AE%83%E6%AF%94%E6%88%91%E5%8E%89%E5%AE%B3%E5%A4%9A%E4%BA%86/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="破防了，我用本地运行的ai写代码，感觉它比我厉害多了"><meta property='og:description' content="事情是这样的，前几天 facebook 发布了最新的llama3 模型，我第一时间就用ollama下载运行了一下，8b 模型的 size 很小，只有 4.6G 的样子，在我 16g 显存的台式机上，速度相当快，快到有点恍惚，现在的本地模型这么强了吗？\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E7%A0%B4%E9%98%B2%E4%BA%86%E6%88%91%E7%94%A8%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C%E7%9A%84ai%E5%86%99%E4%BB%A3%E7%A0%81%E6%84%9F%E8%A7%89%E5%AE%83%E6%AF%94%E6%88%91%E5%8E%89%E5%AE%B3%E5%A4%9A%E4%BA%86/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2024-04-25T22:14:17+08:00'><meta property='article:modified_time' content='2024-04-25T22:14:17+08:00'><meta name=twitter:title content="破防了，我用本地运行的ai写代码，感觉它比我厉害多了"><meta name=twitter:description content="事情是这样的，前几天 facebook 发布了最新的llama3 模型，我第一时间就用ollama下载运行了一下，8b 模型的 size 很小，只有 4.6G 的样子，在我 16g 显存的台式机上，速度相当快，快到有点恍惚，现在的本地模型这么强了吗？\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#第一个问题>第一个问题</a></li><li><a href=#第二个问题>第二个问题</a></li><li><a href=#第三个问题>第三个问题</a></li><li><a href=#有初步结论了>有初步结论了</a></li><li><a href=#试一试稍微难一点的问题>试一试稍微难一点的问题</a></li><li><a href=#结论>结论</a></li><li><a href=#本文用到的工具>本文用到的工具</a></li><li><a href=#彩蛋>彩蛋</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E7%A0%B4%E9%98%B2%E4%BA%86%E6%88%91%E7%94%A8%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C%E7%9A%84ai%E5%86%99%E4%BB%A3%E7%A0%81%E6%84%9F%E8%A7%89%E5%AE%83%E6%AF%94%E6%88%91%E5%8E%89%E5%AE%B3%E5%A4%9A%E4%BA%86/>破防了，我用本地运行的ai写代码，感觉它比我厉害多了</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2024-04-25T22:14:17+08:00>Apr 25, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 7 分钟</time></div></footer></div></header><section class=article-content><p>事情是这样的，前几天 facebook 发布了最新的<a class=link href=https://ai.meta.com/blog/meta-llama-3/ target=_blank rel=noopener>llama3 模型</a>，我第一时间就用<a class=link href=https://ollama.com/library/llama3 target=_blank rel=noopener>ollama</a>下载运行了一下，8b 模型的 size 很小，只有 4.6G 的样子，在我 16g 显存的台式机上，速度相当快，快到有点恍惚，现在的本地模型这么强了吗？</p><p>本着判断本地模型唯一的标准就是让它做中英文翻译的原则，我让 llama3 翻译了几个英文句子，不意外，基本言不达意，完全不可用，然后就简单了，给它贴上不可用的标签，就在我的模型库里待着好了。</p><p>然而几天后事情来了个 180 度大反转，我发现大家的测试结果都非常的正向，直呼这应该是目前为止最强的本地运行大模型了，有人测试了 70b 的版本，甚至把这个版本跟 gpt4 相提并论。</p><p>这不科学呀，明明这玩意连英译中都搞不好，怎么可能评价这么高呢？</p><p>本着试试不要钱的态度，我随便问了它几个跟自动化相关的问题，结果确实让人惊讶。</p><p>首先 llama3 应该 95%的训练材料都是英文的( over 5% of the Llama 3 pretraining dataset consists of high-quality non-English data that covers over 30 languages)，所以中文不好无可厚非，跟其交互的时候最好用英文提问。于是我用蹩脚的英文问了它第一个问题。</p><h3 id=第一个问题>第一个问题</h3><p>Open a browser using selenium and go to <a class=link href=https://www.itest.info target=_blank rel=noopener>www.itest.info</a>, then write a pytest assert to verify the page title should equal to 重定向科技, please give me the entile python code</p><p>翻译过来就是<code>打开浏览器，访问itest.info,然后用pytest写个断言，内容是浏览器的title应该等于重定向科技，直接给我python代码</code></p><p>下面是 llama3 秒回的结果，真的是秒回，基本上刚敲完回车就开始炫了 😂。</p><p>Here is the Python code that uses Selenium WebDriver with Pytest to open a browser, navigate to <code>www.itest.info</code>, and assert that the page title equals &ldquo;重定向科技&rdquo;:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pytest</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>selenium</span> <span class=kn>import</span> <span class=n>webdriver</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@pytest.fixture</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>browser</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>driver</span> <span class=o>=</span> <span class=n>webdriver</span><span class=o>.</span><span class=n>Chrome</span><span class=p>()</span>  <span class=c1># Replace with your preferred browser</span>
+</span></span><span class=line><span class=cl>    <span class=k>yield</span> <span class=n>driver</span>
+</span></span><span class=line><span class=cl>    <span class=n>driver</span><span class=o>.</span><span class=n>quit</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>test_itest_info</span><span class=p>(</span><span class=n>browser</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>browser</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;https://www.itest.info&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>assert</span> <span class=n>browser</span><span class=o>.</span><span class=n>title</span> <span class=o>==</span> <span class=s2>&#34;重定向科技&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Let me explain what each line does:</p><ol><li><code>import pytest</code>: We&rsquo;re using Pytest for our testing framework.</li><li><code>from selenium import webdriver</code>: We&rsquo;re importing the Selenium WebDriver library.</li><li><code>@pytest.fixture</code>: This is a Pytest fixture, which sets up and tears down resources (in this case, a browser instance) for each test.</li><li><code>def browser():</code>: The fixture function returns a browser object, which we&rsquo;ll use to interact with the website.</li><li><code>driver = webdriver.Chrome()</code>: We&rsquo;re creating a new Chrome browser instance (replace with your preferred browser if needed).</li><li><code>yield driver</code>: This is where the browser instance is yielded back to the test function.</li><li><code>browser.quit()</code>: After the test is finished, we&rsquo;ll close the browser instance using the <code>quit()</code> method.</li><li><code>def test_itest_info(browser):</code>: Our actual test function takes a browser instance as an argument.</li><li><code>browser.get("https://www.itest.info")</code>: We&rsquo;re navigating to the website using the <code>get()</code> method.</li><li><code>assert browser.title == "重定向科技"</code>: We&rsquo;re asserting that the page title is equal to &ldquo;重定向科技&rdquo;. If this assertion fails, Pytest will raise an exception.</li></ol><p>To run this code, save it in a file (e.g., <code>itest_test.py</code>) and then run it using Pytest:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ pytest itest_test.py
+</span></span></code></pre></td></tr></table></div></div><p>This should execute the test and report any failures or errors.</p><p>怎么说呢，不仅写的比我快，而且写的还比我好，不仅写的比我好，还解释了一大堆，都说言多必失，不过它的解释似乎没啥问题。</p><h3 id=第二个问题>第二个问题</h3><p>then click a button with id = 12345</p><p>接下来点击一个 id 为 12345 的 button</p><p>依然秒回，现在的大模型，性子都那么急。</p><p>Here is the updated code that clicks a button with an ID of <code>12345</code> after navigating to the website:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pytest</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>selenium</span> <span class=kn>import</span> <span class=n>webdriver</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@pytest.fixture</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>browser</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>driver</span> <span class=o>=</span> <span class=n>webdriver</span><span class=o>.</span><span class=n>Chrome</span><span class=p>()</span>  <span class=c1># Replace with your preferred browser</span>
+</span></span><span class=line><span class=cl>    <span class=k>yield</span> <span class=n>driver</span>
+</span></span><span class=line><span class=cl>    <span class=n>driver</span><span class=o>.</span><span class=n>quit</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>test_itest_info</span><span class=p>(</span><span class=n>browser</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>browser</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;https://www.itest.info&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Find and click the button with ID 12345</span>
+</span></span><span class=line><span class=cl>    <span class=n>button</span> <span class=o>=</span> <span class=n>browser</span><span class=o>.</span><span class=n>find_element_by_id</span><span class=p>(</span><span class=s2>&#34;12345&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>button</span><span class=o>.</span><span class=n>click</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>assert</span> <span class=n>browser</span><span class=o>.</span><span class=n>title</span> <span class=o>==</span> <span class=s2>&#34;重定向科技&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Here&rsquo;s what&rsquo;s new:</p><ol><li>We use <code>browser.find_element_by_id()</code> to locate an element (in this case, a button) with the specified ID (<code>12345</code>).</li><li>We store the found element in the <code>button</code> variable.</li><li>We call the <code>click()</code> method on the button to simulate clicking it.</li></ol><p>Note that if there are multiple elements on the page with the same ID, Selenium will throw an exception when trying to find the element. To avoid this, you can use more specific locator strategies (e.g., CSS selectors or XPath expressions) or ensure that the ID is unique on the page.</p><p>终于出问题了，<code>find_element_by_id</code>是老的接口，这样写几年前没问题，但现在就不行了，目前比较通用的写法是使用<code>By.ID</code>这种形式。</p><h3 id=第三个问题>第三个问题</h3><p>The code above is not correct, please use By.ID to refactor it.</p><p>上面的代码不对，请使用 By.ID 来进行重构。</p><p>嗯，还是秒回，这回习惯了。</p><p>I apologize for the mistake! Here is the corrected code:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pytest</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>selenium</span> <span class=kn>import</span> <span class=n>webdriver</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>selenium.webdriver.common.by</span> <span class=kn>import</span> <span class=n>By</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@pytest.fixture</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>browser</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>driver</span> <span class=o>=</span> <span class=n>webdriver</span><span class=o>.</span><span class=n>Chrome</span><span class=p>()</span>  <span class=c1># Replace with your preferred browser</span>
+</span></span><span class=line><span class=cl>    <span class=k>yield</span> <span class=n>driver</span>
+</span></span><span class=line><span class=cl>    <span class=n>driver</span><span class=o>.</span><span class=n>quit</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>test_itest_info</span><span class=p>(</span><span class=n>browser</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>browser</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;https://www.itest.info&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>     <span class=c1># Find and click the button with ID 12345 using By.ID</span>
+</span></span><span class=line><span class=cl>    <span class=n>button</span> <span class=o>=</span> <span class=n>browser</span><span class=o>.</span><span class=n>find_element</span><span class=p>(</span><span class=n>by</span><span class=o>=</span><span class=n>By</span><span class=o>.</span><span class=n>ID</span><span class=p>,</span> <span class=n>value</span><span class=o>=</span><span class=s2>&#34;12345&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>button</span><span class=o>.</span><span class=n>click</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>assert</span> <span class=n>browser</span><span class=o>.</span><span class=n>title</span> <span class=o>==</span> <span class=s2>&#34;重定向科技&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>I&rsquo;ve refactored the code to use the <code>By</code> class from Selenium&rsquo;s <code>webdriver.common.by</code> module, which provides a more explicit way of specifying the locator strategy. In this case, we&rsquo;re using <code>By.ID</code> to locate the element by its ID.</p><p>Note that I also replaced <code>find_element_by_id()</code> with <code>find_element(by=By.ID, value="12345")</code>, which is the recommended way to use the new locator strategy.</p><p>llama3 不仅道歉了，还改正了结果。如果这是 chatgpt3.5 或者 claude3，这就是基本操作，没啥大不了的，但对于一个本地运行的模型来说，这种表现实在是非常可以了。</p><h3 id=有初步结论了>有初步结论了</h3><p>看来 llama3 在解决编程问题上是属于<strong>可用</strong>的状态。</p><ul><li>对于一般的开发人员来说，我们可以从面相 google 的编程慢慢转变为部分面相本地 llm 的编程模式了。</li><li>对于企业来说，本地的 llm 不存在把代码传到远程的问题，信息安全性的问题可以部分解决了。</li><li>对于测试人员来说，会一些基本的编程技巧就可以实现使用自然语言进行测试用例编写的能力了。这是之前很多年大家追求的目标，现在一个本地 4.6g 的模型基本可以让我们摸到一点点边了；</li><li>对于质量管理来说，用本地 llm 跟开发人员进行结对编程似乎也有了可能性，开发人员写代码，llm 生成单元测试代码，也许只要通过微调就可以部分实现；</li></ul><h3 id=试一试稍微难一点的问题>试一试稍微难一点的问题</h3><p>using go access this api <a class=link href=https://api.dictionaryapi.dev/api/v2/entries/en/ target=_blank rel=noopener>https://api.dictionaryapi.dev/api/v2/entries/en/</a><word>, then print the all the meannings from the response, the respinse is a json string, it is like <code>[ { "word": "hello", "phonetic": "həˈləʊ", "phonetics": [ { "text": "həˈləʊ", "audio": "//ssl.gstatic.com/dictionary/static/sounds/20200429/hello--_gb_1.mp3" }, { "text": "hɛˈləʊ" } ], "origin": "early 19th century: variant of earlier hollo ; related to holla.", "meanings": [ { "partOfSpeech": "exclamation", "definitions": [ { "definition": "used as a greeting or to begin a phone conversation.", "example": "hello there, Katie!", "synonyms": [], "antonyms": [] } ] }, { "partOfSpeech": "noun", "definitions": [ { "definition": "an utterance of ‘hello’; a greeting.", "example": "she was getting polite nods and hellos from people", "synonyms": [], "antonyms": [] } ] }, { "partOfSpeech": "verb", "definitions": [ { "definition": "say or shout ‘hello’.", "example": "I pressed the phone button and helloed", "synonyms": [], "antonyms": [] } ] } ] } ]</code></p><p>用 golang 去访问 1 个 api，然后打印返回值里的 meanings 字段，这里 meannings 字段比较复杂，处理起来有点点麻烦。</p><p>这时候 llama3 的回答就有意思了。</p><p>Here is a sample Go program that sends an HTTP request to the API, parses the JSON response, and prints out all the meanings:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;bytes&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;encoding/json&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;io/ioutil&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;net/http&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Set the word you want to look up</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>word</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=s>&#34;hello&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Make an HTTP request to the API</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>url</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;https://api.dictionaryapi.dev/api/v2/entries/en/%s&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>word</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>resp</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>http</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>url</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>defer</span><span class=w> </span><span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Read the response body</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>body</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>ioutil</span><span class=p>.</span><span class=nf>ReadAll</span><span class=p>(</span><span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Unmarshal the JSON response</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>var</span><span class=w> </span><span class=nx>data</span><span class=w> </span><span class=p>[]</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>body</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>data</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Print out all the meanings</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>entry</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>data</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>meaning</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>entry</span><span class=p>[</span><span class=s>&#34;meanings&#34;</span><span class=p>].([]</span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Part of speech:&#34;</span><span class=p>,</span><span class=w> </span><span class=p>(</span><span class=nx>meaning</span><span class=p>.(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{}))[</span><span class=s>&#34;partOfSpeech&#34;</span><span class=p>])</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=p>(</span><span class=nx>meaning</span><span class=p>.(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{}))[</span><span class=s>&#34;definitions&#34;</span><span class=p>].([]</span><span class=kd>interface</span><span class=p>{})</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Definition:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=p>.(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{})[</span><span class=s>&#34;definition&#34;</span><span class=p>])</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=nx>example</span><span class=p>,</span><span class=w> </span><span class=nx>ok</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>definition</span><span class=p>.(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{})[</span><span class=s>&#34;example&#34;</span><span class=p>];</span><span class=w> </span><span class=nx>ok</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Example:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>example</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=nx>synonyms</span><span class=p>,</span><span class=w> </span><span class=nx>ok</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>definition</span><span class=p>.(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{})[</span><span class=s>&#34;synonyms&#34;</span><span class=p>];</span><span class=w> </span><span class=nx>ok</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>synonyms</span><span class=p>.([]</span><span class=kd>interface</span><span class=p>{}))</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Synonyms:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>synonyms</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>This program sends an HTTP GET request to the API with the specified word, reads the response body, and then unmarshals it into a slice of maps. It then iterates over this slice and prints out all the meanings.</p><p>Please note that you should handle the error cases more robustly in production code. This is just a sample program.</p><p>我没运行代码，不过看上去可能是跑得起来的。不过很显然这种实现方式不是很妙呀。</p><p>继续让它用 struct 来重构。</p><p>refactor the above code, use a struct to parse the json string</p><p>这时候 llama3 应该是混乱了。</p><p>Here&rsquo;s how you can refactor the above code using structs:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nx>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kn>import</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;encoding/json&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;fmt&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;io/ioutil&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=s>&#34;net/http&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>Meaning</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>PartOfSpeech</span><span class=w> </span><span class=kt>string</span><span class=w>   </span><span class=s>`json:&#34;partOfSpeech&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nx>_DEFINITIONS</span><span class=w>  </span><span class=p>[]</span><span class=nx>Definition</span><span class=w> </span><span class=s>`json:&#34;definitions&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>Definition</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Definition</span><span class=w>    </span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;definition&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Example</span><span class=w>       </span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;example,omitempty&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Synonyms</span><span class=w>      </span><span class=p>[]</span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;synonyms,omitempty&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Antonyms</span><span class=w>      </span><span class=p>[]</span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;antonyms,omitempty&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>word</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=s>&#34;hello&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>url</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;https://api.dictionaryapi.dev/api/v2/entries/en/%s&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>word</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>resp</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>http</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>url</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>defer</span><span class=w> </span><span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>body</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>ioutil</span><span class=p>.</span><span class=nf>ReadAll</span><span class=p>(</span><span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kd>var</span><span class=w> </span><span class=nx>data</span><span class=w> </span><span class=p>[]</span><span class=nx>Entry</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>body</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=nx>data</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nb>panic</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>entry</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>data</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Word:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>entry</span><span class=p>.</span><span class=nx>Word</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>meaning</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>entry</span><span class=p>.</span><span class=nx>Meanings</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Part of speech:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>meaning</span><span class=p>.</span><span class=nx>PartOfSpeech</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=k>for</span><span class=w> </span><span class=nx>_</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=k>range</span><span class=w> </span><span class=nx>meaning</span><span class=p>.</span><span class=nx>_DEFINITIONS</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Definition:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=p>.</span><span class=nx>Definition</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=k>if</span><span class=w> </span><span class=nx>definition</span><span class=p>.</span><span class=nx>Example</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>					</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Example:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=p>.</span><span class=nx>Example</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=k>if</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>definition</span><span class=p>.</span><span class=nx>Synonyms</span><span class=p>)</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>					</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Synonyms:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=p>.</span><span class=nx>Synonyms</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=k>if</span><span class=w> </span><span class=nb>len</span><span class=p>(</span><span class=nx>definition</span><span class=p>.</span><span class=nx>Antonyms</span><span class=p>)</span><span class=w> </span><span class=p>&gt;</span><span class=w> </span><span class=mi>0</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>					</span><span class=nx>fmt</span><span class=p>.</span><span class=nb>println</span><span class=p>(</span><span class=s>&#34;Antonyms:&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>definition</span><span class=p>.</span><span class=nx>Antonyms</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>				</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>Entry</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Word</span><span class=w>       </span><span class=kt>string</span><span class=w>     </span><span class=s>`json:&#34;word&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Pronunciation</span><span class=w> </span><span class=kt>string</span><span class=w>    </span><span class=s>`json:&#34;phonetic&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Pronunciations</span><span class=w> </span><span class=p>[]</span><span class=nx>Pronunciation</span><span class=w> </span><span class=s>`json:&#34;phonetics&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Origin</span><span class=w>      </span><span class=kt>string</span><span class=w>     </span><span class=s>`json:&#34;origin&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Meanings</span><span class=w>    </span><span class=p>[]</span><span class=nx>Meaning</span><span class=w>  </span><span class=s>`json:&#34;meanings&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>Pronunciation</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Text</span><span class=w>  </span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;text&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Audio</span><span class=w> </span><span class=kt>string</span><span class=w> </span><span class=s>`json:&#34;audio&#34;`</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>In this code, I&rsquo;ve defined three structs: <code>Meaning</code>, <code>Definition</code>, and <code>Entry</code>. The <code>Meaning</code> struct has a part of speech and a slice of definitions. The <code>Definition</code> struct has a definition, example, synonyms, and antonyms. The <code>Entry</code> struct has a word, pronunciation, origin, and meanings.</p><p>I then used these structs to unmarshal the JSON response from the API. This makes the code more readable and easier to maintain, as it separates the logic of parsing the JSON into its constituent parts from the logic of printing out the results.</p><p>意思对了，但是代码不够准确，稍微复杂一点的代码，llama3 处理起来还是有难度的。</p><h3 id=结论>结论</h3><p>测试人员福音，很多公司访问不了 chatgpt 等国外的 ai 站点，用这个本地写写简单的测试用例还是有搞头的，很多测试同学的代码能力其实并不强，可以用本地 llm 来帮忙检查代码或者生成部分代码，应该能节约不少时间。</p><h3 id=本文用到的工具>本文用到的工具</h3><ul><li>ollama</li><li><a class=link href=https://openwebui.com/ target=_blank rel=noopener>openwebui</a></li><li>Raycast llama3 插件</li><li>vscode continue 插件</li></ul><h3 id=彩蛋>彩蛋</h3><p>这是我不小心发现的 1 个软件测试的 system prompt，有兴趣的同学可以试试。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=n>SYSTEM</span> <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>As a certified Software Testing expert, I am equipped to provide comprehensive assistance in Software Testing using official ISTQB terminology and methodologies. My expertise encompasses roles such as Test Analyst, Technical Test Analyst and Test Manager. I offer training and education in Software Testing, providing in-depth knowledge and practical insights.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>As specialist, I interactively assist organizations in implementing robust test processes, concepts and strategies step by step. Additionally, I support individuals in their day-to-day software testing tasks, carrying out work steps, offering expert advice and solutions tailored to specific software testing challenges. For example, clients may provide test cases, requirements documentation and bug reports to aid in the testing process. To streamline my assistance, I recommend that clients upload relevant work items using Open WebUI with document upload support &lt;https://docs.openwebui.com&gt;. Alternatively, text input can be provided when Open WebUI is not available.
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>For adherence to ISTQB standards, clients are encouraged to use Open WebUI together with glossary, syllabus, and text exam documents uploaded from &lt;https://www.istqb.org/certifications/&gt;. This will ensure that my assistance is aligned with the latest industry best practices and standards. Together, we can achieve exceptional results in Software Testing.
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

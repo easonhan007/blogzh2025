@@ -1,0 +1,415 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="今天看到有人用ai去分析自动化测试报告里的错误，代码和概念都很简单，也很有意思，忍不住翻译了一下，供大家参考。\n原文地址https://labs.pineview.io/using-openai-platform-to-analyse-automated-test-failures\n引言 当涉及到人工智能，尤其是OpenAI平台时，关于它将如何影响一切的内容并不缺乏。因此乍一看，本文可能似乎是另一篇过于热情和乐观的标题党文章，告诉你应该加入人工智能的行列，否则就会被落下。\n"><title>使用openAI来分析自动化测试报告的错误信息</title><link rel=canonical href=zh.ethanhan.cc/p/%E4%BD%BF%E7%94%A8openai%E6%9D%A5%E5%88%86%E6%9E%90%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E7%9A%84%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="使用openAI来分析自动化测试报告的错误信息"><meta property='og:description' content="今天看到有人用ai去分析自动化测试报告里的错误，代码和概念都很简单，也很有意思，忍不住翻译了一下，供大家参考。\n原文地址https://labs.pineview.io/using-openai-platform-to-analyse-automated-test-failures\n引言 当涉及到人工智能，尤其是OpenAI平台时，关于它将如何影响一切的内容并不缺乏。因此乍一看，本文可能似乎是另一篇过于热情和乐观的标题党文章，告诉你应该加入人工智能的行列，否则就会被落下。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E4%BD%BF%E7%94%A8openai%E6%9D%A5%E5%88%86%E6%9E%90%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E7%9A%84%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-12-01T10:22:47+08:00'><meta property='article:modified_time' content='2023-12-01T10:22:47+08:00'><meta name=twitter:title content="使用openAI来分析自动化测试报告的错误信息"><meta name=twitter:description content="今天看到有人用ai去分析自动化测试报告里的错误，代码和概念都很简单，也很有意思，忍不住翻译了一下，供大家参考。\n原文地址https://labs.pineview.io/using-openai-platform-to-analyse-automated-test-failures\n引言 当涉及到人工智能，尤其是OpenAI平台时，关于它将如何影响一切的内容并不缺乏。因此乍一看，本文可能似乎是另一篇过于热情和乐观的标题党文章，告诉你应该加入人工智能的行列，否则就会被落下。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#引言>引言</a></li><li><a href=#什么是端到端测试>什么是端到端测试？</a></li><li><a href=#为什么选择nightwatch>为什么选择Nightwatch？</a></li><li><a href=#步骤1---创建错误分析服务>步骤1 - 创建错误分析服务</a><ol><li><a href=#11-项目结构>1.1 项目结构</a></li><li><a href=#12-添加服务>1.2 添加服务</a></li></ol></li><li><a href=#步骤2---编写nightwatchjs报告插件>步骤2 - 编写Nightwatch.js报告插件</a><ol><li><a href=#21-项目结构>2.1 项目结构</a></li></ol></li><li><a href=#第3步---将所有内容整合在一起>第3步 - 将所有内容整合在一起</a><ol><li><a href=#31-设置一个测试项目>3.1 设置一个测试项目</a></li><li><a href=#32-从npm安装nightwatch>3.2 从NPM安装Nightwatch</a></li><li><a href=#33-添加nightwatch报告插件>3.3 添加Nightwatch报告插件</a></li><li><a href=#34-配置nightwatch加载插件>3.4 配置Nightwatch加载插件</a></li></ol></li><li><a href=#第4步---运行测试并检查分析报告>第4步 - 运行测试并检查分析报告</a><ol><li><a href=#41-添加一些端到端测试>4.1 添加一些端到端测试</a></li><li><a href=#42-故意使测试失败>4.2 故意使测试失败</a></li><li><a href=#43-配置分析后端服务>4.3 配置分析后端服务</a></li></ol></li><li><a href=#结论>结论</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E4%BD%BF%E7%94%A8openai%E6%9D%A5%E5%88%86%E6%9E%90%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E7%9A%84%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF/>使用openAI来分析自动化测试报告的错误信息</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2023-12-01T10:22:47+08:00>Dec 01, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 12 分钟</time></div></footer></div></header><section class=article-content><p>今天看到有人用ai去分析自动化测试报告里的错误，代码和概念都很简单，也很有意思，忍不住翻译了一下，供大家参考。</p><p>原文地址<a class=link href=https://labs.pineview.io/using-openai-platform-to-analyse-automated-test-failures target=_blank rel=noopener>https://labs.pineview.io/using-openai-platform-to-analyse-automated-test-failures</a></p><h2 id=引言>引言</h2><p>当涉及到人工智能，尤其是OpenAI平台时，关于它将如何影响一切的内容并不缺乏。因此乍一看，本文可能似乎是另一篇过于热情和乐观的标题党文章，告诉你应该加入人工智能的行列，否则就会被落下。</p><p>顺便说一下，本文并非由人工智能撰写。我只是使用我最喜欢的文本编辑器应用程序，它以西方文学中最令人激动的小说之一的名字命名——尤利西斯。除了一些基本的自动完成功能外，没有来自外部的干扰（或推理）。本文没有人工智能生成的废话，尽管我不能保证文章完全没有废话。</p><p>但无论你对人工智能生成内容持何种立场，作为软件专业人士，我认为我们都可以达成共识：在自动化软件测试方面，调试和调查测试失败总是很繁琐。因此，我认为这可能是一个可以引入一些人工智能辅助的好领域，因为我们只是在扩展机器已经完成的工作。在这里，不存在冒充人类或“让人们误以为他们正在与真人互动”的风险，这正如哲学家丹尼尔·丹尼特在他最近在《大西洋月刊》上发表的文章中所提到的一个真正的文明风险。</p><h2 id=什么是端到端测试>什么是端到端测试？</h2><p>如果你对端到端测试还不熟悉，它是一种通过模拟真实用户的操作来测试整个应用程序的自动化软件测试类型。</p><p>Nightwatch.js是一个开源库，用于编写和执行网站和Web应用程序的自动化端到端测试。它于2014年发布，2021年被转移到BrowserStack的开源计划办公室，目前正在进行开发。Nightwatch.js是用Node.js编写的，它支持所有主要的Web浏览器，并且还可以在移动设备上运行测试。</p><p>本教程将介绍如何开发一个Nightwatch.js插件，将测试失败和相关错误发送到与OpenAI平台集成的服务，以分析错误并获得一些可操作的反馈。默认情况下，Nightwatch的最新版本已经对测试失败提供了相当好的反馈，并提供了一定程度的可操作反馈，因此我们将尝试使用GPT-4模型扩展其功能，以在输出消息中增加一些亮点，提供稍微更好的上下文，并学习如何开发结合人工智能辅助的服务。</p><h2 id=为什么选择nightwatch>为什么选择Nightwatch？</h2><p>诚然，目前市场上还有一些其他备受炒作和流行的测试工具，但实际上Nightwatch是我们在2014年在Pineview创建的项目，现在正在BrowserStack的开源计划办公室进行开发。我也是那个团队的一员，Nightwatch仍然是我在所有其他项目中用于测试的最喜欢的工具，当然。</p><p>此外，Nightwatch作为一个库已经存在了相当长的时间，在这些年里享有不同程度的受欢迎程度。有大量的可用于机器学习模型训练的数据，因此GPT-4在编写Nightwatch测试和解释结果方面具有相当好的能力，这意味着我们已经有了一个强大的基础，可以构建一个辅助人工智能来解释我们的测试失败，并可能与我们对抗。</p><h2 id=步骤1---创建错误分析服务>步骤1 - 创建错误分析服务</h2><p>我们的小练习主要由两个部分组成，都相对简单：</p><p>构建调用OpenAI服务的后端服务
+编写Nightwatch.js插件，接收实际的测试失败并将其发送到后端服务进行分析
+我们将从第1部分开始 - 构建错误分析服务。在当今时代，构建与人工智能相关的任何东西可能听起来非常奢侈和光鲜，但实际上这只是一个非常基本的任务，并没有太多特别之处。</p><p>分析服务只是一个基本的express.js API服务，它接受POST请求并使用Node.js的SDK向OpenAI平台发出特定的调用。</p><p>你需要从OpenAI这里获取一个开发者密钥，然后配置要使用的模型。为了本文的目的，我使用了gpt-4-1106-preview，但那需要一个付费计划。如果你想在免费计划上尝试它，你可以使用gpt-3.5-turbo。</p><h3 id=11-项目结构>1.1 项目结构</h3><p>使用以下命令设置新项目：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>mkdir nightwatch-openai-service
+</span></span><span class=line><span class=cl>cd nightwatch-openai-service
+</span></span><span class=line><span class=cl>touch index.js
+</span></span><span class=line><span class=cl>npm init -y
+</span></span></code></pre></td></tr></table></div></div><p>接下来，编辑package.json文件并设置type=module，例如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>  &#34;name&#34;: &#34;openai-nightwatch-service&#34;,
+</span></span><span class=line><span class=cl>  &#34;type&#34;: &#34;module&#34;,
+</span></span><span class=line><span class=cl>  ...
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></td></tr></table></div></div><p>然后继续安装所需的依赖项：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npm i dotenv express openai
+</span></span></code></pre></td></tr></table></div></div><h3 id=12-添加服务>1.2 添加服务</h3><p>在新创建的项目中，创建两个新文件：</p><p>.env - 包含OpenAI API密钥，例如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>OPENAI_API_KEY=xxxxxx
+</span></span><span class=line><span class=cl>PORT=4001
+</span></span></code></pre></td></tr></table></div></div><p>index.js - 粘贴以下代码</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kr>import</span> <span class=nx>dotenv</span> <span class=nx>from</span> <span class=s1>&#39;dotenv&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=nx>express</span> <span class=nx>from</span> <span class=s1>&#39;express&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kr>import</span> <span class=p>{</span> <span class=nx>OpenAI</span> <span class=p>}</span> <span class=nx>from</span> <span class=s1>&#39;openai&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>dotenv</span><span class=p>.</span><span class=nx>config</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>app</span> <span class=o>=</span> <span class=nx>express</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>use</span><span class=p>(</span><span class=nx>express</span><span class=p>.</span><span class=nx>json</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>openai</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>OpenAI</span><span class=p>({</span> <span class=nx>apiKey</span><span class=o>:</span> <span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>OPENAI_API_KEY</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>post</span><span class=p>(</span><span class=s1>&#39;/analyze-error&#39;</span><span class=p>,</span> <span class=kr>async</span> <span class=p>(</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>errorMessage</span><span class=p>,</span> <span class=nx>codeSnippet</span><span class=p>,</span> <span class=nx>additionalDetails</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>req</span><span class=p>.</span><span class=nx>body</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kr>const</span> <span class=nx>details</span> <span class=o>=</span> <span class=sb>`Additional details: Nightwatch version: </span><span class=si>${</span><span class=nx>additionalDetails</span><span class=p>.</span><span class=nx>nightwatchVersion</span><span class=si>}</span><span class=sb>, config file: </span><span class=si>${</span><span class=nx>additionalDetails</span><span class=p>.</span><span class=nx>configFile</span><span class=si>}</span><span class=sb>, platform: </span><span class=si>${</span><span class=nx>additionalDetails</span><span class=p>.</span><span class=nx>platform</span><span class=si>}</span><span class=sb>, browser: </span><span class=si>${</span><span class=nx>additionalDetails</span><span class=p>.</span><span class=nx>browser</span><span class=si>}</span><span class=sb>, headless mode: </span><span class=si>${</span><span class=nx>additionalDetails</span><span class=p>.</span><span class=nx>headless</span><span class=si>}</span><span class=sb>.`</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>messages</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>role</span><span class=o>:</span> <span class=s2>&#34;system&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>content</span><span class=o>:</span> <span class=s2>&#34;You are an expert in web development using Node.js, automated testing with Selenium WebDriver, and the Nightwatch.js framework.&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=p>},</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>role</span><span class=o>:</span> <span class=s2>&#34;user&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>content</span><span class=o>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>          <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>type</span><span class=o>:</span> <span class=s2>&#34;text&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nx>text</span><span class=o>:</span> <span class=sb>`Investigate and explain why the tests failed. Error message: </span><span class=si>${</span><span class=nx>errorMessage</span><span class=si>}</span><span class=sb>\n.Code snippet from test case where the error occurred: </span><span class=si>${</span><span class=nx>codeSnippet</span><span class=si>}</span><span class=sb>. </span><span class=si>${</span><span class=nx>details</span><span class=si>}</span><span class=sb>`</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>]</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>response</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>openai</span><span class=p>.</span><span class=nx>chat</span><span class=p>.</span><span class=nx>completions</span><span class=p>.</span><span class=nx>create</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>      <span class=nx>model</span><span class=o>:</span> <span class=s2>&#34;gpt-4-1106-preview&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>messages</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nx>max_tokens</span><span class=o>:</span> <span class=mi>600</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>json</span><span class=p>({</span> <span class=nx>analyzedResult</span><span class=o>:</span> <span class=nx>response</span><span class=p>.</span><span class=nx>choices</span><span class=p>[</span><span class=mi>0</span><span class=p>].</span><span class=nx>message</span><span class=p>.</span><span class=nx>content</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>res</span><span class=p>.</span><span class=nx>status</span><span class=p>(</span><span class=mi>500</span><span class=p>).</span><span class=nx>json</span><span class=p>({</span> <span class=nx>error</span><span class=o>:</span> <span class=nx>error</span><span class=p>.</span><span class=nx>message</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>PORT</span> <span class=o>=</span> <span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>PORT</span> <span class=o>||</span> <span class=mi>3000</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=nx>app</span><span class=p>.</span><span class=nx>listen</span><span class=p>(</span><span class=nx>PORT</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=sb>`Server running on port </span><span class=si>${</span><span class=nx>PORT</span><span class=si>}</span><span class=sb>`</span><span class=p>));</span>
+</span></span></code></pre></td></tr></table></div></div><p>至此，服务部分就完成了。只需使用以下命令运行它：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>node index.js
+</span></span></code></pre></td></tr></table></div></div><p>正如你所见，这里几乎没有涉及创造性的工作。我们将发送来自Nightwatch插件的错误消息，以及一个包含发生错误或断言失败的代码行的小代码片段。</p><p>唯一剩下的事情就是调整提示。在OpenAI文档中有一个名为"prompt engineering"的完整部分，介绍了如何编写更好的提示以改进结果，这正是我们现在所关注的产品创新方面。</p><p>代码可在Github(<a class=link href=https://github.com/pineviewlabs/openai-nightwatch-service target=_blank rel=noopener>https://github.com/pineviewlabs/openai-nightwatch-service</a>)上找到。请继续fork它并在本地运行，我们将在教程的下一部分中需要它。</p><h2 id=步骤2---编写nightwatchjs报告插件>步骤2 - 编写Nightwatch.js报告插件</h2><p>除了默认包含的内置测试报告器（junit-xml、json、html）之外，Nightwatch还支持加载自定义报告器的功能，这是我们接下来要开发的内容。</p><p>完整的代码可以在Github上找到，该包已经在NPM上发布为nightwatch-openai-plugin，因此如果你愿意，你可以直接使用它并跳过第3步。</p><p>自定义报告插件的作用是将错误数据发送到我们在第1步中开发的AI辅助分析服务。为此，我们需要创建一个新的Node.js项目，遵循Nightwatch能够理解的特定结构。</p><h3 id=21-项目结构>2.1 项目结构</h3><p>首先，使用以下命令设置新项目：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>mkdir my-nightwatch-ai-reporter
+</span></span><span class=line><span class=cl>cd my-nightwatch-ai-reporter
+</span></span><span class=line><span class=cl>touch index.js
+</span></span><span class=line><span class=cl>npm init -y
+</span></span><span class=line><span class=cl>git init
+</span></span></code></pre></td></tr></table></div></div><p>基本上，插件需要被包装为一个NPM包，并导出一个如下所示的模块：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=c1>// index.js
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>async</span> <span class=nx>reporter</span><span class=p>(</span><span class=nx>results</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;在这里进行一些报告...&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>我们还需要添加一个.env文件，其中将填入我们的AI分析服务的URL。</p><p>如果你按照本文第1步的说明运行服务，则.env文件如下所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>SERVICE_URL=http://localhost:4001/analyze-error
+</span></span></code></pre></td></tr></table></div></div><p>2.2 编写自定义报告器
+现在，我们只需要在index.js文件的reporter()函数中添加一些逻辑，将报告发送到第1步的分析服务，并显示结果。分析服务将使用我们定义的提示调用OpenAI平台。</p><p>当测试运行完成时，Nightwatch将调用带有results参数的报告器函数，该参数包含失败的结果和其他相关错误。下面是具体的代码：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>async</span> <span class=nx>reporter</span><span class=p>(</span><span class=nx>results</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>errors</span> <span class=o>=</span> <span class=nx>getErrorMessages</span><span class=p>(</span><span class=nx>results</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>errors</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>outputs</span> <span class=o>=</span> <span class=nx>makeOutputs</span><span class=p>(</span><span class=nx>errors</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kr>const</span> <span class=nx>output</span> <span class=k>of</span> <span class=nx>outputs</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>response</span> <span class=o>=</span> <span class=nx>sendErrorAnalysisRequest</span><span class=p>(</span><span class=nx>output</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>terminalOutput</span> <span class=o>=</span> <span class=nx>marked</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>response</span><span class=p>.</span><span class=nx>data</span><span class=p>.</span><span class=nx>analyzedResult</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;错误分析完成：&#39;</span><span class=p>,</span> <span class=nx>terminalOutput</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>err</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>console</span><span class=p>.</span><span class=nx>error</span><span class=p>(</span><span class=s1>&#39;错误分析失败：&#39;</span><span class=p>,</span> <span class=nx>error</span><span class=p>.</span><span class=nx>response</span><span class=o>?</span><span class=p>.</span><span class=nx>data</span> <span class=o>||</span> <span class=nx>error</span><span class=p>.</span><span class=nx>message</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>sendErrorAnalysisRequest函数将使用测试数据发起一个POST请求。</p><h2 id=第3步---将所有内容整合在一起>第3步 - 将所有内容整合在一起</h2><p>现在，我们已经有了插件和服务，是时候将它们整合到一个测试项目中了。我们将构建一个小型的端到端测试项目，其中包含一个示例网站的一些非常基本的测试。该项目将使用Nightwatch来运行测试，并使用我们新创建的插件。</p><h3 id=31-设置一个测试项目>3.1 设置一个测试项目</h3><p>首先，使用以下命令创建一个测试项目：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>mkdir nightwatch-testing
+</span></span><span class=line><span class=cl>cd nightwatch-testing
+</span></span><span class=line><span class=cl>npm init -y
+</span></span></code></pre></td></tr></table></div></div><h3 id=32-从npm安装nightwatch>3.2 从NPM安装Nightwatch</h3><p>Nightwatch可以通过以下命令从NPM安装，并且准备就绪：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npm i nightwatch
+</span></span></code></pre></td></tr></table></div></div><p>你可以使用以下命令验证Nightwatch是否已安装：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npx nightwatch --info
+</span></span></code></pre></td></tr></table></div></div><h3 id=33-添加nightwatch报告插件>3.3 添加Nightwatch报告插件</h3><p>现在，我们将在步骤2中开发的AI分析插件添加到我们的测试项目中，以便Nightwatch可以发现并使用它。</p><p>你可以直接从NPM安装该包，或者如果你已经完整地完成了步骤2，也可以使用本地版本。</p><p>从NPM安装插件：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npm i nightwatch-openai-plugin
+</span></span></code></pre></td></tr></table></div></div><p>从本地文件夹安装（根据实际路径进行更新，相对路径也适用）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npm i /path/to/my-nightwatch-ai-reporter
+</span></span></code></pre></td></tr></table></div></div><h3 id=34-配置nightwatch加载插件>3.4 配置Nightwatch加载插件</h3><p>为了使Nightwatch能够加载插件，我们需要在nightwatch配置文件（nightwatch.conf.js）中进行定义。</p><p>首先，让我们查看package.json文件。它应该在依赖项列表中包含插件。假设插件是从NPM安装的，它应该如下所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;nightwatch-testing&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=err>...</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;dependencies&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;nightwatch&#34;</span><span class=p>:</span> <span class=s2>&#34;^3.3.1&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;nightwatch-openai-plugin&#34;</span><span class=p>:</span> <span class=s2>&#34;^0.1.0&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>现在打开nightwatch.conf.js文件，并将nightwatch-openai-plugin添加到插件数组中，如下所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=c1>// nightwatch.conf.js
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// ... 其他设置
+</span></span></span><span class=line><span class=cl>  <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;nightwatch-openai-plugin&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// ... 继续设置
+</span></span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>你可以通过使用Chrome运行一个与库捆绑在一起的示例测试来验证Nightwatch是否已安装并正常工作：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npx nightwatch examples/tests/duckDuckGo.js --chrome
+</span></span></code></pre></td></tr></table></div></div><p>输出结果将如下所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>ℹ Connected to ChromeDriver on port 9515 (1001ms).
+</span></span><span class=line><span class=cl>Using: chrome (119.0.6045.123) on MAC.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  Running Search Nightwatch.js and check results:
+</span></span><span class=line><span class=cl>───────────────────────────────────────────────────────────────
+</span></span><span class=line><span class=cl>  ✔ Element &lt;body&gt; was visible after 15 milliseconds.
+</span></span><span class=line><span class=cl>  ✔ Testing if element &lt;input[name=&#34;q&#34;]&gt; is visible (17ms)
+</span></span><span class=line><span class=cl>  ✔ Testing if element &lt;button[type=submit]&gt; is visible (14ms)
+</span></span><span class=line><span class=cl>  ✔ Testing if element &lt;.react-results--main&gt; contains text &#39;Nightwatch.js&#39; (1545ms)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  ✨ PASSED. 4 assertions. (2.534s)
+</span></span></code></pre></td></tr></table></div></div><p>你还可以根据你在计算机上安装的浏览器选择使用<code>--firefox</code>、<code>--safari</code>或<code>--edge</code>选项。</p><h2 id=第4步---运行测试并检查分析报告>第4步 - 运行测试并检查分析报告</h2><p>现在，我们已经安装并配置了Nightwatch，并在第1步中使用插件开发了AI辅助分析服务，我们可以运行更多的端到端测试并看到它的运行情况。</p><p>如果你还没有完成第1步，或者想在开始之前先了解一下，我已经为你准备了一个示例项目，其中包括一个演示后端服务，可以直接运行，这样你就可以看到它的运行情况：</p><p>GitHub - pineviewlabs/nightwatch-ai-testproject
+Contribute to pineviewlabs/nightwatch-ai-testproject development by creating an account on GitHub.
+GitHubpineviewlabs</p><p>请随意fork它并在本地运行。请注意，分析服务仅以演示目的的有限容量运行，不应在实际测试场景中使用。</p><h3 id=41-添加一些端到端测试>4.1 添加一些端到端测试</h3><p>对于那些已经完成了前面步骤并深入其中的人，我们只需要添加一些基本的测试，以便我们可以在本地运行所有内容。</p><p>进入nightwatch-testing文件夹并创建一个新的test文件夹：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>mkdir test
+</span></span></code></pre></td></tr></table></div></div><p>然后在test文件夹中添加以下两个测试：</p><ol><li>homepage.js</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=nx>describe</span><span class=p>(</span><span class=s1>&#39;Homepage End-to-end Test&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>it</span><span class=p>(</span><span class=s1>&#39;tests if homepage is loaded&#39;</span><span class=p>,</span> <span class=nx>browser</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>browser</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>navigateTo</span><span class=p>(</span><span class=s1>&#39;https://middlemarch.netlify.app/&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>assert</span><span class=p>.</span><span class=nx>visible</span><span class=p>(</span><span class=s1>&#39;#app .new-arrivals-panel&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=p>.</span><span class=nx>expect</span><span class=p>.</span><span class=nx>elements</span><span class=p>(</span><span class=s1>&#39;#app .new-arrivals-panel .col-md-6&#39;</span><span class=p>).</span><span class=nx>count</span><span class=p>.</span><span class=nx>toEqual</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><ol start=2><li>addtocart.js</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=nx>describe</span><span class=p>(</span><span class=s1>&#39;add to cart test&#39;</span><span class=p>,</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>before</span><span class=p>(</span><span class=nx>browser</span> <span class=p>=&gt;</span> <span class=nx>browser</span><span class=p>.</span><span class=nx>navigateTo</span><span class=p>(</span><span class=s1>&#39;https://middlemarch.netlify.app/&#39;</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>it</span><span class=p>(</span><span class=s1>&#39;adds 2 volumes of &#34;Rhinoceros and Other Plays&#34; to cart&#39;</span><span class=p>,</span> <span class=nx>browser</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>addToCartEl</span> <span class=o>=</span> <span class=nx>browser</span><span class=p>.</span><span class=nx>element</span><span class=p>.</span><span class=nx>findByText</span><span class=p>(</span><span class=s1>&#39;Rhinoceros and Other Plays&#39;</span><span class=p>).</span><span class=nx>getParentElement</span><span class=p>().</span><span class=nx>find</span><span class=p>(</span><span class=s1>&#39;button&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nx>addToCartEl</span><span class=p>.</span><span class=nx>click</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=nx>addToCartEl</span><span class=p>.</span><span class=nx>click</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nx>browser</span><span class=p>.</span><span class=nx>assert</span><span class=p>.</span><span class=nx>textEquals</span><span class=p>(</span><span class=s1>&#39;.shopping-cart .badge&#39;</span><span class=p>,</span> <span class=s1>&#39;2&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>after</span><span class=p>(</span><span class=nx>browser</span> <span class=p>=&gt;</span> <span class=nx>browser</span><span class=p>.</span><span class=nx>end</span><span class=p>());</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>这两个测试是针对一个示例书店应用程序编写的，是我之前关于Vite和Vue 3的教程的一部分。第一个测试只是打开网站并验证内容是否存在，而第二个测试将一本书添加到购物车并执行基本断言。</p><p>要运行这些测试，请使用以下命令，如果你不想在测试过程中看到浏览器弹出，请选择传递&ndash;headless参数：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>npx nightwatch test --chrome
+</span></span></code></pre></td></tr></table></div></div><p>或者根据你的计算机上可用的浏览器选择&ndash;firefox、&ndash;safari或&ndash;edge选项。</p><h3 id=42-故意使测试失败>4.2 故意使测试失败</h3><p>为了测试AI分析服务，我们需要故意使至少一个测试失败。然后插件报告器将生效，将测试失败发送到后端服务，然后打印结果。</p><p>幸运的是，有许多可用的方法来使测试失败。其中一种最简单的方法是重命名其中一个元素，然后等待测试失败并显示“元素未找到”的错误。</p><p>模拟“元素未找到”错误
+编辑test文件夹中的homepage.js文件，将以.assert.visible开头的行更改为以下内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=nx>browser</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>navigateTo</span><span class=p>(</span><span class=s1>&#39;https://middlemarch.netlify.app/&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>assert</span><span class=p>.</span><span class=nx>visible</span><span class=p>(</span><span class=s1>&#39;#xapp&#39;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后测试将以错误消息失败，指示无法找到选择器为#xapp的元素，并打印类似于以下输出：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=n>TEST</span> <span class=n>FAILURE</span> <span class=p>(</span><span class=mf>12.844</span><span class=n>s</span><span class=p>):</span>  
+</span></span><span class=line><span class=cl> <span class=o>-</span> <span class=mi>1</span> <span class=n>assertions</span> <span class=n>failed</span><span class=p>;</span> <span class=mi>1</span> <span class=n>passed</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=err>✖</span> <span class=mi>1</span><span class=p>)</span> <span class=n>homepage</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=err>–</span> <span class=n>tests</span> <span class=k>if</span> <span class=n>homepage</span> <span class=n>is</span> <span class=n>loaded</span> <span class=p>(</span><span class=mf>7.903</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> <span class=err>→</span> <span class=err>✖</span> <span class=n>NightwatchAssertError</span>
+</span></span><span class=line><span class=cl> <span class=n>Testing</span> <span class=k>if</span> <span class=n>element</span> <span class=o>&lt;</span><span class=c1>#xapp .new-arrivals-panel&gt; is visible in 5000ms - expected &#34;is visible&#34; but got: &#34;element could not be located&#34; (5131ms)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>Error</span> <span class=n>location</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>andrei</span><span class=o>/</span><span class=n>pineviewlabs</span><span class=o>/</span><span class=n>nightwatch</span><span class=o>-</span><span class=n>openai</span><span class=o>/</span><span class=n>test</span><span class=o>/</span><span class=n>homepage</span><span class=o>.</span><span class=n>js</span><span class=p>:</span><span class=mi>6</span>
+</span></span><span class=line><span class=cl>    <span class=err>–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––</span>
+</span></span><span class=line><span class=cl>     <span class=mi>4</span> <span class=o>|</span>     <span class=n>browser</span>
+</span></span><span class=line><span class=cl>     <span class=mi>5</span> <span class=o>|</span>       <span class=o>.</span><span class=n>navigateTo</span><span class=p>(</span><span class=s1>&#39;https://middlemarch.netlify.app/&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>     <span class=mi>6</span> <span class=o>|</span>       <span class=o>.</span><span class=n>assert</span><span class=o>.</span><span class=n>visible</span><span class=p>(</span><span class=s1>&#39;#xapp .new-arrivals-panel&#39;</span><span class=p>)</span> 
+</span></span><span class=line><span class=cl>     <span class=mi>7</span> <span class=o>|</span>       <span class=o>.</span><span class=n>expect</span><span class=o>.</span><span class=n>elements</span><span class=p>(</span><span class=s1>&#39;#app .new-arrivals-panel .col-md-6&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>count</span><span class=o>.</span><span class=n>toEqual</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>     <span class=mi>8</span> <span class=o>|</span>   <span class=p>});</span>
+</span></span><span class=line><span class=cl>    <span class=err>–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后我们实际上可以看到来自AI分析服务的报告：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=err>错误分析完成：失败表明在</span><span class=mi>5000</span><span class=n>ms</span><span class=err>（</span><span class=mi>5</span><span class=err>秒）的时间范围内未找到具有</span><span class=n>CSS选择器</span><span class=c1>#xapp .new-arrivals-panel的元素。以下是您可以用于调试的操作：</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=mf>1.</span> <span class=err>更新测试代码：</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=o>.</span><span class=n>debug</span><span class=p>({</span><span class=n>selector</span><span class=p>:</span> <span class=s2>&#34;#xapp .new-arrivals-panel&#34;</span><span class=p>})</span> <span class=o>//</span> <span class=err>添加此行</span>
+</span></span><span class=line><span class=cl>    <span class=o>.</span><span class=n>browser</span><span class=o>.</span><span class=n>expect</span><span class=o>.</span><span class=n>element</span><span class=p>(</span><span class=s1>&#39;#xapp .new-arrivals-panel&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>to</span><span class=o>.</span><span class=n>be</span><span class=o>.</span><span class=n>visible</span><span class=o>.</span><span class=n>before</span><span class=p>(</span><span class=mi>5000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=mf>2.</span> <span class=err>使用调试标志运行</span><span class=n>Nightwatch</span><span class=err>：</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>nightwatch</span> <span class=o>--</span><span class=n>debug</span> <span class=o>--</span><span class=n>devtools</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=err>这将打开</span><span class=n>Chrome开发者工具</span><span class=err>，您可以在其中检查页面和控制台。</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=err>导致错误的可能原因包括：</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=o>*</span> <span class=err>元素在测试时不存在于页面上。</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span> <span class=err>由于页面尚未加载完成、存在网络延迟或显示元素的</span><span class=n>JavaScript运行较晚</span><span class=err>，该元素在</span><span class=mi>5</span><span class=err>秒内不可见。</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span> <span class=err>选择器不正确或已更改。</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span> <span class=err>页面的</span><span class=n>JavaScript中存在错误</span><span class=err>，导致元素无法正确显示。</span>
+</span></span></code></pre></td></tr></table></div></div><p>报告可能有点过长和过于通用，但现在只需要调整提示，使其生成所需的结果，这不是本文的任务。</p><h3 id=43-配置分析后端服务>4.3 配置分析后端服务</h3><p>nightwatch-openai-plugin使用默认的HTTP API服务与OpenAI API进行交互，该服务仅供演示目的使用。您可以通过克隆openai-nightwatch-service存储库并使用自己的OpenAI API密钥运行它来托管自己的服务。</p><p>在运行openai-nightwatch-service时，您需要定义NIGHTWATCH_ANALYSIS_SERVICE_URL环境变量，指向服务的URL。您还可以使用.env文件。</p><p>例如，假设您将服务运行在http://localhost:4001上，您可以在Nightwatch项目的根目录中创建一个.env文件，内容如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>NIGHTWATCH_ANALYSIS_SERVICE_URL=http://localhost:4001/analyze-error
+</span></span></code></pre></td></tr></table></div></div><h2 id=结论>结论</h2><p>所以，我们已经成功构建（希望如此）一个用于Nightwatch测试的AI辅助分析插件，并且我们已经看到它的实际效果。您现在可以尝试模拟各种错误并查看响应。</p><p>请记住，这只是一个实验，该服务仅供演示目的使用。我尚未尝试不同类型的错误和测试失败，并且我没有花太多时间来调整提示，因此无法保证它能够适用于大量的测试集合，其中可能存在不同类型的失败。因此，您需要自行承担风险，但欢迎您进行自己的实验并报告您的发现。感谢阅读。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

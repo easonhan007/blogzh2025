@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Openclaw on 乙醇的博客</title><link>zh.ethanhan.cc/categories/openclaw/</link><description>Recent content in Openclaw on 乙醇的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 07 Mar 2026 11:36:21 +0800</lastBuildDate><atom:link href="zh.ethanhan.cc/categories/openclaw/index.xml" rel="self" type="application/rss+xml"/><item><title>为什么 MacBook Neo 是 OpenClaw 养虾首选？</title><link>zh.ethanhan.cc/p/%E4%B8%BA%E4%BB%80%E4%B9%88-macbook-neo-%E6%98%AF-openclaw-%E5%85%BB%E8%99%BE%E9%A6%96%E9%80%89/</link><pubDate>Sat, 07 Mar 2026 11:36:21 +0800</pubDate><guid>zh.ethanhan.cc/p/%E4%B8%BA%E4%BB%80%E4%B9%88-macbook-neo-%E6%98%AF-openclaw-%E5%85%BB%E8%99%BE%E9%A6%96%E9%80%89/</guid><description>&lt;img src="zh.ethanhan.cc/zh.ethanhan.cc/p/%E4%B8%BA%E4%BB%80%E4%B9%88-macbook-neo-%E6%98%AF-openclaw-%E5%85%BB%E8%99%BE%E9%A6%96%E9%80%89/neo_new_20260307_213835.jpg" alt="Featured image of post 为什么 MacBook Neo 是 OpenClaw 养虾首选？" /&gt;&lt;h3 id="直接上结论"&gt;直接上结论
+&lt;/h3&gt;&lt;p&gt;现阶段，如果你的主要需求是7×24小时稳定运行 &lt;strong&gt;OpenClaw&lt;/strong&gt;的话，我认为苹果新发布的MacBook Neo入门款其实是比Mac mini更合适的选择，至少在大多数普通用户的实际场景下是这样的。&lt;/p&gt;
+&lt;h3 id="原因一neo-8g-内存对开发不友好但对养虾来说是够用的"&gt;原因一：Neo 8G 内存对开发不友好，但对“养虾”来说是够用的
+&lt;/h3&gt;&lt;p&gt;MacBook Neo 标配8GB统一内存，处理器是A18 Pro，性能大致跟早期M1/M2芯片旗鼓相当。&lt;/p&gt;
+&lt;p&gt;对日常开发来说，8GB内存确实少了点。我自己的MacBook Pro在轻中度负载（也就是浏览器多打开几个标签 + VS Code + 几个后台服务）时，内存占用经常超过8–10GB，所以不能扩展的8G内存拿来做开发的话，大概率是不够看的。&lt;/p&gt;
+&lt;p&gt;但&lt;strong&gt;只用来跑OpenClaw&lt;/strong&gt;就不一样了,OpenClaw本身是轻量级Agent框架，主要是调用云端大模型以及少量的本地脚本或者文件操作。&lt;/p&gt;
+&lt;p&gt;实测在8GB内存下，保持后台运行，并偶尔发几条飞书/Telegram指令时，内存占用通常在4–6GB以内，所以内存还是够用的。&lt;/p&gt;
+&lt;p&gt;简单来说就是: 开发匆匆忙忙连滚带爬，养虾从从容容游刃有余。&lt;/p&gt;
+&lt;h3 id="原因二黑屏待机功耗极低能效突出"&gt;原因二：黑屏待机功耗极低，能效突出
+&lt;/h3&gt;&lt;p&gt;MacBook Neo采用无风扇设计 + 手机级芯片，黑屏待机时整机功耗非常可观。&lt;/p&gt;
+&lt;p&gt;根据社区和早期评测估算，在纯待机（仅运行OpenClaw后台） 的情况下，功耗大概是3–6W。&lt;/p&gt;
+&lt;p&gt;当偶尔响应指令、跑轻量脚本时，平均功耗大概5–8W左右&lt;/p&gt;
+&lt;p&gt;按一周168小时、平均6W计算：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一周大概1度电，甚至更低&lt;/li&gt;
+&lt;li&gt;一年50多度电，一年的电费也就几十块钱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Mac mini M4的功耗应该也是差不多的。&lt;/p&gt;
+&lt;p&gt;但是Neo不怕短时间的停电，毕竟自带了36瓦时的电池，相当于自带UPS电源了。&lt;/p&gt;
+&lt;p&gt;这点比Mac mini还是要强一点点的。&lt;/p&gt;
+&lt;h3 id="原因三自带屏幕键盘隐形成本低"&gt;原因三：自带屏幕、键盘，隐形成本低
+&lt;/h3&gt;&lt;p&gt;Mac mini是纯主机，必须额外配备显示器、键鼠、支架等。&lt;/p&gt;
+&lt;p&gt;很多人一开始觉得“我可以只接电源当服务器用”，但现实是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首次设置、调试OpenClaw、排查问题时，普通人几乎不可避免要外接屏幕和键盘&lt;/li&gt;
+&lt;li&gt;系统更新、重装、改配置时可能也需要&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以对普通爱好者来说，显示器和键盘可能是省不掉的。&lt;/p&gt;
+&lt;p&gt;MacBook Neo自带屏幕，键盘以及触摸板，初始设置和维护成本几乎为零，调试起来也方便得多。&lt;/p&gt;
+&lt;h3 id="原因四兼顾便携性neo是真正能带出门的机器"&gt;原因四：兼顾便携性，Neo是真正“能带出门”的机器
+&lt;/h3&gt;&lt;p&gt;Mac mini是“固定资产”，在搬家、换地方、出差，出街的时候,都会有些许的麻烦。&lt;/p&gt;
+&lt;p&gt;MacBook Neo虽然定位入门，但好歹是正宗MacBook：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;重量轻、体积小，外形甜美&lt;/li&gt;
+&lt;li&gt;电池续航也还可以（官方宣称最长16小时）&lt;/li&gt;
+&lt;li&gt;需要出门拿便携笔记本应急的时候，带出去也是根正苗红的星巴克入场券&lt;/li&gt;
+&lt;li&gt;回到家又可以继续挂机当服务器用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这点灵活性是Mac mini完全比不了的。&lt;/p&gt;
+&lt;h3 id="原因五实际到手总成本几乎持平甚至neo更划算"&gt;原因五：实际到手总成本几乎持平，甚至Neo更划算
+&lt;/h3&gt;&lt;p&gt;2026年3月份的官方定价&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MacBook Neo 8GB + 256GB：4599元&lt;/li&gt;
+&lt;li&gt;Mac mini M4 16GB + 256GB：4499元&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;表面看来Neo贵100元，但加上Mac mini必须的外设，比如最便宜的显示器 + 键鼠套装，可能要 400–500元，所以mini的实际总投入很可能超过5000元。&lt;/p&gt;
+&lt;p&gt;Neo反而可能是更省钱的选项，尤其是叠加了国补，教育优惠和各种促销之后,价格还能再低。&lt;/p&gt;
+&lt;h3 id="总结"&gt;总结
+&lt;/h3&gt;&lt;p&gt;如果你的核心诉求就是&lt;strong&gt;稳定、长时间、低成本的跑OpenClaw&lt;/strong&gt;，并且不排斥8GB内存、不需要特别强的本地算力的话，那么&lt;strong&gt;MacBook Neo&lt;/strong&gt;可能是当前最务实、最全面的选择。&lt;/p&gt;
+&lt;p&gt;当然，如果你已经有一套完整的显示器+键鼠生态，或者未来打算把OpenClaw跑得更加geek一点（本地跑多Agent、跑多模型并行），那Mac mini M4 16GB起跳的配置仍然是更加稳妥的选择。&lt;/p&gt;
+&lt;p&gt;但就“纯养虾”这个单一的诉求来说，我现在更推荐的是MacBook Neo。&lt;/p&gt;</description></item><item><title>Openclaw如何接入飞书</title><link>zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/</link><pubDate>Sat, 31 Jan 2026 15:37:18 +0800</pubDate><guid>zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/</guid><description>&lt;img src="zh.ethanhan.cc/zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-02-05-11-20-23.png" alt="Featured image of post Openclaw如何接入飞书" /&gt;&lt;h2 id="b站视频"&gt;B站视频
+&lt;/h2&gt;&lt;iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=115990172015212&amp;bvid=BV12V6nBvEkf&amp;cid=35736060484&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"&gt;&lt;/iframe&gt;
+&lt;hr&gt;
+&lt;h2 id="youtube视频"&gt;YouTube视频
+&lt;/h2&gt;&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/YgGW60AwEuQ?si=1x90RfB17KNBbsyd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;hr&gt;
+&lt;p&gt;之前在 Linux 机器上装了 OpenClaw，每次访问 Dashboard 都得用 SSH 端口转发，用起来不太方便。&lt;/p&gt;
+&lt;p&gt;更合理的方式是把飞书和 OpenClaw 做集成，直接在飞书里就能聊天交互，这样更自然一点。&lt;/p&gt;
+&lt;h2 id="使用到的plugin"&gt;使用到的plugin
+&lt;/h2&gt;&lt;p&gt;这里用到了&lt;a class="link" href="https://github.com/m1heng/Clawdbot-feishu?tab=readme-ov-file#%E4%B8%AD%E6%96%87" target="_blank" rel="noopener"
+&gt;clawdbot-feishu&lt;/a&gt;插件，直接在命令行里安装。&lt;/p&gt;
+&lt;h2 id="安装clawdbot-feishu插件"&gt;安装clawdbot-feishu插件
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;openclaw plugins install @m1heng-clawd/feishu
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="创建飞书应用"&gt;创建飞书应用
+&lt;/h2&gt;&lt;p&gt;然后在 在 &lt;a class="link" href="https://open.feishu.cn" target="_blank" rel="noopener"
+&gt;飞书开放平台&lt;/a&gt; 创建自建应用。&lt;/p&gt;
+&lt;p&gt;应用名称和描述都不重要。&lt;/p&gt;
+&lt;p&gt;然后添加应用能力，加个机器人。&lt;/p&gt;
+&lt;p&gt;接下来在权限管理里面增加下面的权限。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;权限&lt;/th&gt;
+&lt;th&gt;范围&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;contact:user.base:readonly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;用户信息&lt;/td&gt;
+&lt;td&gt;获取用户基本信息（用于解析发送者姓名，避免群聊/私聊把不同人当成同一说话者）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;消息&lt;/td&gt;
+&lt;td&gt;发送和接收消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message.p2p_msg:readonly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;私聊&lt;/td&gt;
+&lt;td&gt;读取发给机器人的私聊消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message.group_at_msg:readonly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;群聊&lt;/td&gt;
+&lt;td&gt;接收群内 @机器人 的消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:message:send_as_bot&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;发送&lt;/td&gt;
+&lt;td&gt;以机器人身份发送消息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im:resource&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;媒体&lt;/td&gt;
+&lt;td&gt;上传和下载图片/文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="在-openclaw-中增加channel"&gt;在 openclaw 中增加channel
+&lt;/h2&gt;&lt;p&gt;回到命令行，用下面的命令添加channel。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;openclaw channels add
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;选择飞书，各种下一步，然后去飞书的开发者后台把App ID 和 App Secret拿到，贴到命令行里。&lt;/p&gt;
+&lt;p&gt;然后就各种下一步。&lt;/p&gt;
+&lt;h2 id="设置事件与回调"&gt;设置事件与回调
+&lt;/h2&gt;&lt;p&gt;接下来设置事件与回调，这一步非常重要。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-31-36.png"
+width="1760"
+height="1084"
+srcset="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-31-36_hu_e31e1fa0a0f905ff.png 480w, zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-31-36_hu_b57e0bc92036abc9.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="162"
+data-flex-basis="389px"
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;事件配置方式&lt;/strong&gt;：选择 &lt;strong&gt;使用长连接接收事件&lt;/strong&gt;（推荐）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;添加事件订阅&lt;/strong&gt;，勾选以下事件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;事件&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.message.receive_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;接收消息（必需）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.message.message_read_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;消息已读回执&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.chat.member.bot.added_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;机器人进群&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;im.chat.member.bot.deleted_v1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;机器人被移出群&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="发布并审核"&gt;发布并审核。
+&lt;/h2&gt;&lt;p&gt;然后在飞书开发者后台的版本管理与发布页面，创建一个版本，并提交。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;下面这一步也非常重要，第一次配置的时候我就没弄明白。去飞书的管理后台里面，把应用审核，正式发布一下。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="测试一下"&gt;测试一下
+&lt;/h2&gt;&lt;p&gt;发布成功之后，在飞书会发一条审核通过的消息，在消息里打开应用，就可以跟机器人聊天了。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-29-32.png"
+width="1216"
+height="1530"
+srcset="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-29-32_hu_70e0b5959dacf3e6.png 480w, zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-29-32_hu_4f6bb7dc595db928.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="79"
+data-flex-basis="190px"
+&gt;&lt;/p&gt;
+&lt;p&gt;我的机器人比较笨，跟它说了半天才弄明白了我是谁。&lt;/p&gt;
+&lt;p&gt;&lt;img src="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-33-13.png"
+width="1116"
+height="1562"
+srcset="zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-33-13_hu_dc86f18a7a3d5d51.png 480w, zh.ethanhan.cc/p/openclaw%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6/2026-01-31-20-33-13_hu_5f3ce1f574bfeb48.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="71"
+data-flex-basis="171px"
+&gt;&lt;/p&gt;
+&lt;p&gt;不过能聊天就代表配置成功了。&lt;/p&gt;</description></item><item><title>完全免费！如何安装openclaw</title><link>zh.ethanhan.cc/p/%E5%AE%8C%E5%85%A8%E5%85%8D%E8%B4%B9%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85openclaw/</link><pubDate>Sat, 31 Jan 2026 09:36:02 +0800</pubDate><guid>zh.ethanhan.cc/p/%E5%AE%8C%E5%85%A8%E5%85%8D%E8%B4%B9%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85openclaw/</guid><description>&lt;p&gt;这几天clawdbot的改名风波闹的沸沸扬扬。&lt;/p&gt;
+&lt;p&gt;从clawdbot到moltbot再到openclaw，一周装了我3个版本，搞得我都有点精神分裂了。&lt;/p&gt;
+&lt;h2 id="b站视频版"&gt;B站视频版
+&lt;/h2&gt;&lt;iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=115984132282338&amp;bvid=BV17p6qBeEBy&amp;cid=35712336955&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"&gt;&lt;/iframe&gt;
+&lt;h2 id="youtube视频版"&gt;YouTube视频版
+&lt;/h2&gt;&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/3zggEv39Voc?si=RLTFx_QYITE4sOYv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;hr&gt;
+&lt;p&gt;两个月前，clawdbot的作者peter花了一个周末搞了个叫“WhatsApp Relay”的小项目，结果现在GitHub星标破10万，一周内吸引了200万访问者。完全超出预期。&lt;/p&gt;
+&lt;p&gt;今天peter正式宣布：这个项目改名叫OpenClaw。&lt;/p&gt;
+&lt;p&gt;这个名字一路走来挺戏剧：最早叫Clawd，2025年11月诞生，就是那个大模型“Claude”加个爪子的梗，这是英文的谐音梗，我也不太懂，反正logo倒是挺可爱的。&lt;/p&gt;
+&lt;p&gt;结果火了之后，claude母公司的法务礼貌敲门了，这个名字太像了，蹭了我们的流量，能不能改？&lt;/p&gt;
+&lt;p&gt;peter表示：我们懂，向资本低头，马上整改。&lt;/p&gt;
+&lt;p&gt;然后凌晨5点在Discord脑暴，选了Moltbot的名字。molt大概是龙虾要长大就得蜕壳的意思，象征成长。很有诗意，但读起来总有点拗口。&lt;/p&gt;
+&lt;p&gt;peter不满意，几番折腾之后，现在终于定下来一个新名字：OpenClaw。&lt;/p&gt;
+&lt;p&gt;这次peter学乖了，商标没有被注册、域名也买好了、代码也迁移了。&lt;/p&gt;
+&lt;p&gt;现在的名字我觉得是很贴切的：Open代表开源、开放、社区驱动&lt;/p&gt;
+&lt;p&gt;Claw：就是爪子，保留龙虾爪子的血统，向起点致敬。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;这次应该不会再改名字了，终于可以给大家分享一下如何安装openclaw了，对于没有技术基础的同学来说，本地安装还是很有难度的。&lt;/p&gt;
+&lt;p&gt;下面给大家演示一下如何在mac和linux上安装openclaw，这里我们的目标是让国内的同学不花一分钱把服务运行起来。&lt;/p&gt;
+&lt;h2 id="mac-系统"&gt;mac 系统
+&lt;/h2&gt;&lt;p&gt;先看mac系统。&lt;/p&gt;
+&lt;p&gt;首先安装nodejs的最新稳定版本。我安装的是&lt;code&gt;24.13.0&lt;/code&gt;，推荐用nvm安装，我把命令放这里了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nvm install --lts
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Mac上还需要安装 Command Line Tools，命令放在下面了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# 先彻底删除旧的（很重要，很多时候不删它就装错版本）
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /Library/Developer/CommandLineTools
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# 让系统重新拉取（会弹出安装窗口，按提示点继续）
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo xcode-select --install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;安装git，我们用brew安装。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;brew install git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;接下来把官网上的命令拷贝下来，在命令行里执行。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://openclaw.ai/install.sh | bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;安装会花一段时间，没有报错的话，进入配置界面。&lt;/p&gt;
+&lt;p&gt;首先同意协议，按&lt;code&gt;回车&lt;/code&gt;是继续，空格键是选择。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;onboard mode&lt;/code&gt;选择&lt;code&gt;QuickStart&lt;/code&gt;，在&lt;code&gt;model auth provider&lt;/code&gt;里选择千问，千问似乎有一定的免费额度，可以拿来体验。&lt;/p&gt;
+&lt;p&gt;选择&lt;code&gt;Qwen OAuth&lt;/code&gt;，这时候会自动打开浏览器，注册或者登录一下就可以了，点击&lt;code&gt;Confirm&lt;/code&gt;，模型就用改，就默认。&lt;/p&gt;
+&lt;p&gt;在&lt;code&gt;select channel&lt;/code&gt;选择&lt;code&gt;Skip for now&lt;/code&gt;，暂时不配置im集成。&lt;/p&gt;
+&lt;p&gt;下面就是skill配置，也是openclaw最核心的能力。&lt;/p&gt;
+&lt;p&gt;随便选择几个安装一下，这一步大概要几分钟的时间。&lt;/p&gt;
+&lt;p&gt;后面就是各种API key的配置，全部选择&lt;code&gt;No&lt;/code&gt;，这些后面都可以配。&lt;/p&gt;
+&lt;p&gt;然后就是&lt;code&gt;Enable hooks&lt;/code&gt;，选&lt;code&gt;command-logger&lt;/code&gt;和&lt;code&gt;session-memory&lt;/code&gt;，前者是命令执行日志，后者是session级别的记忆，都是有用的。&lt;/p&gt;
+&lt;p&gt;接下来openclaw会安装gateway service，安装成功之后就可以打开TUI了，这时候浏览器会打开openclaw的gateway dashboard页面。&lt;/p&gt;
+&lt;p&gt;在chat里面设置一下openclaw的角色和名字，顺便设置一下自己的名字，接下来就大功告成了。&lt;/p&gt;
+&lt;h2 id="linux-系统无ui"&gt;linux 系统，无ui
+&lt;/h2&gt;&lt;p&gt;我们再看一下linux里怎么安装openclaw。&lt;/p&gt;
+&lt;p&gt;我这里用的是一台多年前的赛扬N5105的机器，性能比较差，反应速度很慢，大家在安装时尽量选择配置高一点的机器或者是vps。&lt;/p&gt;
+&lt;p&gt;我的操作系统是ubuntu 24.04，纯命令行的，没有UI。&lt;/p&gt;
+&lt;p&gt;首先需要更新一下相关依赖，命令我放在下面了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt upgrade
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;接下来就是安装nodejs和git，跟mac上差不多，就不展开了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install git
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nvm install --lts
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后使用官方脚本安装。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://openclaw.ai/install.sh | bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;因为机器配置比较差，所以安装的很慢。&lt;/p&gt;
+&lt;p&gt;这时候顺便去注册一个智谱的账号，然后在&lt;code&gt;控制台&lt;/code&gt;-&amp;gt;&lt;code&gt;API key&lt;/code&gt;里生成1个api key。&lt;/p&gt;
+&lt;p&gt;因为我用的是没有ui的linux系统，所以没办法用千问的oauth，在模型这边就用智谱的GLM了。&lt;/p&gt;
+&lt;p&gt;安装完成之后的配置步骤跟mac上是一样，只是在选择模型的时候Z.AI，也就是GLM4.7。&lt;/p&gt;
+&lt;p&gt;把之前创建的API key拷贝一下，接下来参考mac的步骤，不配置channel，随便选几个skill安装一下，不配置各种api key。&lt;/p&gt;
+&lt;p&gt;因为没有检测到系统的gui，所以在安装完gateway之后，整个安装过程就结束了。&lt;/p&gt;
+&lt;p&gt;不过我们还是要打开gateway的dashboard测试一下。&lt;/p&gt;
+&lt;p&gt;先回到本机，用下面的命令进行ssh转发。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -N -L 18888:127.0.0.1:18789 用户名@目标机器的ip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后浏览器访问&lt;code&gt;http://127.0.0.1:18888/?token=1xxxxxxxxxf911e9f8ceea1ed572a11c&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这里的token可以在安装结束后的命令行里看到，或者在linux机器上运行命令&lt;code&gt;openclaw dashboard&lt;/code&gt;来查看。&lt;/p&gt;
+&lt;p&gt;在浏览器的聊天窗口中测试一下，openclaw能回答就证明配置成功了。&lt;/p&gt;
+&lt;h2 id="总结"&gt;总结
+&lt;/h2&gt;&lt;p&gt;老实说，openclaw安装和配置都是有一定门槛的，对于普通用户来说，基本上很难自己搞定。&lt;/p&gt;
+&lt;p&gt;个人观点，openclaw代表的是AI应用的一种新的方向，它让AI 拥有近乎无限的记忆，并且能直接操控电脑，真正帮人类把事情做完。&lt;/p&gt;
+&lt;p&gt;但这并不意味着openclaw目前的交互方式是适合每一个人的。&lt;/p&gt;
+&lt;p&gt;最后总结一下，在我看来openclaw是一场程序员自己的狂欢，而对绝大多数的普通用户来说，可能更适合站在场边围观。它确实代表未来，但不是每个人都需要、也并不是每个人都必须现在就去学它和使用它。&lt;/p&gt;
+&lt;h2 id="附录clawedbot改名始末"&gt;附录:clawedbot改名始末
+&lt;/h2&gt;&lt;p&gt;大家好，今天来聊聊Clawdbot那段让人又好笑又心酸的改名史，简直是2026年AI圈最戏剧化的一幕。&lt;/p&gt;
+&lt;p&gt;故事是这样的：&lt;/p&gt;
+&lt;p&gt;就在前几天，一款超级能干的开源AI个人助理突然爆火，GitHub星标狂飙好几万，还顺手把Mac Mini都带到断货。它叫&lt;strong&gt;Clawdbot&lt;/strong&gt;，名字灵感来自Claude Code里那个像素风小龙虾，Clawd就是它的吉祥物，读起来有点像“Claude bot”，龙虾爪子🦞+机器人，挺可爱的致敬嘛。&lt;/p&gt;
+&lt;p&gt;结果火得太快，火到被正主盯上了。&lt;/p&gt;
+&lt;p&gt;1月27日，Anthropic的法务直接找上门：你们这名字和Logo太像我们家Claude了，商标有问题，赶紧改！&lt;/p&gt;
+&lt;p&gt;创始人Peter Steinberger一开始还想挣扎，说“要不我把d去掉改Clawbot行不行？”——对方：不行。&lt;/p&gt;
+&lt;p&gt;一番拉扯后，Peter只能举白旗：“好吧，被迫改名，这不是我的决定。”&lt;/p&gt;
+&lt;p&gt;但这哥们儿脑子转得快，顺着龙虾的生物属性直接玩了个高级自黑：&lt;/p&gt;
+&lt;p&gt;龙虾要长大就得&lt;strong&gt;蜕壳（Molt）&lt;/strong&gt;，对吧？那就叫&lt;strong&gt;Moltbot&lt;/strong&gt;好了！&lt;/p&gt;
+&lt;p&gt;吉祥物也从Clawd变成&lt;strong&gt;Molty&lt;/strong&gt;，Logo跟着更新。&lt;/p&gt;
+&lt;p&gt;官方公告一句话总结得绝了：&lt;/p&gt;
+&lt;p&gt;“Same lobster soul, new shell.”&lt;br&gt;
+（同样的龙虾灵魂，换了新壳。）&lt;/p&gt;
+&lt;p&gt;结果改名当天更魔幻：&lt;/p&gt;
+&lt;p&gt;GitHub账号重命名搞砸了，X账号改名那10秒钟空窗期，直接被加密货币骗子抢注去发诈骗链接……&lt;/p&gt;
+&lt;p&gt;Peter在推上连发几条吐槽：“我只是想改个名，怎么比写代码还难？”&lt;/p&gt;
+&lt;p&gt;所以Clawdbot的改名史，浓缩起来就一句话：&lt;/p&gt;
+&lt;p&gt;一只想好好做事的龙虾AI，因为名字太像大佬家的产品，被逼着当众蜕了一次壳，&lt;/p&gt;
+&lt;p&gt;蜕完之后不但没萎，反而用最幽默的方式告诉大家：&lt;/p&gt;
+&lt;p&gt;“我还是那个能干活的家伙，只是……壳换了个更酷的版本而已🦞→🦐”&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,271 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="www.freecodecamp.org是我密切关注的免费学习编程的网站，里面不定期会有高质量且最新的各种编程以及技术教程，今天偶然在freecodecap看到一篇讲python进行日常自动化的帖子，原文在这里https://www.freecodecamp.org/news/python-automation-scripts/，觉得有点意思，顺便就把里面的内容拿出来分享和评论一下。\n"><title>你应该知道的python自动化脚本</title><link rel=canonical href=zh.ethanhan.cc/p/%E4%BD%A0%E5%BA%94%E8%AF%A5%E7%9F%A5%E9%81%93%E7%9A%84python%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="你应该知道的python自动化脚本"><meta property='og:description' content="www.freecodecamp.org是我密切关注的免费学习编程的网站，里面不定期会有高质量且最新的各种编程以及技术教程，今天偶然在freecodecap看到一篇讲python进行日常自动化的帖子，原文在这里https://www.freecodecamp.org/news/python-automation-scripts/，觉得有点意思，顺便就把里面的内容拿出来分享和评论一下。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E4%BD%A0%E5%BA%94%E8%AF%A5%E7%9F%A5%E9%81%93%E7%9A%84python%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2023-07-03T11:31:49+08:00'><meta property='article:modified_time' content='2023-07-03T11:31:49+08:00'><meta name=twitter:title content="你应该知道的python自动化脚本"><meta name=twitter:description content="www.freecodecamp.org是我密切关注的免费学习编程的网站，里面不定期会有高质量且最新的各种编程以及技术教程，今天偶然在freecodecap看到一篇讲python进行日常自动化的帖子，原文在这里https://www.freecodecamp.org/news/python-automation-scripts/，觉得有点意思，顺便就把里面的内容拿出来分享和评论一下。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#自动校对>自动校对</a></li><li><a href=#自动随机播放音乐>自动随机播放音乐</a></li><li><a href=#pdf转csv>pdf转csv</a></li><li><a href=#自动压缩照片>自动压缩照片</a></li><li><a href=#自动下载youtube视频>自动下载YouTube视频</a></li><li><a href=#自动文本转语音>自动文本转语音</a></li><li><a href=#图片转pdf>图片转pdf</a></li><li><a href=#抄袭检测>抄袭检测</a></li><li><a href=#生成短链接>生成短链接</a></li><li><a href=#网络测速>网络测速</a></li><li><a href=#总结>总结</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E4%BD%A0%E5%BA%94%E8%AF%A5%E7%9F%A5%E9%81%93%E7%9A%84python%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC/>你应该知道的python自动化脚本</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2023-07-03T11:31:49+08:00>Jul 03, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><p><a class=link href=https://www.freecodecamp.org target=_blank rel=noopener>www.freecodecamp.org</a>是我密切关注的免费学习编程的网站，里面不定期会有高质量且最新的各种编程以及技术教程，今天偶然在freecodecap看到一篇讲python进行日常自动化的帖子，原文在这里https://www.freecodecamp.org/news/python-automation-scripts/，觉得有点意思，顺便就把里面的内容拿出来分享和评论一下。</p><h3 id=自动校对>自动校对</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># Python Proofreading</span>
+</span></span><span class=line><span class=cl><span class=c1># pip install lmproof</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>lmproof</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>proofread</span><span class=p>(</span><span class=n>text</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>proofread</span> <span class=o>=</span> <span class=n>lmproof</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s2>&#34;en&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>correction</span> <span class=o>=</span> <span class=n>proofread</span><span class=o>.</span><span class=n>proofread</span><span class=p>(</span><span class=n>text</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Original: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>text</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Correction: </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>correction</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl><span class=n>proofread</span><span class=p>(</span><span class=s2>&#34;Your Text&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>说实话，似乎用不上。</p><h3 id=自动随机播放音乐>自动随机播放音乐</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>random</span><span class=o>,</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl><span class=n>music_dir</span> <span class=o>=</span> <span class=s1>&#39;E:</span><span class=se>\\</span><span class=s1>music diretory&#39;</span>
+</span></span><span class=line><span class=cl><span class=n>songs</span> <span class=o>=</span> <span class=n>os</span><span class=o>.</span><span class=n>listdir</span><span class=p>(</span><span class=n>music_dir</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>song</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=nb>len</span><span class=p>(</span><span class=n>songs</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Prints The Song Name</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>songs</span><span class=p>[</span><span class=n>song</span><span class=p>])</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>os</span><span class=o>.</span><span class=n>startfile</span><span class=p>(</span><span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>music_dir</span><span class=p>,</span> <span class=n>songs</span><span class=p>[</span><span class=mi>0</span><span class=p>]))</span> 
+</span></span></code></pre></td></tr></table></div></div><p>思路很好，不过似乎也用不上。</p><h3 id=pdf转csv>pdf转csv</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>tabula</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>filename</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s2>&#34;Enter File Path: &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>df</span> <span class=o>=</span> <span class=n>tabula</span><span class=o>.</span><span class=n>read_pdf</span><span class=p>(</span><span class=n>filename</span><span class=p>,</span> <span class=n>encoding</span><span class=o>=</span><span class=s1>&#39;utf-8&#39;</span><span class=p>,</span> <span class=n>spreadsheet</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>pages</span><span class=o>=</span><span class=s1>&#39;1&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>df</span><span class=o>.</span><span class=n>to_csv</span><span class=p>(</span><span class=s1>&#39;output.csv&#39;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>需要<code>pip install tabula</code>，在做数据处理的时候就很有用了，因为有些站点的收据下载的格式默认就是pdf的。</p><h3 id=自动压缩照片>自动压缩照片</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>PIL</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>PIL</span> <span class=kn>import</span> <span class=n>Image</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>tkinter.filedialog</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>fl</span><span class=o>=</span><span class=n>askopenfilenames</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>img</span> <span class=o>=</span> <span class=n>Image</span><span class=o>.</span><span class=n>open</span><span class=p>(</span><span class=n>fl</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=n>img</span><span class=o>.</span><span class=n>save</span><span class=p>(</span><span class=s2>&#34;output.jpg&#34;</span><span class=p>,</span> <span class=s2>&#34;JPEG&#34;</span><span class=p>,</span> <span class=n>optimize</span> <span class=o>=</span> <span class=kc>True</span><span class=p>,</span> <span class=n>quality</span> <span class=o>=</span> <span class=mi>10</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>需要安装PIL(Python Imaging Library) ，在归档的时候应该有些用处。</p><h3 id=自动下载youtube视频>自动下载YouTube视频</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pytube</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>link</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s1>&#39;Youtube Video URL&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>video_download</span> <span class=o>=</span> <span class=n>pytube</span><span class=o>.</span><span class=n>Youtube</span><span class=p>(</span><span class=n>link</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>video_download</span><span class=o>.</span><span class=n>streams</span><span class=o>.</span><span class=n>first</span><span class=p>()</span><span class=o>.</span><span class=n>download</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s1>&#39;Video Downloaded&#39;</span><span class=p>,</span> <span class=n>link</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>需要安装pytube，国内的话用处不大，推荐一个替代的命令行工具<strong>you-get</strong>，可以下载b站视频，有兴趣的同学可以研究一下。</p><h3 id=自动文本转语音>自动文本转语音</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pygame</span> <span class=kn>import</span> <span class=n>mixer</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>gtts</span> <span class=kn>import</span> <span class=n>gTTS</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>   <span class=n>tts</span> <span class=o>=</span> <span class=n>gTTS</span><span class=p>(</span><span class=s1>&#39;Like This Article&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>   <span class=n>tts</span><span class=o>.</span><span class=n>save</span><span class=p>(</span><span class=s1>&#39;output.mp3&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>   <span class=n>mixer</span><span class=o>.</span><span class=n>init</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>   <span class=n>mixer</span><span class=o>.</span><span class=n>music</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s1>&#39;output.mp3&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>   <span class=n>mixer</span><span class=o>.</span><span class=n>music</span><span class=o>.</span><span class=n>play</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>   
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>   <span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p>这里用的是Google Text to Speech API，国内用不上。</p><h3 id=图片转pdf>图片转pdf</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>fpdf</span> <span class=kn>import</span> <span class=n>FPDF</span>
+</span></span><span class=line><span class=cl><span class=n>Pdf</span> <span class=o>=</span> <span class=n>FPDF</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>list_of_images</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;wall.jpg&#34;</span><span class=p>,</span> <span class=s2>&#34;nature.jpg&#34;</span><span class=p>,</span><span class=s2>&#34;cat.jpg&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>list_of_images</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>   <span class=n>Pdf</span><span class=o>.</span><span class=n>add_page</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>   <span class=n>Pdf</span><span class=o>.</span><span class=n>image</span><span class=p>(</span><span class=n>i</span><span class=p>,</span><span class=n>x</span><span class=p>,</span><span class=n>y</span><span class=p>,</span><span class=n>w</span><span class=p>,</span><span class=n>h</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>   <span class=n>Pdf</span><span class=o>.</span><span class=n>output</span><span class=p>(</span><span class=s2>&#34;result.pdf&#34;</span><span class=p>,</span> <span class=s2>&#34;F&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>可以批量转，应该有用。</p><h3 id=抄袭检测>抄袭检测</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>difflib</span> <span class=kn>import</span> <span class=n>SequenceMatcher</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>plagiarism_checker</span><span class=p>(</span><span class=n>f1</span><span class=p>,</span><span class=n>f2</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=n>f1</span><span class=p>,</span><span class=n>errors</span><span class=o>=</span><span class=s2>&#34;ignore&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file1</span><span class=p>,</span><span class=nb>open</span><span class=p>(</span><span class=n>f2</span><span class=p>,</span><span class=n>errors</span><span class=o>=</span><span class=s2>&#34;ignore&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file2</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>f1_data</span><span class=o>=</span><span class=n>file1</span><span class=o>.</span><span class=n>read</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>f2_data</span><span class=o>=</span><span class=n>file2</span><span class=o>.</span><span class=n>read</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>res</span><span class=o>=</span><span class=n>SequenceMatcher</span><span class=p>(</span><span class=kc>None</span><span class=p>,</span> <span class=n>f1_data</span><span class=p>,</span> <span class=n>f2_data</span><span class=p>)</span><span class=o>.</span><span class=n>ratio</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;These files are </span><span class=si>{</span><span class=n>res</span><span class=o>*</span><span class=mi>100</span><span class=si>}</span><span class=s2> % similar&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>f1</span><span class=o>=</span><span class=nb>input</span><span class=p>(</span><span class=s2>&#34;Enter file_1 path: &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>f2</span><span class=o>=</span><span class=nb>input</span><span class=p>(</span><span class=s2>&#34;Enter file_2 path: &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>plagiarism_checker</span><span class=p>(</span><span class=n>f1</span><span class=p>,</span> <span class=n>f2</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>其实就是比较两个文件的相似性，不知道对中文的支持如何。</p><h3 id=生成短链接>生成短链接</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>__future__</span> <span class=kn>import</span> <span class=n>with_statement</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>contextlib</span>
+</span></span><span class=line><span class=cl><span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=kn>from</span> <span class=nn>urllib.parse</span> <span class=kn>import</span> <span class=n>urlencode</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=ne>ImportError</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=kn>from</span> <span class=nn>urllib</span> <span class=kn>import</span> <span class=n>urlencode</span>
+</span></span><span class=line><span class=cl><span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=kn>from</span> <span class=nn>urllib.request</span> <span class=kn>import</span> <span class=n>urlopen</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=ne>ImportError</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=kn>from</span> <span class=nn>urllib2</span> <span class=kn>import</span> <span class=n>urlopen</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>make_tiny</span><span class=p>(</span><span class=n>url</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>	<span class=n>request_url</span> <span class=o>=</span> <span class=p>(</span><span class=s1>&#39;http://tinyurl.com/app-index.php?&#39;</span> <span class=o>+</span> 
+</span></span><span class=line><span class=cl>	<span class=n>urlencode</span><span class=p>({</span><span class=s1>&#39;url&#39;</span><span class=p>:</span><span class=n>url</span><span class=p>}))</span>
+</span></span><span class=line><span class=cl>	<span class=k>with</span> <span class=n>contextlib</span><span class=o>.</span><span class=n>closing</span><span class=p>(</span><span class=n>urlopen</span><span class=p>(</span><span class=n>request_url</span><span class=p>))</span> <span class=k>as</span> <span class=n>response</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=n>response</span><span class=o>.</span><span class=n>read</span><span class=p>()</span><span class=o>.</span><span class=n>decode</span><span class=p>(</span><span class=s1>&#39;utf-8&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=n>tinyurl</span> <span class=ow>in</span> <span class=nb>map</span><span class=p>(</span><span class=n>make_tiny</span><span class=p>,</span> <span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>:]):</span>
+</span></span><span class=line><span class=cl>		<span class=nb>print</span><span class=p>(</span><span class=n>tinyurl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=n>main</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s1>&#39;&#39;&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>-----------------------------OUTPUT------------------------
+</span></span></span><span class=line><span class=cl><span class=s1>python url_shortener.py https://www.wikipedia.org/
+</span></span></span><span class=line><span class=cl><span class=s1>https://tinyurl.com/bif4t9
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;&#39;&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>调用第三方服务生成短链接，其实也可以自己写个短链接的生成服务，用flask+redis就可以了。</p><h3 id=网络测速>网络测速</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># Internet Speed tester</span>
+</span></span><span class=line><span class=cl><span class=c1># pip install speedtest-cli</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>speedtest</span> <span class=k>as</span> <span class=nn>st</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Set Best Server</span>
+</span></span><span class=line><span class=cl><span class=n>server</span> <span class=o>=</span> <span class=n>st</span><span class=o>.</span><span class=n>Speedtest</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>server</span><span class=o>.</span><span class=n>get_best_server</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Test Download Speed</span>
+</span></span><span class=line><span class=cl><span class=n>down</span> <span class=o>=</span> <span class=n>server</span><span class=o>.</span><span class=n>download</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>down</span> <span class=o>=</span> <span class=n>down</span> <span class=o>/</span> <span class=mi>1000000</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Download Speed: </span><span class=si>{</span><span class=n>down</span><span class=si>}</span><span class=s2> Mb/s&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Test Upload Speed</span>
+</span></span><span class=line><span class=cl><span class=n>up</span> <span class=o>=</span> <span class=n>server</span><span class=o>.</span><span class=n>upload</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>up</span> <span class=o>=</span> <span class=n>up</span> <span class=o>/</span> <span class=mi>1000000</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Upload Speed: </span><span class=si>{</span><span class=n>up</span><span class=si>}</span><span class=s2> Mb/s&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Test Ping</span>
+</span></span><span class=line><span class=cl><span class=n>ping</span> <span class=o>=</span> <span class=n>server</span><span class=o>.</span><span class=n>results</span><span class=o>.</span><span class=n>ping</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Ping Speed: </span><span class=si>{</span><span class=n>ping</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>这个很有用的，可以保存一下。</p><h3 id=总结>总结</h3><p>这些自动化脚本其实都很不错，短小精悍，属于入门级，尽管跟离提升工作效率的目的还有点距离，不过却可以很好的向初学者进行python自动化概念的展示，很不错的帖子。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

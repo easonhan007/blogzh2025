@@ -1,0 +1,195 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Grok3 前几天马斯克发布了 Grok3。\n简单试用了一下，有几点感想。\n速度是真快。除了搜索之外，基本上大部分的问题都是秒回； 对中文的理解不错； 代码生成能力令人印象深刻； 因为只是简单的体验了一下，感触比较浅薄。\n"><title>Grok3和deepseek在测试领域如何落地</title><link rel=canonical href=zh.ethanhan.cc/p/grok3%E5%92%8Cdeepseek%E5%9C%A8%E6%B5%8B%E8%AF%95%E9%A2%86%E5%9F%9F%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="Grok3和deepseek在测试领域如何落地"><meta property='og:description' content="Grok3 前几天马斯克发布了 Grok3。\n简单试用了一下，有几点感想。\n速度是真快。除了搜索之外，基本上大部分的问题都是秒回； 对中文的理解不错； 代码生成能力令人印象深刻； 因为只是简单的体验了一下，感触比较浅薄。\n"><meta property='og:url' content='zh.ethanhan.cc/p/grok3%E5%92%8Cdeepseek%E5%9C%A8%E6%B5%8B%E8%AF%95%E9%A2%86%E5%9F%9F%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2025-02-21T09:19:52+08:00'><meta property='article:modified_time' content='2025-02-21T09:19:52+08:00'><meta name=twitter:title content="Grok3和deepseek在测试领域如何落地"><meta name=twitter:description content="Grok3 前几天马斯克发布了 Grok3。\n简单试用了一下，有几点感想。\n速度是真快。除了搜索之外，基本上大部分的问题都是秒回； 对中文的理解不错； 代码生成能力令人印象深刻； 因为只是简单的体验了一下，感触比较浅薄。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#grok3>Grok3</a></li><li><a href=#与测试的结合>与测试的结合</a></li><li><a href=#grok3-生成的单元测试>Grok3 生成的单元测试</a><ol><li><a href=#前提代码>前提代码</a></li><li><a href=#单元测试代码>单元测试代码</a></li><li><a href=#测试用例说明>测试用例说明</a></li><li><a href=#运行结果>运行结果</a></li><li><a href=#注意事项>注意事项</a></li></ol></li><li><a href=#目前的实践>目前的实践</a></li><li><a href=#deepseek-与单元测试>Deepseek 与单元测试</a><ol><li><a href=#说明>说明：</a></li><li><a href=#运行测试>运行测试：</a></li><li><a href=#预期结果>预期结果：</a></li></ol></li><li><a href=#总结>总结</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/grok3%E5%92%8Cdeepseek%E5%9C%A8%E6%B5%8B%E8%AF%95%E9%A2%86%E5%9F%9F%E5%A6%82%E4%BD%95%E8%90%BD%E5%9C%B0/>Grok3和deepseek在测试领域如何落地</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2025-02-21T09:19:52+08:00>Feb 21, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><h2 id=grok3>Grok3</h2><p>前几天马斯克发布了 Grok3。</p><p>简单试用了一下，有几点感想。</p><ul><li>速度是真快。除了搜索之外，基本上大部分的问题都是秒回；</li><li>对中文的理解不错；</li><li>代码生成能力令人印象深刻；</li></ul><p>因为只是简单的体验了一下，感触比较浅薄。</p><h2 id=与测试的结合>与测试的结合</h2><p>昨天看到 DHH 在社交媒体上谈论 Grok3。</p><p>他表示 Grok3 对他来说最重要的功能是处理测试代码。</p><p>这里可以简单的理解为使用 Grok3 进行单元测试和集成测试用例的编写。</p><p>这也是我认为目前来说 AI 在测试领域可以迅速落地的点。</p><p>特别是使用 AI 进行单元测试用例，理由如下。</p><ul><li>单元测试用例相对来说依赖比较少，做的事情也相对单纯，适合 AI 进行代码生成；</li><li>单元测试框架相对来说更新不是非常频繁，哪怕 AI 的数据不是最新，生成的代码可用性也很高；</li><li>我们可以先写实现代码再让 AI 对我们的实现代码进行测试，这样上下文比较精确，生成的代码基本上是可用信赖的；</li><li>写单元测试比较痛苦的地方是给用例取名，但对 AI 来说，这其实是小菜一碟；我发现 AI 生成的用例名称比我自己写的要有意义的多；</li></ul><p>另外我之前也使用过 github 的 copilot 来进行单元测试用例的编写，总体来说速度和准确性都可以接受。</p><h2 id=grok3-生成的单元测试>Grok3 生成的单元测试</h2><p>这里贴一个 Grok3 生成的测试<code>print("hello")</code>的测试用例。</p><p>平心而论，这个用例逻辑很简单，但是实现起来却不是很容易。</p><p>Grok3 非常迅速且准确的完成了这个任务。</p><p>我只能说，用例写的真好，比我自己实现的要好很多。</p><p>我来为 <code>print("hello")</code> 这段 Python 代码写几个单元测试用例。由于 print() 是内置函数，主要作用是输出到控制台，测试它的行为需要考虑如何捕获输出。我们可以使用 Python 的 unittest 框架，并结合 io.StringIO 和 sys.stdout 重定向来验证输出结果。</p><p>以下是几个单元测试用例，假设这段代码被封装在一个函数中：</p><h3 id=前提代码>前提代码</h3><p>假设我们将 print(&ldquo;hello&rdquo;) 放入一个简单的函数：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>print_hello</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;hello&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=单元测试代码>单元测试代码</h3><p>以下是基于 unittest 的测试用例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>unittest</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>io</span> <span class=kn>import</span> <span class=n>StringIO</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 被测试的函数</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>print_hello</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;hello&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>TestPrintHello</span><span class=p>(</span><span class=n>unittest</span><span class=o>.</span><span class=n>TestCase</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>setUp</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 在每个测试用例前重定向 stdout</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span> <span class=o>=</span> <span class=n>StringIO</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>stdout</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>tearDown</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 在每个测试用例后恢复 stdout</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span><span class=o>.</span><span class=n>close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>stdout</span> <span class=o>=</span> <span class=n>sys</span><span class=o>.</span><span class=n>__stdout__</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 测试用例 1：验证输出内容是否为 &#34;hello&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>test_print_hello_output</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>print_hello</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>output</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span><span class=o>.</span><span class=n>getvalue</span><span class=p>()</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>assertEqual</span><span class=p>(</span><span class=n>output</span><span class=p>,</span> <span class=s2>&#34;hello&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 测试用例 2：验证输出不为空</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>test_print_hello_not_empty</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>print_hello</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>output</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span><span class=o>.</span><span class=n>getvalue</span><span class=p>()</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>assertTrue</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>output</span><span class=p>)</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 测试用例 3：验证输出不包含意外内容</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>test_print_hello_no_unexpected_content</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>print_hello</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>output</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span><span class=o>.</span><span class=n>getvalue</span><span class=p>()</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>assertNotEqual</span><span class=p>(</span><span class=n>output</span><span class=p>,</span> <span class=s2>&#34;hi&#34;</span><span class=p>)</span>  <span class=c1># 不应输出 &#34;hi&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>assertNotIn</span><span class=p>(</span><span class=s2>&#34;error&#34;</span><span class=p>,</span> <span class=n>output</span><span class=p>)</span>  <span class=c1># 不应包含 &#34;error&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>unittest</span><span class=o>.</span><span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=测试用例说明>测试用例说明</h3><p><code>test_print_hello_output</code></p><ul><li>目标：验证 print_hello() 输出是否精确为 &ldquo;hello&rdquo;。</li><li>方法：捕获输出并与预期值比较。</li></ul><p><code>test_print_hello_not_empty</code></p><ul><li>目标：确保函数有输出，而不是空字符串。</li><li>方法：检查输出长度大于 0。</li></ul><p><code>test_print_hello_no_unexpected_content</code></p><ul><li>目标：确认输出不包含意外内容（如 &ldquo;hi&rdquo; 或 &ldquo;error&rdquo;）。</li><li>方法：使用 assertNotEqual 和 assertNotIn 检查。</li></ul><h3 id=运行结果>运行结果</h3><p>运行这段测试代码时：
+所有测试应该通过，因为 print(&ldquo;hello&rdquo;) 会稳定输出 &ldquo;hello&rdquo;。
+如果你修改 print_hello() 为 print(&ldquo;hi&rdquo;)，则 test_print_hello_output 会失败。</p><h3 id=注意事项>注意事项</h3><p>sys.stdout 重定向：因为 print() 直接输出到标准输出，我们需要用 StringIO 捕获它。
+测试局限：如果 print_hello() 被改为写入文件或不调用 print()，这些测试需要调整。
+扩展性：你可以添加更多用例，比如测试换行符 \n（默认 print() 带换行）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>test_print_hello_with_newline</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>print_hello</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>output</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>held_output</span><span class=o>.</span><span class=n>getvalue</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=bp>self</span><span class=o>.</span><span class=n>assertTrue</span><span class=p>(</span><span class=n>output</span><span class=o>.</span><span class=n>endswith</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果你想测试其他场景（比如异常处理、参数化输出），告诉我，我可以进一步扩展！</p><h2 id=目前的实践>目前的实践</h2><p>目前工程化方面，除了 github 的 copilot 和 cursor 等工具之外，很多时候我们都是在做复制和粘贴的工作。</p><p>先把实现代码粘贴进 AI 对话框，然后把单元测试用例拷贝出来。</p><p>效率不高，而且过程很枯燥，时间长了会让人陷入自我怀疑。</p><p>难道我只是复制粘贴的工具么？</p><p>所以后面 AI 生成单元测试的实践可能会是：</p><ul><li>更深层次 IDE 级别的集成，比如一键生成单元测试用例并且运行的能力；</li><li>框架级别的 AI 集成。在开发框架里集成 AI 生成测试用例的能力，并进行执行；</li></ul><h2 id=deepseek-与单元测试>Deepseek 与单元测试</h2><p>同样的题目，让 deepseek 去实现<code>print("hello")</code>的测试用例。</p><p>以下是针对 <code>print("hello")</code> 的单元测试用例，使用 Python 的 <code>unittest</code> 框架并捕获标准输出验证结果：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>unittest</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>io</span> <span class=kn>import</span> <span class=n>StringIO</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>unittest.mock</span> <span class=kn>import</span> <span class=n>patch</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 要测试的代码</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>hello_world</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;hello&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 单元测试类</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>TestHelloWorld</span><span class=p>(</span><span class=n>unittest</span><span class=o>.</span><span class=n>TestCase</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>test_hello_output</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 捕获标准输出</span>
+</span></span><span class=line><span class=cl>        <span class=n>captured_output</span> <span class=o>=</span> <span class=n>StringIO</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>stdout</span> <span class=o>=</span> <span class=n>captured_output</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># 执行函数</span>
+</span></span><span class=line><span class=cl>        <span class=n>hello_world</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># 恢复标准输出</span>
+</span></span><span class=line><span class=cl>        <span class=n>sys</span><span class=o>.</span><span class=n>stdout</span> <span class=o>=</span> <span class=n>sys</span><span class=o>.</span><span class=n>__stdout__</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># 验证输出结果（注意 print 会自动换行，输出实际为 &#34;hello\n&#34;）</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>assertEqual</span><span class=p>(</span><span class=n>captured_output</span><span class=o>.</span><span class=n>getvalue</span><span class=p>()</span><span class=o>.</span><span class=n>strip</span><span class=p>(),</span> <span class=s2>&#34;hello&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 另一种方法：使用 unittest.mock.patch 直接捕获输出</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@patch</span><span class=p>(</span><span class=s1>&#39;sys.stdout&#39;</span><span class=p>,</span> <span class=n>new_callable</span><span class=o>=</span><span class=n>StringIO</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>test_hello_output_with_patch</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>mock_stdout</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>hello_world</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>assertEqual</span><span class=p>(</span><span class=n>mock_stdout</span><span class=o>.</span><span class=n>getvalue</span><span class=p>()</span><span class=o>.</span><span class=n>strip</span><span class=p>(),</span> <span class=s2>&#34;hello&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>unittest</span><span class=o>.</span><span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=说明>说明：</h3><ol><li><p><strong>捕获输出逻辑</strong>：</p><ul><li>第一种方法手动将 <code>sys.stdout</code> 重定向到 <code>StringIO</code> 对象，执行后恢复原输出。</li><li>第二种方法使用 <code>@patch</code> 装饰器自动模拟 <code>sys.stdout</code>，更简洁且避免资源泄漏。</li></ul></li><li><p><strong>注意换行符</strong>：</p><ul><li><code>print("hello")</code> 实际输出 <code>"hello\n"</code>，因此断言时使用 <code>.strip()</code> 去掉首尾空白（包括换行符）。</li></ul></li></ol><h3 id=运行测试>运行测试：</h3><p>将代码保存为 <code>test_hello.py</code>，执行以下命令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>python -m unittest test_hello.py
+</span></span></code></pre></td></tr></table></div></div><h3 id=预期结果>预期结果：</h3><p>测试通过，输出类似：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>..
+</span></span><span class=line><span class=cl>----------------------------------------------------------------------
+</span></span><span class=line><span class=cl>Ran 2 tests in 0.001s
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>OK
+</span></span></code></pre></td></tr></table></div></div><p>其实 deepseek R1 也能一次写对，但是用例的完备程度是不如 grok3 的，另外输出速度上 grok3 的优势还是比较明显的。</p><p>不过我觉得用 deepseek R1 写单元测试用例应该也没什么问题，用例完备性默认不高的问题可以在 prompt 里面增加引导，有可能会得到不错的效果。</p><h2 id=总结>总结</h2><p>总之目前看来 AI 在代码能力上的表现是可圈可点的。</p><p>而代码跟测试结合的最紧密的点就是单元测试。</p><p>而开发不写单元测试的原因无非是不会写和没时间写。</p><p>现在 ai 代码助手的出现让这两个理由已经站不住脚了。</p><p>有理由相信在不远的将来，ai 生成的单元测试用例将是大部分软件项目的标配。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

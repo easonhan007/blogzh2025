@@ -1,0 +1,305 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="前因后果 最近有一些做测试使用的小工具的需求，拿 AI 生成了一下，发现确实对测试效率有一定的提升。\n前几天需要写一个简单的性能压测工具，自己写的话可能要 1-2 天，估计效果还不太好，于是试着拿 AI 去生成了一下。\n"><title>对于测试同学来说，拿AI做测试小工具简直不要太爽</title><link rel=canonical href=zh.ethanhan.cc/p/%E5%AF%B9%E4%BA%8E%E6%B5%8B%E8%AF%95%E5%90%8C%E5%AD%A6%E6%9D%A5%E8%AF%B4%E6%8B%BFai%E5%81%9A%E6%B5%8B%E8%AF%95%E5%B0%8F%E5%B7%A5%E5%85%B7%E7%AE%80%E7%9B%B4%E4%B8%8D%E8%A6%81%E5%A4%AA%E7%88%BD/><link rel=stylesheet href=zh.ethanhan.cc/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="对于测试同学来说，拿AI做测试小工具简直不要太爽"><meta property='og:description' content="前因后果 最近有一些做测试使用的小工具的需求，拿 AI 生成了一下，发现确实对测试效率有一定的提升。\n前几天需要写一个简单的性能压测工具，自己写的话可能要 1-2 天，估计效果还不太好，于是试着拿 AI 去生成了一下。\n"><meta property='og:url' content='zh.ethanhan.cc/p/%E5%AF%B9%E4%BA%8E%E6%B5%8B%E8%AF%95%E5%90%8C%E5%AD%A6%E6%9D%A5%E8%AF%B4%E6%8B%BFai%E5%81%9A%E6%B5%8B%E8%AF%95%E5%B0%8F%E5%B7%A5%E5%85%B7%E7%AE%80%E7%9B%B4%E4%B8%8D%E8%A6%81%E5%A4%AA%E7%88%BD/'><meta property='og:site_name' content='乙醇的博客'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2025-08-28T17:33:25+08:00'><meta property='article:modified_time' content='2025-08-28T17:33:25+08:00'><meta name=twitter:title content="对于测试同学来说，拿AI做测试小工具简直不要太爽"><meta name=twitter:description content="前因后果 最近有一些做测试使用的小工具的需求，拿 AI 生成了一下，发现确实对测试效率有一定的提升。\n前几天需要写一个简单的性能压测工具，自己写的话可能要 1-2 天，估计效果还不太好，于是试着拿 AI 去生成了一下。\n"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/zh.ethanhan.cc/><img src=zh.ethanhan.cc/img/avatar_hu_c3223959809ae462.jpg width=300 height=169 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>😊</span></figure><div class=site-meta><h1 class=site-name><a href=/zh.ethanhan.cc>乙醇的博客</a></h1><h2 class=site-description>走出舒适区</h2></div></header><ol class=menu-social><li><a href=https://github.com/easonhan007/blogzh2025 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=zh.ethanhan.cc/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=zh.ethanhan.cc/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=zh.ethanhan.cc/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=zh.ethanhan.cc/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>友情链接</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#前因后果>前因后果</a></li><li><a href=#具体过程>具体过程</a></li><li><a href=#横向比较>横向比较</a></li><li><a href=#思考>思考</a></li><li><a href=#学习时间>学习时间</a><ol><li><a href=#函数签名解析>函数签名解析</a></li><li><a href=#逐步详细解析>逐步详细解析</a><ol><li><a href=#1-解析和配置阶段>1. 解析和配置阶段</a></li><li><a href=#2-进度条设置>2. 进度条设置</a></li><li><a href=#3-工作线程创建关键部分>3. 工作线程创建（关键部分）</a></li><li><a href=#4-时间控制和清理>4. 时间控制和清理</a></li><li><a href=#5-结果收集和输出>5. 结果收集和输出</a></li></ol></li><li><a href=#并发执行流程图>并发执行流程图</a></li><li><a href=#内存安全和并发安全>内存安全和并发安全</a><ol><li><a href=#rust-的优势>Rust 的优势：</a></li><li><a href=#对比其他语言可能的问题>对比其他语言可能的问题：</a></li></ol></li><li><a href=#错误处理>错误处理</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=zh.ethanhan.cc/p/%E5%AF%B9%E4%BA%8E%E6%B5%8B%E8%AF%95%E5%90%8C%E5%AD%A6%E6%9D%A5%E8%AF%B4%E6%8B%BFai%E5%81%9A%E6%B5%8B%E8%AF%95%E5%B0%8F%E5%B7%A5%E5%85%B7%E7%AE%80%E7%9B%B4%E4%B8%8D%E8%A6%81%E5%A4%AA%E7%88%BD/>对于测试同学来说，拿AI做测试小工具简直不要太爽</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2025-08-28T17:33:25+08:00>Aug 28, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 6 分钟</time></div></footer></div></header><section class=article-content><h2 id=前因后果>前因后果</h2><p>最近有一些做测试使用的小工具的需求，拿 AI 生成了一下，发现确实对测试效率有一定的提升。</p><p>前几天需要写一个简单的性能压测工具，自己写的话可能要 1-2 天，估计效果还不太好，于是试着拿 AI 去生成了一下。</p><p>为了让工具有足够的并发性能，我选择用 rust 语言来实现。</p><p>简单描述了一下需求，claude 就在几分钟之内给出了结果。</p><h2 id=具体过程>具体过程</h2><p>我的提示词非常简单</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>How to use rust to implement this cli feature .
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>it is a stress test cli
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>apistress rest --url https://api.example.com/users \
+</span></span><span class=line><span class=cl>               --method POST \
+</span></span><span class=line><span class=cl>               --body &#39;{&#34;name&#34;:&#34;test&#34;}&#39; \
+</span></span><span class=line><span class=cl>               --header &#34;Authorization: Bearer TOKEN&#34; \
+</span></span><span class=line><span class=cl>               --concurrency 50 \
+</span></span><span class=line><span class=cl>               --duration 30s \
+</span></span><span class=line><span class=cl>               --rate 1000 \
+</span></span><span class=line><span class=cl>               --output json
+</span></span></code></pre></td></tr></table></div></div><p>不久 claude 给出了第一版的代码。</p><p>初版的代码里所有的内容都写在<code>main.rs</code>里面，尽管简单，但可维护性还是不强。</p><p>于是我再加强了一下。</p><p>这是我的提示词。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>seperate to more files
+</span></span></code></pre></td></tr></table></div></div><p>告诉 ai 将代码分成多个文件。</p><p>这是后来的文件目录。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-zed data-lang=zed><span class=line><span class=cl><span class=nn>src/</span><span class=n>main</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>Entry</span><span class=w> </span><span class=n>point</span><span class=w> </span><span class=n>that</span><span class=w> </span><span class=n>sets</span><span class=w> </span><span class=n>up</span><span class=w> </span><span class=n>modules</span><span class=w> </span><span class=n>and</span><span class=w> </span><span class=n>runs</span><span class=w> </span><span class=n>the</span><span class=w> </span><span class=n>CLI</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>src/</span><span class=n>cli</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>Command</span><span class=w> </span><span class=n>line</span><span class=w> </span><span class=n>interface</span><span class=w> </span><span class=kt>definition</span><span class=w> </span><span class=n>using</span><span class=w> </span><span class=n>clap</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>src/</span><span class=n>config</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>Request</span><span class=w> </span><span class=n>configuration</span><span class=w> </span><span class=n>and</span><span class=w> </span><span class=n>parsing</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>src/</span><span class=n>client</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>HTTP</span><span class=w> </span><span class=n>client</span><span class=w> </span><span class=n>functionality</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>src/</span><span class=n>results</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>Test</span><span class=w> </span><span class=n>results</span><span class=w> </span><span class=n>and</span><span class=w> </span><span class=n>reporting</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>src/</span><span class=n>rate_limiter</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>Rate</span><span class=w> </span><span class=n>limiting</span><span class=w> </span><span class=n>implementation</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>src/</span><span class=n>stress_test</span><span class=p>.</span><span class=n>rs</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>Main</span><span class=w> </span><span class=n>stress</span><span class=w> </span><span class=n>testing</span><span class=w> </span><span class=n>orchestration</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>逻辑上清楚多了。</p><p>根据代码编译了一下，然后随手写了个 api 试试效果。</p><p>api 应用是用 golang+gin 去写的，代码非常简单。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-golang data-lang=golang><span class=line><span class=cl><span class=w>	</span><span class=nx>r</span><span class=p>.</span><span class=nf>GET</span><span class=p>(</span><span class=s>&#34;/ping&#34;</span><span class=p>,</span><span class=w> </span><span class=kd>func</span><span class=p>(</span><span class=nx>c</span><span class=w> </span><span class=o>*</span><span class=nx>gin</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>c</span><span class=p>.</span><span class=nf>JSON</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusOK</span><span class=p>,</span><span class=w> </span><span class=nx>gin</span><span class=p>.</span><span class=nx>H</span><span class=p>{</span><span class=s>&#34;message&#34;</span><span class=p>:</span><span class=w> </span><span class=s>&#34;pong&#34;</span><span class=p>})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>})</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>拿 ai 生成的工具去试试效果。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>stress_test rest --url http://localhost:8080/ping --duration 10s
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>[00:00:10] Test completed
+</span></span><span class=line><span class=cl>=== Stress Test Results ===
+</span></span><span class=line><span class=cl>Total Requests: 273398
+</span></span><span class=line><span class=cl>Successful: 273398
+</span></span><span class=line><span class=cl>Failed: 0
+</span></span><span class=line><span class=cl>Test Duration: 10.00s
+</span></span><span class=line><span class=cl>Requests/sec: 27339.80
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Latency:
+</span></span><span class=line><span class=cl>  Min: 0.06ms
+</span></span><span class=line><span class=cl>  Max: 33.02ms
+</span></span><span class=line><span class=cl>  Avg: 0.31ms
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Status Codes:
+</span></span><span class=line><span class=cl>  200: 273398
+</span></span></code></pre></td></tr></table></div></div><p>结果是挺惊艳的，跑出了 27k 的 QPS，性能方面应该是满足我的原始需求的。</p><h2 id=横向比较>横向比较</h2><p>为了横向比较这个工具的性能，我又用 golang 写了个类似功能的 cli 压力测试工具。</p><p>用同样的被测应用跑了一下效果。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>⠏ Running stress test...  [9s]
+</span></span><span class=line><span class=cl>=== Stress Test Results ===
+</span></span><span class=line><span class=cl>Total Requests: 29244
+</span></span><span class=line><span class=cl>Successful: 29244
+</span></span><span class=line><span class=cl>Failed: 0
+</span></span><span class=line><span class=cl>Test Duration: 10.00s
+</span></span><span class=line><span class=cl>Requests/sec: 2924.40
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Latency:
+</span></span><span class=line><span class=cl>  Min: 0.18ms
+</span></span><span class=line><span class=cl>  Max: 614.15ms
+</span></span><span class=line><span class=cl>  Avg: 3.41ms
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Status Codes:
+</span></span><span class=line><span class=cl>  200: 29244
+</span></span></code></pre></td></tr></table></div></div><p>只跑出了 2.9k 的 QPS，基本上性能差了 10 倍。</p><h2 id=思考>思考</h2><ul><li>AI 的编程能力已经超过了我能力，我绞尽脑汁写的工具在性能上是完全比不上 ai 几分钟生成的结果的</li><li>Golang 的性能比 Rust 要差，但在并发上效果差 10 倍，这是不正常的，所以还是印证了上面的观点，ai 的代码写的更合理，比我要强</li></ul><p>对于测试同学来说，我们经常会写一些次抛的工具，这些工具可能在某些测试任务上会给我们带来极大的效率提升，比如造数据工具。</p><p>但是测试同学的代码能力有限，时间有限，所以一般情况下，我们是不会去写这些次抛工具的。</p><p>这就造成了大部分情况下，我们选择用人工的方式去完成这些重复性的工具。</p><p>这就是我们测试经常被诟病测试效率低下的一部分原因了。</p><p>现在有了 ai，测试同学哪怕不会写代码，也完全有能力把自己的次抛工具需求给描述清楚，毕竟是一次性或者几次性的工具，功能大都不复杂，对 ai 非常友好，所以几个来回就可以把工具给生成出来。</p><p>可以预想到，在不远的将来，测试岗位可能会有减少，但熟练使用 ai 并跟测试结合的新型测试人才，应该是会有一定的市场的。</p><p>所以从本质上讲，今后的一段时间，发现问题还是靠人，但是 ai 会加速这个过程。</p><h2 id=学习时间>学习时间</h2><p>是时候看一下这个测试工具中的核心代码了，还是非常有学习的意义的。</p><p>Rust 版本的压力测试核心函数：</p><h3 id=函数签名解析>函数签名解析</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>pub</span><span class=w> </span><span class=k>async</span><span class=w> </span><span class=k>fn</span> <span class=nf>run_stress_test</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>url</span>: <span class=nb>String</span><span class=p>,</span><span class=w>                    </span><span class=c1>// 目标URL
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>method</span>: <span class=nb>String</span><span class=p>,</span><span class=w>                 </span><span class=c1>// HTTP方法 (GET, POST, etc.)
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>body</span>: <span class=nb>Option</span><span class=o>&lt;</span><span class=nb>String</span><span class=o>&gt;</span><span class=p>,</span><span class=w>           </span><span class=c1>// 可选的请求体
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>headers</span>: <span class=nb>Vec</span><span class=o>&lt;</span><span class=nb>String</span><span class=o>&gt;</span><span class=p>,</span><span class=w>           </span><span class=c1>// 请求头列表
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>concurrency</span>: <span class=kt>usize</span><span class=p>,</span><span class=w>             </span><span class=c1>// 并发数
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>duration</span>: <span class=nb>String</span><span class=p>,</span><span class=w>               </span><span class=c1>// 测试持续时间字符串
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>rate</span>: <span class=nb>Option</span><span class=o>&lt;</span><span class=kt>u64</span><span class=o>&gt;</span><span class=p>,</span><span class=w>              </span><span class=c1>// 可选的速率限制
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>output</span>: <span class=nc>OutputFormat</span><span class=p>,</span><span class=w>           </span><span class=c1>// 输出格式
+</span></span></span><span class=line><span class=cl><span class=p>)</span><span class=w> </span>-&gt; <span class=nb>Result</span><span class=o>&lt;</span><span class=p>()</span><span class=o>&gt;</span><span class=w>                     </span><span class=c1>// 返回Result类型
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=逐步详细解析>逐步详细解析</h3><h4 id=1-解析和配置阶段>1. 解析和配置阶段</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 解析持续时间字符串 &#34;30s&#34; -&gt; Duration对象
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>test_duration</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>humantime</span>::<span class=n>parse_duration</span><span class=p>(</span><span class=o>&amp;</span><span class=n>duration</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 创建请求配置对象，包含所有HTTP请求参数
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>config</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>RequestConfig</span>::<span class=n>new</span><span class=p>(</span><span class=n>url</span><span class=p>,</span><span class=w> </span><span class=n>method</span><span class=p>,</span><span class=w> </span><span class=n>body</span><span class=p>,</span><span class=w> </span><span class=n>headers</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 创建HTTP客户端（复用连接池）
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>client</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Client</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 创建共享的测试结果对象
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>results</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Arc</span>::<span class=n>new</span><span class=p>(</span><span class=n>Mutex</span>::<span class=n>new</span><span class=p>(</span><span class=n>TestResult</span>::<span class=n>new</span><span class=p>()));</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p><strong>为什么用 <code>Arc&lt;Mutex&lt;T>></code>？</strong></p><ul><li><code>Arc</code>：原子引用计数，多个线程可以安全地共享所有权</li><li><code>Mutex</code>：互斥锁，确保同一时间只有一个线程能修改结果</li></ul><h4 id=2-进度条设置>2. 进度条设置</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>pb</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>create_progress_bar</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=n>pb</span><span class=p>.</span><span class=n>set_message</span><span class=p>(</span><span class=s>&#34;Running stress test...&#34;</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>用户可以看到测试正在进行中的实时反馈。</p><h4 id=3-工作线程创建关键部分>3. 工作线程创建（关键部分）</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>handles</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=nb>Vec</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=n>_</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=mi>0</span><span class=o>..</span><span class=n>concurrency</span><span class=w> </span><span class=p>{</span><span class=w>  </span><span class=c1>// 创建指定数量的并发工作者
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 为每个工作者克隆必要的资源
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>client</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>client</span><span class=p>.</span><span class=n>clone</span><span class=p>();</span><span class=w>        </span><span class=c1>// 克隆HTTP客户端
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>config</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>config</span><span class=p>.</span><span class=n>clone</span><span class=p>();</span><span class=w>        </span><span class=c1>// 克隆请求配置
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>results</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Arc</span>::<span class=n>clone</span><span class=p>(</span><span class=o>&amp;</span><span class=n>results</span><span class=p>);</span><span class=w> </span><span class=c1>// 克隆共享结果的引用
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 为每个工作者创建独立的速率限制器
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>rate_limiter</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>rate</span><span class=p>.</span><span class=n>map</span><span class=p>(</span><span class=o>|</span><span class=n>rps</span><span class=o>|</span><span class=w> </span><span class=n>RateLimiter</span>::<span class=n>new</span><span class=p>(</span><span class=n>rps</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=n>concurrency</span><span class=w> </span><span class=k>as</span><span class=w> </span><span class=kt>u64</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 生成异步任务
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>handle</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>tokio</span>::<span class=n>spawn</span><span class=p>(</span><span class=k>async</span><span class=w> </span><span class=k>move</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>run_worker</span><span class=p>(</span><span class=n>client</span><span class=p>,</span><span class=w> </span><span class=n>config</span><span class=p>,</span><span class=w> </span><span class=n>results</span><span class=p>,</span><span class=w> </span><span class=n>rate_limiter</span><span class=p>).</span><span class=k>await</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>});</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>handles</span><span class=p>.</span><span class=n>push</span><span class=p>(</span><span class=n>handle</span><span class=p>);</span><span class=w>  </span><span class=c1>// 保存任务句柄以便后续控制
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p><strong>速率限制分配的重要细节</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 如果总速率是1000 RPS，10个并发工作者
+</span></span></span><span class=line><span class=cl><span class=n>rate</span><span class=p>.</span><span class=n>map</span><span class=p>(</span><span class=o>|</span><span class=n>rps</span><span class=o>|</span><span class=w> </span><span class=n>RateLimiter</span>::<span class=n>new</span><span class=p>(</span><span class=n>rps</span><span class=w> </span><span class=o>/</span><span class=w> </span><span class=n>concurrency</span><span class=w> </span><span class=k>as</span><span class=w> </span><span class=kt>u64</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 每个工作者得到：1000 / 10 = 100 RPS
+</span></span></span></code></pre></td></tr></table></div></div><h4 id=4-时间控制和清理>4. 时间控制和清理</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 让测试运行指定的时间
+</span></span></span><span class=line><span class=cl><span class=n>sleep</span><span class=p>(</span><span class=n>test_duration</span><span class=p>).</span><span class=k>await</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 时间到了，强制停止所有工作者
+</span></span></span><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=n>handle</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=n>handles</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>handle</span><span class=p>.</span><span class=n>abort</span><span class=p>();</span><span class=w>  </span><span class=c1>// 中止异步任务
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p><strong>为什么用 <code>abort()</code> 而不是优雅关闭？</strong></p><ul><li>压力测试需要精确的时间控制</li><li>优雅关闭可能会延长测试时间</li><li><code>abort()</code> 确保立即停止</li></ul><h4 id=5-结果收集和输出>5. 结果收集和输出</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=n>pb</span><span class=p>.</span><span class=n>finish_with_message</span><span class=p>(</span><span class=s>&#34;Test completed&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 获取最终结果并打印
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>final_results</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>results</span><span class=p>.</span><span class=n>lock</span><span class=p>().</span><span class=k>await</span><span class=p>;</span><span class=w>  </span><span class=c1>// 获取互斥锁
+</span></span></span><span class=line><span class=cl><span class=n>final_results</span><span class=p>.</span><span class=n>print_results</span><span class=p>(</span><span class=n>test_duration</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=n>output</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=并发执行流程图>并发执行流程图</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>主线程                     工作线程1            工作线程2            工作线程N
+</span></span><span class=line><span class=cl>  |                          |                    |                    |
+</span></span><span class=line><span class=cl>  ├─ 创建配置和客户端         |                    |                    |
+</span></span><span class=line><span class=cl>  ├─ 创建共享结果对象         |                    |                    |
+</span></span><span class=line><span class=cl>  ├─ spawn工作线程1 ────────→ 开始发送请求          |                    |
+</span></span><span class=line><span class=cl>  ├─ spawn工作线程2 ────────────────────────────→ 开始发送请求          |
+</span></span><span class=line><span class=cl>  ├─ spawn工作线程N ──────────────────────────────────────────────→ 开始发送请求
+</span></span><span class=line><span class=cl>  ├─ sleep(duration)         │                    │                    │
+</span></span><span class=line><span class=cl>  │                         │ 持续发送HTTP请求    │ 持续发送HTTP请求    │ 持续发送HTTP请求
+</span></span><span class=line><span class=cl>  │                         │ 更新共享结果        │ 更新共享结果        │ 更新共享结果
+</span></span><span class=line><span class=cl>  ├─ 时间到，abort所有任务 ───→ 被强制停止          │                    │
+</span></span><span class=line><span class=cl>  ├─ ──────────────────────────────────────────→ 被强制停止          │
+</span></span><span class=line><span class=cl>  ├─ ────────────────────────────────────────────────────────────→ 被强制停止
+</span></span><span class=line><span class=cl>  ├─ 收集结果
+</span></span><span class=line><span class=cl>  └─ 打印统计信息
+</span></span></code></pre></td></tr></table></div></div><h3 id=内存安全和并发安全>内存安全和并发安全</h3><h4 id=rust-的优势>Rust 的优势：</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 编译时保证线程安全
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>results</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Arc</span>::<span class=n>new</span><span class=p>(</span><span class=n>Mutex</span>::<span class=n>new</span><span class=p>(</span><span class=n>TestResult</span>::<span class=n>new</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>results_clone</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Arc</span>::<span class=n>clone</span><span class=p>(</span><span class=o>&amp;</span><span class=n>results</span><span class=p>);</span><span class=w>  </span><span class=c1>// 安全的共享
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// 在工作线程中安全地更新结果
+</span></span></span><span class=line><span class=cl><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>results</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>results</span><span class=p>.</span><span class=n>lock</span><span class=p>().</span><span class=k>await</span><span class=p>;</span><span class=w>  </span><span class=c1>// 获取锁
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>results</span><span class=p>.</span><span class=n>add_request</span><span class=p>(</span><span class=n>latency</span><span class=p>,</span><span class=w> </span><span class=n>status</span><span class=p>,</span><span class=w> </span><span class=n>error</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>  </span><span class=c1>// 锁自动释放
+</span></span></span></code></pre></td></tr></table></div></div><h4 id=对比其他语言可能的问题>对比其他语言可能的问题：</h4><ul><li><strong>C/C++</strong>：可能的内存泄漏和数据竞争</li><li><strong>Java</strong>：需要手动管理线程池和同步</li><li><strong>Go</strong>：需要显式的 channel 通信或锁管理</li></ul><h3 id=错误处理>错误处理</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// ? 操作符实现链式错误传播
+</span></span></span><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>config</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>RequestConfig</span>::<span class=n>new</span><span class=p>(</span><span class=n>url</span><span class=p>,</span><span class=w> </span><span class=n>method</span><span class=p>,</span><span class=w> </span><span class=n>body</span><span class=p>,</span><span class=w> </span><span class=n>headers</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>//                                                        ↑
+</span></span></span><span class=line><span class=cl><span class=c1>//                                         如果出错，立即返回错误
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=n>final_results</span><span class=p>.</span><span class=n>print_results</span><span class=p>(</span><span class=n>test_duration</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=n>output</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>//                                                 ↑
+</span></span></span><span class=line><span class=cl><span class=c1>//                                    打印出错也会传播错误
+</span></span></span></code></pre></td></tr></table></div></div><p>这个函数展现了 Rust 异步编程的强大：<strong>零成本抽象</strong>、<strong>内存安全</strong>、<strong>并发安全</strong>，同时保持高性能！</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//hugo-theme-stack.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 乙醇的博客</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=zh.ethanhan.cc/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

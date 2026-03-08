@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MacBook Neo on 乙醇的博客</title><link>zh.ethanhan.cc/tags/macbook-neo/</link><description>Recent content in MacBook Neo on 乙醇的博客</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 07 Mar 2026 11:36:21 +0800</lastBuildDate><atom:link href="zh.ethanhan.cc/tags/macbook-neo/index.xml" rel="self" type="application/rss+xml"/><item><title>为什么 MacBook Neo 是 OpenClaw 养虾首选？</title><link>zh.ethanhan.cc/p/%E4%B8%BA%E4%BB%80%E4%B9%88-macbook-neo-%E6%98%AF-openclaw-%E5%85%BB%E8%99%BE%E9%A6%96%E9%80%89/</link><pubDate>Sat, 07 Mar 2026 11:36:21 +0800</pubDate><guid>zh.ethanhan.cc/p/%E4%B8%BA%E4%BB%80%E4%B9%88-macbook-neo-%E6%98%AF-openclaw-%E5%85%BB%E8%99%BE%E9%A6%96%E9%80%89/</guid><description>&lt;img src="zh.ethanhan.cc/zh.ethanhan.cc/p/%E4%B8%BA%E4%BB%80%E4%B9%88-macbook-neo-%E6%98%AF-openclaw-%E5%85%BB%E8%99%BE%E9%A6%96%E9%80%89/neo_new_20260307_213835.jpg" alt="Featured image of post 为什么 MacBook Neo 是 OpenClaw 养虾首选？" /&gt;&lt;h3 id="直接上结论"&gt;直接上结论
+&lt;/h3&gt;&lt;p&gt;现阶段，如果你的主要需求是7×24小时稳定运行 &lt;strong&gt;OpenClaw&lt;/strong&gt;的话，我认为苹果新发布的MacBook Neo入门款其实是比Mac mini更合适的选择，至少在大多数普通用户的实际场景下是这样的。&lt;/p&gt;
+&lt;h3 id="原因一neo-8g-内存对开发不友好但对养虾来说是够用的"&gt;原因一：Neo 8G 内存对开发不友好，但对“养虾”来说是够用的
+&lt;/h3&gt;&lt;p&gt;MacBook Neo 标配8GB统一内存，处理器是A18 Pro，性能大致跟早期M1/M2芯片旗鼓相当。&lt;/p&gt;
+&lt;p&gt;对日常开发来说，8GB内存确实少了点。我自己的MacBook Pro在轻中度负载（也就是浏览器多打开几个标签 + VS Code + 几个后台服务）时，内存占用经常超过8–10GB，所以不能扩展的8G内存拿来做开发的话，大概率是不够看的。&lt;/p&gt;
+&lt;p&gt;但&lt;strong&gt;只用来跑OpenClaw&lt;/strong&gt;就不一样了,OpenClaw本身是轻量级Agent框架，主要是调用云端大模型以及少量的本地脚本或者文件操作。&lt;/p&gt;
+&lt;p&gt;实测在8GB内存下，保持后台运行，并偶尔发几条飞书/Telegram指令时，内存占用通常在4–6GB以内，所以内存还是够用的。&lt;/p&gt;
+&lt;p&gt;简单来说就是: 开发匆匆忙忙连滚带爬，养虾从从容容游刃有余。&lt;/p&gt;
+&lt;h3 id="原因二黑屏待机功耗极低能效突出"&gt;原因二：黑屏待机功耗极低，能效突出
+&lt;/h3&gt;&lt;p&gt;MacBook Neo采用无风扇设计 + 手机级芯片，黑屏待机时整机功耗非常可观。&lt;/p&gt;
+&lt;p&gt;根据社区和早期评测估算，在纯待机（仅运行OpenClaw后台） 的情况下，功耗大概是3–6W。&lt;/p&gt;
+&lt;p&gt;当偶尔响应指令、跑轻量脚本时，平均功耗大概5–8W左右&lt;/p&gt;
+&lt;p&gt;按一周168小时、平均6W计算：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一周大概1度电，甚至更低&lt;/li&gt;
+&lt;li&gt;一年50多度电，一年的电费也就几十块钱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Mac mini M4的功耗应该也是差不多的。&lt;/p&gt;
+&lt;p&gt;但是Neo不怕短时间的停电，毕竟自带了36瓦时的电池，相当于自带UPS电源了。&lt;/p&gt;
+&lt;p&gt;这点比Mac mini还是要强一点点的。&lt;/p&gt;
+&lt;h3 id="原因三自带屏幕键盘隐形成本低"&gt;原因三：自带屏幕、键盘，隐形成本低
+&lt;/h3&gt;&lt;p&gt;Mac mini是纯主机，必须额外配备显示器、键鼠、支架等。&lt;/p&gt;
+&lt;p&gt;很多人一开始觉得“我可以只接电源当服务器用”，但现实是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首次设置、调试OpenClaw、排查问题时，普通人几乎不可避免要外接屏幕和键盘&lt;/li&gt;
+&lt;li&gt;系统更新、重装、改配置时可能也需要&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以对普通爱好者来说，显示器和键盘可能是省不掉的。&lt;/p&gt;
+&lt;p&gt;MacBook Neo自带屏幕，键盘以及触摸板，初始设置和维护成本几乎为零，调试起来也方便得多。&lt;/p&gt;
+&lt;h3 id="原因四兼顾便携性neo是真正能带出门的机器"&gt;原因四：兼顾便携性，Neo是真正“能带出门”的机器
+&lt;/h3&gt;&lt;p&gt;Mac mini是“固定资产”，在搬家、换地方、出差，出街的时候,都会有些许的麻烦。&lt;/p&gt;
+&lt;p&gt;MacBook Neo虽然定位入门，但好歹是正宗MacBook：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;重量轻、体积小，外形甜美&lt;/li&gt;
+&lt;li&gt;电池续航也还可以（官方宣称最长16小时）&lt;/li&gt;
+&lt;li&gt;需要出门拿便携笔记本应急的时候，带出去也是根正苗红的星巴克入场券&lt;/li&gt;
+&lt;li&gt;回到家又可以继续挂机当服务器用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这点灵活性是Mac mini完全比不了的。&lt;/p&gt;
+&lt;h3 id="原因五实际到手总成本几乎持平甚至neo更划算"&gt;原因五：实际到手总成本几乎持平，甚至Neo更划算
+&lt;/h3&gt;&lt;p&gt;2026年3月份的官方定价&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MacBook Neo 8GB + 256GB：4599元&lt;/li&gt;
+&lt;li&gt;Mac mini M4 16GB + 256GB：4499元&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;表面看来Neo贵100元，但加上Mac mini必须的外设，比如最便宜的显示器 + 键鼠套装，可能要 400–500元，所以mini的实际总投入很可能超过5000元。&lt;/p&gt;
+&lt;p&gt;Neo反而可能是更省钱的选项，尤其是叠加了国补，教育优惠和各种促销之后,价格还能再低。&lt;/p&gt;
+&lt;h3 id="总结"&gt;总结
+&lt;/h3&gt;&lt;p&gt;如果你的核心诉求就是&lt;strong&gt;稳定、长时间、低成本的跑OpenClaw&lt;/strong&gt;，并且不排斥8GB内存、不需要特别强的本地算力的话，那么&lt;strong&gt;MacBook Neo&lt;/strong&gt;可能是当前最务实、最全面的选择。&lt;/p&gt;
+&lt;p&gt;当然，如果你已经有一套完整的显示器+键鼠生态，或者未来打算把OpenClaw跑得更加geek一点（本地跑多Agent、跑多模型并行），那Mac mini M4 16GB起跳的配置仍然是更加稳妥的选择。&lt;/p&gt;
+&lt;p&gt;但就“纯养虾”这个单一的诉求来说，我现在更推荐的是MacBook Neo。&lt;/p&gt;</description></item></channel></rss>
